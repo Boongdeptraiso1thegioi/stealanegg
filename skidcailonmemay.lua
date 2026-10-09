@@ -135,7 +135,21 @@ do
 		}
 
 		v2 = v:CreateWindow({ Name = "Chilli Hub - Steal An Egg", DefaultTab = "Farm" })
-		defaultTab = v2:GetDefaultTab()
+		do
+			-- FIX 2026-10-09: GetDefaultTab co the doi ten/mat trong engine moi, boc pcall + fallback
+			local okGet, gotTab = pcall(function() return v2:GetDefaultTab() end)
+			if okGet and gotTab ~= nil then
+				defaultTab = gotTab
+			else
+				warn("[SAE] GetDefaultTab khong dung duoc, thu tao tab Farm")
+				local okFarm, farmTab = pcall(function() return v2:CreateTab({ Name = "Farm", SectionsExpanded = true }) end)
+				if okFarm and farmTab ~= nil then
+					defaultTab = farmTab
+				else
+					warn("[SAE] khong tao duoc tab Farm: " .. tostring(farmTab))
+				end
+			end
+		end
 		Players = game:GetService("Players")
 		RunService = game:GetService("RunService")
 		ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -25275,7 +25289,7 @@ do
 			NameFont = fn55("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.ExtraBold),
 		}
 
-		tbl12.RarityFont = fn55("rbxassetid://110438945732939", Enum.FontWeight.Bold) or fn55("rbxasset://fonts/families/FredokaOne.json", Enum.FontWeight.Regular)
+		tbl12.RarityFont = fn55("rbxassetid://12187365977", Enum.FontWeight.Bold) or fn55("rbxasset://fonts/families/FredokaOne.json", Enum.FontWeight.Regular)
 		local sequence2 = tbl6.Sequence
 		local tbl30 = {}
 		local tbl31 = { 0, Color3.fromRGB(255, 255, 255) }
@@ -30797,7 +30811,7 @@ do
 		Position = UDim2.fromScale(0.5, 0.5),
 		Size = UDim2.fromScale(0.86, 0.86),
 		BackgroundTransparency = 1,
-		Image = "rbxassetid://110438945732939",
+		Image = "rbxassetid://128961717706452",
 		ImageTransparency = 0.35,
 		ScaleType = Enum.ScaleType.Crop,
 		ZIndex = 3,
@@ -31870,8 +31884,8 @@ end
 
 do
 	local v15 = v2:CreateTab({ Name = "Discord", Side = "Right", SectionsExpanded = true }):CreateSection({ Name = "Community", Expanded = true })
-	local str = "https://discord.gg/z77ytBbcgS"
-	local str2 = "rbxassetid://110438945732939"
+	local str = "discord.gg/CJK4bs2mgT"
+	local str2 = "rbxassetid://128961717706452"
 	local n14 = 0.5
 	local n15 = 0.0909
 	local n16 = 0.2
@@ -32210,7 +32224,7 @@ do
 end
 
 do
-	local image = "rbxassetid://110438945732939"
+	local image = "rbxassetid://128961717706452"
 	local n14 = 56
 	local n15 = 0.035
 	local n16 = 8
@@ -32401,7 +32415,21 @@ do
 	fn4(fn21)
 end
 
-v:Finalize({ Window = v2, MainTab = defaultTab, ShowMainTab = true })
+do
+	-- FIX 2026-10-09: Finalize boc pcall + thu lai don gian, in so tab ra F9 de chan doan
+	local okFin, errFin = pcall(v.Finalize, v, { Window = v2, MainTab = defaultTab, ShowMainTab = true })
+	if not okFin then
+		warn("[SAE] Finalize lan 1 loi: " .. tostring(errFin) .. ", thu lai don gian")
+		local okFin2, errFin2 = pcall(v.Finalize, v, { Window = v2 })
+		if not okFin2 then
+			warn("[SAE] Finalize lan 2 loi: " .. tostring(errFin2))
+		end
+	end
+	pcall(function()
+		local tabs = v2.Tabs
+		warn("[SAE] so tab da tao: " .. tostring(type(tabs) == "table" and #tabs or "khong ro"))
+	end)
+end
 
 task.defer(function()
 	if #tbl2 == 0 or type(readfile) ~= "function" then
