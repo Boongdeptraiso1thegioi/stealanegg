@@ -27155,7 +27155,7 @@ do
 			ImageLabel.Position = UDim2.fromScale(0.5, 0.5)
 			ImageLabel.Size = UDim2.new(1, 40, 1, 40)
 			ImageLabel.BackgroundTransparency = 1
-			ImageLabel.Image = "rbxassetid://6015897843"
+			ImageLabel.Image = "rbxassetid://132401977734278"
 			ImageLabel.ImageColor3 = t166.shadow
 			ImageLabel.ImageTransparency = 0.52
 			ImageLabel.ScaleType = Enum.ScaleType.Slice
@@ -27207,7 +27207,7 @@ do
 			ImageLabel2.Position = UDim2.fromOffset(11, 23)
 			ImageLabel2.Size = UDim2.fromOffset(20, 20)
 			ImageLabel2.BackgroundTransparency = 1
-			ImageLabel2.Image = "rbxassetid://96240498384290"
+			ImageLabel2.Image = "rbxassetid://132401977734278"
 			ImageLabel2.ScaleType = Enum.ScaleType.Fit
 			ImageLabel2.Parent = Frame2
 
@@ -27261,7 +27261,7 @@ do
 			ImageLabel3.Position = UDim2.new(0, 12, 0.5, 0)
 			ImageLabel3.Size = UDim2.fromOffset(12, 12)
 			ImageLabel3.BackgroundTransparency = 1
-			ImageLabel3.Image = "rbxassetid://94434236999817"
+			ImageLabel3.Image = "rbxassetid://132401977734278"
 			ImageLabel3.ScaleType = Enum.ScaleType.Fit
 			ImageLabel3.Parent = TextButton
 
@@ -29675,7 +29675,7 @@ do
 				Folder = "STEAL",
 				Version = 1,
 				Color = Color3.fromRGB(232, 232, 238),
-				Image = "rbxassetid://110438945732939"
+				Image = "rbxassetid://132401977734278"
 			})
 			v4779(v4742)
 			t216 = {}
