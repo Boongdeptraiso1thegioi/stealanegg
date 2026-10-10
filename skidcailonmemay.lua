@@ -1,3 +1,4 @@
+-- MERGED: Speed Hub X goc + Wisp Event + Butterfly Bloom (1 block)
 repeat
 	task.wait()
 until game:IsLoaded()
@@ -415,7 +416,7 @@ local function fn2()
 				textLabel.TextSize = 13
 				textLabel.TextColor3 = Color3.fromRGB(0, 255, 127)
 				textLabel.TextXAlignment = Enum.TextXAlignment.Left
-				textLabel.Text = "⚡ SPEED HUB X - DEBUG INSPECTOR"
+				textLabel.Text = "âš¡ SPEED HUB X - DEBUG INSPECTOR"
 				textLabel.Parent = frame
 				local textLabel2 = Instance.new("TextLabel")
 				textLabel2.Name = "StatsLabel"
@@ -9777,7 +9778,7 @@ local function fn2()
 				}
 
 				tbl8.footer = {
-					text = "Speed Hub X • Steal An Egg",
+					text = "Speed Hub X â€¢ Steal An Egg",
 					icon_url = "https://cdn.discordapp.com/attachments/1386384052197527602/1538148901868019712/2130c04f38ddf3049b5b24a2d73971f5.png?ex=6a81a04b&is=6a804ecb&hm=05b7e14a3b99f37e87fdacdb879654cdcd62916b90e9a47ad0e46e43b6d28717&",
 				}
 
@@ -10089,7 +10090,7 @@ local function fn2()
 
 				local tbl8 = {}
 				table.insert(tbl8, string.format("<font color=\"#AAAAAA\">Total Tracked Eggs:</font> <b><font color=\"#00FF7F\">%d</font></b>", #tbl6))
-				table.insert(tbl8, "<font color=\"#444455\">──────────────────────────────────────</font>")
+				table.insert(tbl8, "<font color=\"#444455\">â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€</font>")
 
 				for _, v7 in ipairs(tbl6) do
 					local str = tbl7[v7.RarityNumber] or "#FFFFFF"
@@ -10119,7 +10120,7 @@ local function fn2()
 						end
 					end
 
-					table.insert(tbl8, string.format("• <b><font color=\"%s\">[%s] %s</font></b> <font color=\"#FFD700\">(%s / %s)</font>", str, v7.RarityName, v7.Category, v7.ScaleStr, v7.KgStr))
+					table.insert(tbl8, string.format("â€¢ <b><font color=\"%s\">[%s] %s</font></b> <font color=\"#FFD700\">(%s / %s)</font>", str, v7.RarityName, v7.Category, v7.ScaleStr, v7.KgStr))
 					table.insert(tbl8, string.format("  <font color=\"%s\">%s</font> | <b><font color=\"#00FF7F\">%s</font></b> | <font color=\"%s\">%s</font>", str2, v7.MutDisplay, v7.IncomeStr, str3, v7.Growth.StatusStr))
 				end
 
@@ -10309,9 +10310,9 @@ local function fn2()
 				end
 
 				local str = rarity or "Common"
-				table.insert(tbl8, string.format("<b><font color=\"#FFD700\">⚡ FUSE MACHINE STATUS (%d/3 Pets)</font></b>", #tbl7))
-				table.insert(tbl8, "<font color=\"#444455\">──────────────────────────────────────</font>")
-				table.insert(tbl8, string.format("• <b>Species:</b> <font color=\"#FFFFFF\">[%s] %s</font>", str, category))
+				table.insert(tbl8, string.format("<b><font color=\"#FFD700\">âš¡ FUSE MACHINE STATUS (%d/3 Pets)</font></b>", #tbl7))
+				table.insert(tbl8, "<font color=\"#444455\">â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€</font>")
+				table.insert(tbl8, string.format("â€¢ <b>Species:</b> <font color=\"#FFFFFF\">[%s] %s</font>", str, category))
 				local n = 0
 				local n2 = 0
 				local str2 = "Normal"
@@ -10335,13 +10336,13 @@ local function fn2()
 
 				if #tbl7 < 3 then
 					table.insert(tbl8, "")
-					table.insert(tbl8, string.format("<font color=\"#E67E22\">⚠️ Waiting for %d more pet(s) to calculate final odds.</font>", 3 - #tbl7))
+					table.insert(tbl8, string.format("<font color=\"#E67E22\">âš ï¸ Waiting for %d more pet(s) to calculate final odds.</font>", 3 - #tbl7))
 					return table.concat(tbl8, "\n")
 				end
 
 				local n3 = n / 3
 				table.insert(tbl8, "")
-				table.insert(tbl8, string.format("• <b>Average Scale:</b> <font color=\"#00FF7F\"><b>%.2fx (%s)</b></font>", n3, fn29(modelWeight * n3 ^ 3)))
+				table.insert(tbl8, string.format("â€¢ <b>Average Scale:</b> <font color=\"#00FF7F\"><b>%.2fx (%s)</b></font>", n3, fn29(modelWeight * n3 ^ 3)))
 				local tbl9 = {}
 				local n4 = 0
 
@@ -10352,7 +10353,7 @@ local function fn2()
 				end
 
 				table.insert(tbl8, "")
-				table.insert(tbl8, "<b><font color=\"#6495ED\">📊 Predicted Scale Tier Probabilities:</font></b>")
+				table.insert(tbl8, "<b><font color=\"#6495ED\">ðŸ“Š Predicted Scale Tier Probabilities:</font></b>")
 
 				for _, v7 in ipairs(tbl9) do
 					local n5 = v7.weight / n4 * 100
@@ -10360,7 +10361,7 @@ local function fn2()
 					if n5 >= 0.5 then
 						local tier = v7.tier
 						local n6 = modelWeight * tier.max ^ 3
-						table.insert(tbl8, string.format("  <font color=\"%s\">• %-8s</font> <font color=\"#AAAAAA\">(%.2fx - %.2fx / %s - %s):</font> <b><font color=\"%s\">%.1f%%</font></b>", tier.color, tier.name, tier.min, tier.max, fn29(modelWeight * tier.min ^ 3), fn29(n6), n5 >= 20 and "#00FF7F" or "#FFD700", n5))
+						table.insert(tbl8, string.format("  <font color=\"%s\">â€¢ %-8s</font> <font color=\"#AAAAAA\">(%.2fx - %.2fx / %s - %s):</font> <b><font color=\"%s\">%.1f%%</font></b>", tier.color, tier.name, tier.min, tier.max, fn29(modelWeight * tier.min ^ 3), fn29(n6), n5 >= 20 and "#00FF7F" or "#FFD700", n5))
 					end
 				end
 
@@ -10369,8 +10370,8 @@ local function fn2()
 				local v7 = fn32(category, n5, str2 ~= "Normal" and { str2 } or {}, get)
 				local v8 = fn32(category, n6, str2 ~= "Normal" and { str2 } or {}, get)
 				table.insert(tbl8, "")
-				table.insert(tbl8, string.format("• <b>Predicted Mutation:</b> <font color=\"#FFD700\">%s</font>", str2))
-				table.insert(tbl8, string.format("• <b>Estimated Income:</b> <b><font color=\"#00FF7F\">%s</font></b> ~ <b><font color=\"#00FF7F\">%s</font></b>", fn30(v7), fn30(v8)))
+				table.insert(tbl8, string.format("â€¢ <b>Predicted Mutation:</b> <font color=\"#FFD700\">%s</font>", str2))
+				table.insert(tbl8, string.format("â€¢ <b>Estimated Income:</b> <b><font color=\"#00FF7F\">%s</font></b> ~ <b><font color=\"#00FF7F\">%s</font></b>", fn30(v7), fn30(v8)))
 				return table.concat(tbl8, "\n")
 			end
 
@@ -11862,7 +11863,7 @@ local function fn2()
 				tbl6[4] = "<b>Catalog Items:</b>"
 
 				for _, v8 in ipairs(v7.Shop) do
-					table.insert(tbl6, string.format("  • <b>%s</b>%s: %s", v8.Label or v8.Id, v8.PurchaseLimit and string.format(" (Limit: %d)", v8.PurchaseLimit) or "", samples >= v8.Price and string.format("<font color=\"#00FF88\">%d Samples</font>", v8.Price) or string.format("<font color=\"#FF5555\">%d Samples</font>", v8.Price)))
+					table.insert(tbl6, string.format("  â€¢ <b>%s</b>%s: %s", v8.Label or v8.Id, v8.PurchaseLimit and string.format(" (Limit: %d)", v8.PurchaseLimit) or "", samples >= v8.Price and string.format("<font color=\"#00FF88\">%d Samples</font>", v8.Price) or string.format("<font color=\"#FF5555\">%d Samples</font>", v8.Price)))
 				end
 
 				return table.concat(tbl6, "\n")
@@ -12527,7 +12528,7 @@ local function fn2()
 						end
 					end
 
-					table.insert(tbl7, string.format("  • %s: <font color=\"%s\"><b>%s</b></font>", str4, str6, str5))
+					table.insert(tbl7, string.format("  â€¢ %s: <font color=\"%s\"><b>%s</b></font>", str4, str6, str5))
 				end
 
 				local flag = true
@@ -13618,6 +13619,528 @@ local function fn2()
 				end
 			end
 		end)
+
+
+do
+	local movement = modules.Movement
+	local steal = modules.Steal
+	local inspector = modules.DebugInspector
+	local treadmill = modules.Treadmill
+
+	local M = {
+		StatusParagraph = nil,
+		LastTelemetry = 0,
+		ButterfliesCaught = 0,
+		SeenButterflyInv = {},
+		Cooldowns = {},
+		Config = {
+			FlySpeed = 650,
+			Arrive = 6,
+			PerStep = 3,
+			CatchCooldown = 6,
+		},
+	}
+
+	local function normStr(s)
+		if type(s) ~= "string" then
+			return ""
+		end
+		return string.lower(s):gsub("%s+", " ")
+	end
+
+	local function cooled(key, dur)
+		local now = os.clock()
+		local last = M.Cooldowns[key] or -999
+		if now - last < (dur or 1.5) then
+			return false
+		end
+		M.Cooldowns[key] = now
+		return true
+	end
+
+	local function getChar()
+		local c = localPlayer.Character
+		if not c then
+			return nil
+		end
+		local hrp = c:FindFirstChild("HumanoidRootPart")
+		local hum = c:FindFirstChildOfClass("Humanoid")
+		if not hrp or not hum or hum.Health <= 0 then
+			return nil
+		end
+		return c, hrp, hum
+	end
+
+	local function say(msg)
+		_G.LastAction = tostring(msg)
+		if inspector and inspector.Log then
+			pcall(inspector.Log, inspector, msg, "WISP")
+		end
+	end
+
+	local function clickGuiButton(words)
+		local pg = localPlayer:FindFirstChildOfClass("PlayerGui")
+		if not pg or not fn6 then
+			return false
+		end
+		for _, d in ipairs(pg:GetDescendants()) do
+			if d:IsA("TextButton") and d.Visible then
+				local t = normStr(d.Text)
+				local ok = true
+				for _, w in ipairs(words) do
+					if not string.find(t, normStr(w), 1, true) then
+						ok = false
+						break
+					end
+				end
+				if ok then
+					pcall(fn6, d.Activated)
+					pcall(fn6, d.MouseButton1Click)
+					return true
+				end
+			end
+		end
+		return false
+	end
+
+	local function guiHas(words)
+		local pg = localPlayer:FindFirstChildOfClass("PlayerGui")
+		if not pg then
+			return false
+		end
+		for _, d in ipairs(pg:GetDescendants()) do
+			if (d:IsA("TextLabel") or d:IsA("TextButton")) and d.Visible then
+				local t = normStr(d.Text)
+				local ok = true
+				for _, w in ipairs(words) do
+					if not string.find(t, normStr(w), 1, true) then
+						ok = false
+						break
+					end
+				end
+				if ok then
+					return true
+				end
+			end
+		end
+		return false
+	end
+
+	local function firePromptOn(obj)
+		if not obj then
+			return false
+		end
+		local prompt = obj:IsA("ProximityPrompt") and obj
+			or obj:FindFirstChildWhichIsA("ProximityPrompt", true)
+		if not prompt then
+			return false
+		end
+		pcall(function()
+			prompt.RequiresLineOfSight = false
+			prompt.HoldDuration = 0
+			prompt.MaxActivationDistance = math.max(prompt.MaxActivationDistance or 10, 60)
+		end)
+		if typeof(fireproximityprompt) == "function" then
+			pcall(fireproximityprompt, prompt)
+			return true
+		end
+		return false
+	end
+
+	local function findWorkspaceObjects(keywords, limit, maxDepth)
+		limit = limit or 20
+		maxDepth = maxDepth or 7
+		local out = {}
+		local function scan(root, depth)
+			if #out >= limit or depth > maxDepth then
+				return
+			end
+			for _, ch in ipairs(root:GetChildren()) do
+				local n = normStr(ch.Name)
+				for _, k in ipairs(keywords) do
+					if string.find(n, normStr(k), 1, true) then
+						table.insert(out, ch)
+						break
+					end
+				end
+				if #out >= limit then
+					return
+				end
+			end
+			for _, ch in ipairs(root:GetChildren()) do
+				scan(ch, depth + 1)
+				if #out >= limit then
+					return
+				end
+			end
+		end
+		pcall(scan, workspace, 1)
+		return out
+	end
+
+	local function pivotOf(o)
+		if o:IsA("Model") then
+			return o:GetPivot()
+		elseif o:IsA("BasePart") then
+			return o.CFrame
+		end
+		return nil
+	end
+
+	local function moveToCF(cf, speed)
+		local _, hrp = getChar()
+		if not hrp or not cf then
+			return false
+		end
+		if (hrp.Position - cf.Position).Magnitude <= (M.Config.Arrive or 6) then
+			return true
+		end
+		return steal.TweenTo(cf, speed or M.Config.FlySpeed, { Owner = "WispBloom" })
+	end
+
+	-- -- -- WISP QUEST -- -- --
+	M.StepWisp = function()
+		local acted = false
+		local wisps = findWorkspaceObjects({ "wisp" }, 6, 6)
+		if #wisps > 0 and cooled("wisp:go", 8) then
+			local _, hrp = getChar()
+			if hrp then
+				local best, bestD = nil, math.huge
+				for _, w in ipairs(wisps) do
+					local cf = pivotOf(w)
+					if cf then
+						local d = (cf.Position - hrp.Position).Magnitude
+						if d < bestD then
+							bestD = d
+							best = w
+						end
+					end
+				end
+				if best then
+					local cf = pivotOf(best)
+					if cf and bestD > 12 then
+						say("Wisp: di toi Wisp")
+						moveToCF(cf * CFrame.new(0, 3, 4))
+						acted = true
+					end
+					if firePromptOn(best) then
+						say("Wisp: bam prompt Wisp")
+						acted = true
+					end
+				end
+			end
+		end
+		if cooled("wisp:btn", 3) then
+			if clickGuiButton({ "your", "wisp" }) then
+				say("Wisp: nhan/kiem tra Your Wisp")
+				acted = true
+			elseif clickGuiButton({ "grow", "wisp" }) then
+				say("Wisp: Grow Your Wisp")
+				acted = true
+			elseif clickGuiButton({ "return", "wisp" }) then
+				say("Wisp: Return the Wisp")
+				acted = true
+			elseif clickGuiButton({ "claim" }) and guiHas({ "wisp" }) then
+				say("Wisp: Claim thuong Wisp")
+				acted = true
+			end
+		end
+		return acted
+	end
+
+	-- -- -- BUTTERFLY BLOOM -- -- --
+	M.EventActive = function()
+		if guiHas({ "butterfly", "bloom" }) or guiHas({ "bloom" }) then
+			return true
+		end
+		local ok, tags = pcall(function()
+			return game:GetService("CollectionService"):GetTagged("ButterflyBloom")
+		end)
+		if ok and tags and #tags > 0 then
+			return true
+		end
+		local ok2, bfs = pcall(function()
+			return game:GetService("CollectionService"):GetTagged("Butterfly")
+		end)
+		if ok2 and bfs and #bfs > 0 then
+			return true
+		end
+		return false
+	end
+
+	M.FindButterflies = function()
+		local out = {}
+		local ok, tags = pcall(function()
+			return game:GetService("CollectionService"):GetTagged("Butterfly")
+		end)
+		if ok and type(tags) == "table" then
+			for _, t in ipairs(tags) do
+				table.insert(out, t)
+			end
+		end
+		for _, o in ipairs(findWorkspaceObjects({ "butterfly", "butterflies" }, 30, 7)) do
+			table.insert(out, o)
+		end
+		return out
+	end
+
+	local function isNetTool(tool)
+		if not tool or not tool:IsA("Tool") then
+			return false
+		end
+		local n = normStr(tool.Name)
+		return string.find(n, "butterfly", 1, true) and string.find(n, "net", 1, true)
+	end
+
+	local function isButterflyLoot(tool)
+		if not tool or not tool:IsA("Tool") or isNetTool(tool) then
+			return false
+		end
+		local blob = normStr(("%s %s %s"):format(
+			tool.Name or "",
+			tostring(tool:GetAttribute("Category") or tool:GetAttribute("AssetCategory") or ""),
+			tostring(tool:GetAttribute("ItemType") or "")))
+		return string.find(blob, "butterfly", 1, true) ~= nil
+	end
+
+	M.EquipNet = function()
+		local c, _, hum = getChar()
+		if not c or not hum then
+			return nil
+		end
+		for _, t in ipairs(c:GetChildren()) do
+			if isNetTool(t) then
+				return t
+			end
+		end
+		local bag = localPlayer:FindFirstChild("Backpack")
+		if bag then
+			for _, t in ipairs(bag:GetChildren()) do
+				if isNetTool(t) then
+					pcall(hum.EquipTool, hum, t)
+					task.wait(0.15)
+					return t
+				end
+			end
+		end
+		return nil
+	end
+
+	M.CountLoot = function()
+		local c = localPlayer.Character
+		local bag = localPlayer:FindFirstChild("Backpack")
+		local function handle(tool)
+			if not isButterflyLoot(tool) then
+				return
+			end
+			local key = tostring(tool:GetAttribute("UID") or tool:GetAttribute("Uid") or "")
+			if key == "" then
+				local ok, id = pcall(tool.GetDebugId, tool)
+				key = ok and tostring(id) or tool.Name
+			end
+			key = "inv:" .. key
+			if not M.SeenButterflyInv[key] then
+				M.SeenButterflyInv[key] = true
+				M.ButterfliesCaught += 1
+				say(("Bloom: bat duoc buom (tong %d)"):format(M.ButterfliesCaught))
+			end
+		end
+		if bag then
+			for _, t in ipairs(bag:GetChildren()) do
+				handle(t)
+			end
+		end
+		if c then
+			for _, t in ipairs(c:GetChildren()) do
+				handle(t)
+			end
+		end
+	end
+
+	M.StepButterfly = function()
+		if not M.EventActive() then
+			return false
+		end
+		local net = M.EquipNet()
+		if not net then
+			say("Bloom: chua co Butterfly Net")
+			return false
+		end
+		local _, hrp = getChar()
+		if not hrp then
+			return false
+		end
+		local list = M.FindButterflies()
+		if #list == 0 then
+			return false
+		end
+		table.sort(list, function(a, b)
+			local ca, cb = pivotOf(a), pivotOf(b)
+			local da = ca and (ca.Position - hrp.Position).Magnitude or math.huge
+			local db = cb and (cb.Position - hrp.Position).Magnitude or math.huge
+			return da < db
+		end)
+		local done = 0
+		for _, b in ipairs(list) do
+			if done >= M.Config.PerStep then
+				break
+			end
+			local uid = tostring(b:GetAttribute("UID") or b:GetAttribute("Uid") or b.Name)
+			if cooled("bf:" .. uid, M.Config.CatchCooldown) then
+				local cf = pivotOf(b)
+				if cf then
+					moveToCF(cf, M.Config.FlySpeed * 1.2)
+					pcall(function()
+						net:Activate()
+					end)
+					task.wait(0.15)
+					pcall(function()
+						net:Activate()
+					end)
+					if typeof(firetouchinterest) == "function" then
+						local part = b:IsA("BasePart") and b
+							or (b:IsA("Model") and (b.PrimaryPart or b:FindFirstChildWhichIsA("BasePart", true)))
+						if part then
+							pcall(firetouchinterest, part, hrp, 0)
+							task.wait(0.03)
+							pcall(firetouchinterest, part, hrp, 1)
+						end
+					end
+					task.wait(0.3)
+					M.CountLoot()
+					done += 1
+				end
+			end
+		end
+		return done > 0
+	end
+
+	-- -- -- CONVERT -- -- --
+	M.StepConvert = function()
+		local stations = findWorkspaceObjects({ "convert", "exchange", "trade" }, 8, 7)
+		if #stations == 0 then
+			return false
+		end
+		local _, hrp = getChar()
+		if not hrp then
+			return false
+		end
+		local best, bestD = nil, math.huge
+		for _, s in ipairs(stations) do
+			local cf = pivotOf(s)
+			if cf then
+				local d = (cf.Position - hrp.Position).Magnitude
+				if d < bestD then
+					bestD = d
+					best = s
+				end
+			end
+		end
+		if not best then
+			return false
+		end
+		local cf = pivotOf(best)
+		if bestD > 14 then
+			say("Bloom: di toi diem Convert")
+			moveToCF(cf * CFrame.new(0, 3, 4))
+			return true
+		end
+		firePromptOn(best)
+		if cooled("convert:btn", 2) then
+			if clickGuiButton({ "convert" }) or clickGuiButton({ "exchange" }) then
+				say("Bloom: Convert/Exchange buom")
+				return true
+			end
+		end
+		return true
+	end
+
+	M.GetTelemetryText = function()
+		return string.format(
+			"<b>Wisp & Bloom:</b> %s\n<b>Buom da bat (xac nhan tui):</b> <font color=\"#00FF88\">%d</font>\n<b>Event Bloom:</b> %s",
+			(_G.LastAction or "Idle"),
+			M.ButterfliesCaught,
+			M.EventActive() and "<font color=\"#00FF88\">DANG MO</font>" or "<font color=\"#AAAAAA\">chua mo</font>")
+	end
+
+	M.UpdateTelemetry = function()
+		if not M.StatusParagraph then
+			return
+		end
+		if os.clock() - M.LastTelemetry < 2 then
+			return
+		end
+		M.LastTelemetry = os.clock()
+		pcall(function()
+			M.StatusParagraph:Set({ Title = "Wisp & Butterfly Bloom", Content = M.GetTelemetryText() })
+		end)
+	end
+
+	M.Step = function()
+		if not (enabled["Auto Wisp"] or enabled["Auto Butterfly"] or enabled["Auto Convert Butterfly"]) then
+			movement.Release("WispBloom")
+			return
+		end
+		if steal.IsNightOrWallClosed and steal.IsNightOrWallClosed() then
+			movement.Release("WispBloom")
+			return
+		end
+		if treadmill and treadmill.CheckTreadmil and treadmill.CheckTreadmil() then
+			movement.Release("WispBloom")
+			return
+		end
+		if not movement.Claim("WispBloom", 110) then
+			return
+		end
+		local did = false
+		if enabled["Auto Wisp"] and M.StepWisp() then
+			did = true
+		end
+		if enabled["Auto Butterfly"] and M.StepButterfly() then
+			did = true
+		end
+		if enabled["Auto Convert Butterfly"] and M.StepConvert() then
+			did = true
+		end
+		if not did then
+			movement.Release("WispBloom")
+		end
+		M.UpdateTelemetry()
+	end
+
+	modules.WispBloom = M
+
+	-- -- -- UI (nam trong Farm tab) -- -- --
+	local vWisp = tbl5.Farm:AddSection("Automation Wisp & Butterfly Bloom")
+	M.StatusParagraph = vWisp:AddParagraph({ "Wisp & Butterfly Bloom", "Dang doi du lieu event..." })
+
+	funcs:Toggle(vWisp, "Auto Wisp Quest", "Tu dong nhan / tra / claim nhiem vu Wisp", false, true, function(arg)
+		enabled["Auto Wisp"] = arg
+	end)
+
+	funcs:Toggle(vWisp, "Auto Butterfly Bloom", "Tu dong bat buom khi event mo (can Butterfly Net)", false, true, function(arg)
+		enabled["Auto Butterfly"] = arg
+	end)
+
+	funcs:Toggle(vWisp, "Auto Convert Butterfly", "Tu dong doi buom o tram Convert/Exchange", false, true, function(arg)
+		enabled["Auto Convert Butterfly"] = arg
+	end)
+
+	funcs:Button(vWisp, "Count Butterflies Now", "Quet tui va dem buom da bat", function()
+		M.CountLoot()
+	end)
+
+	-- -- -- LOOP NEN (rieng, khong chen vao LoadFunction) -- -- --
+	task.spawn(function()
+		repeat
+			task.wait(1)
+		until game_.Ready
+		while not shx.Unloaded do
+			pcall(M.Step)
+			task.wait(0.5)
+		end
+	end)
+end
 
 		local v22 = tbl5.Farm:AddSection("Automation Sell")
 
@@ -14791,3 +15314,299 @@ task.spawn(pcall, function()
 		end
 	end)
 end)
+
+local tbl2
+
+tbl2 = {
+	Request = http_request or request or http and http.request,
+	Script_ID = "570e906c9c01e841f979d51152994c52",
+	Load = function(scriptKey)
+		script_key = scriptKey
+		getfenv(0).script_key = scriptKey
+		getfenv(1).script_key = scriptKey
+		getgenv().script_key = scriptKey
+		loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/" .. tbl2.Script_ID .. ".lua"))()
+	end,
+	MathFloor = function(arg, arg2)
+		local n = arg2 - arg2 % 1
+		return arg2 < 0 and n ~= arg2 and n - 1 or n
+	end,
+	Uint32 = function(arg, arg2)
+		return arg2 % 4294967296
+	end,
+	BitwiseXor = function(arg, arg2, arg3)
+		local n = 0
+		local n2 = 1
+
+		while arg2 > 0 or arg3 > 0 do
+			if arg2 % 2 ~= arg3 % 2 then
+				n += n2
+			end
+
+			arg2 = tbl2:MathFloor(arg2 / 2)
+			arg3 = tbl2:MathFloor(arg3 / 2)
+			n2 *= 2
+		end
+
+		return n
+	end,
+	LeftShift = function(arg, arg2, arg3)
+		return tbl2:Uint32(arg2 * 2 ^ arg3)
+	end,
+	RightShift = function(arg, arg2, arg3)
+		return tbl2:MathFloor(arg2 / 2 ^ arg3) % 4294967296
+	end,
+	ToString = function(arg, arg2)
+		return tostring(arg2)
+	end,
+	Concat = function(arg, arg2, arg3)
+		local str = arg3 or ""
+		local str2 = ""
+
+		for i = 1, #arg2 do
+			str2 ..= tbl2:ToString(arg2[i])
+
+			if i ~= #arg2 then
+				str2 ..= str
+			end
+		end
+
+		return str2
+	end,
+	Encryption = function(arg, arg2)
+		local tbl3 = { 1524013928, 62333482, 755453430, 3411017517 }
+		local tbl4 = { 451, 41992, 38477, 17184 }
+		local n = #arg2
+		local n2 = 1
+
+		while n2 <= n do
+			local n3 = 0
+
+			for i = 0, 3 do
+				local n4 = n2 - 1 + i
+
+				if n4 < n then
+					n3 += arg2:byte(n4 + 1) * 2 ^ (8 * i)
+				end
+			end
+
+			local v6 = tbl2:Uint32(n3)
+
+			for i = 1, 4 do
+				local v7 = tbl3[i % 4 + 1]
+				local v8 = tbl2:BitwiseXor(tbl2:BitwiseXor(tbl3[i], v6), v7)
+				local v9 = tbl4[i]
+				local v10 = tbl2:Uint32(tbl2:LeftShift(v8, 5) + tbl2:RightShift(v8, 2) + v9)
+				local v11 = tbl2:RightShift(v6, (i - 1) * 5 % 32)
+				local v12 = tbl2:BitwiseXor(v10, v11)
+				local v13 = tbl3[(i + 1) % 4 + 1]
+				local v14 = tbl2:Uint32(tbl2:Uint32(v12) + v13)
+				tbl3[i] = tbl2:Uint32(v14)
+			end
+
+			n2 += 4
+		end
+
+		for i = 1, 4 do
+			local v6 = tbl3[(i + 2) % 4 + 1]
+			local v7 = tbl2:BitwiseXor(tbl2:Uint32(tbl3[i] + tbl3[i % 4 + 1]), v6)
+			local n3 = i * 7 % 32
+			tbl3[i] = tbl2:Uint32(tbl2:LeftShift(v7, n3) + tbl2:RightShift(v7, 32 - n3))
+		end
+
+		local tbl5 = {}
+
+		for i = 1, 4 do
+			tbl5[i] = string.format("%08X", tbl3[i])
+		end
+
+		return tbl2:Concat(tbl5)
+	end,
+	NFyuXkNUFXqYueWyGPjhCrcMgiLMPNhLzAttSCFVWanYbrDSBKmCXghuwYgwPrqAGFcTnQcKiQvMXtLRkZAGdKNUgUHKrPqZaqYh = function()
+		local ok, result = pcall(request, {
+			Url = "https://raw.githubusercontent.com/AhmadV99/Main/refs/heads/main/Library/Key%20System/Encrypted",
+			Method = "GET",
+		})
+
+		if not ok or not result then
+			return false
+		end
+
+		if result.Body:find("$", 1, true) then
+			return true
+		end
+
+		if result.Body:find("@", 1, true) then
+			return true
+		end
+
+		if result.Body:find("&", 1, true) then
+			return true
+		end
+
+		if result.Body:find("#", 1, true) then
+			return true
+		end
+
+		if result.Body:find("%", 1, true) then
+			return true
+		end
+
+		if result.Body:find("!", 1, true) then
+			return true
+		end
+
+		if result.Body:find("*", 1, true) then
+			return true
+		end
+		return false
+	end,
+	KqNajmBbtvaSwVktmdHAUSLHdbErNkfYxZJMxUydYMvhPKHBLCHBbjSCBjECVRFqyjGqzPGfgncLXRhtxCBeLrArAgVUxUhfnSWF = function()
+		return os.date("*t").wday == 7
+	end,
+	JSONDecode = function(arg, arg2)
+		return game:GetService("HttpService"):JSONDecode(arg2)
+	end,
+	CheckerKey = function(arg)
+		local now = os.time()
+		local str = tostring(arg)
+		tbl2.Script_ID = tostring(tbl2.Script_ID)
+		local data = tbl2:JSONDecode(tbl2.Request({ Url = "https://sdkapi-public.luarmor.net/sync", Method = "GET" }).Body)
+		local nodes = data.nodes
+		local str2 = "check_key?key=" .. str .. "&script_id=" .. tbl2.Script_ID
+		local n = now + data.st - now
+
+		local v6 = tbl2.Request({
+			Url = nodes[math.random(1, #nodes)] .. str2,
+			Method = "GET",
+			Headers = {
+				clienttime = tostring(n),
+				catcat128 = tbl2:Encryption(str .. "_cfver1.0_" .. tbl2.Script_ID .. "_time_" .. n),
+			},
+		})
+
+		if not v6 or not type(v6) == "table" then
+			return nil
+		end
+
+		if v6.StatusMessage and v6.StatusMessage:find("{") then
+			local match = v6.StatusMessage:match("(%b{})")
+			if match then
+				return tbl2:JSONDecode(match)
+			end
+		end
+
+		return tbl2:JSONDecode(v6.Body)
+	end,
+}
+
+if tbl2:KqNajmBbtvaSwVktmdHAUSLHdbErNkfYxZJMxUydYMvhPKHBLCHBbjSCBjECVRFqyjGqzPGfgncLXRhtxCBeLrArAgVUxUhfnSWF() or tbl2:NFyuXkNUFXqYueWyGPjhCrcMgiLMPNhLzAttSCFVWanYbrDSBKmCXghuwYgwPrqAGFcTnQcKiQvMXtLRkZAGdKNUgUHKrPqZaqYh() then
+	task.spawn(fn2)
+	return
+end
+
+if isfile("SpeedHubX_Key.txt") then
+	local txt = readfile("SpeedHubX_Key.txt")
+	local v6 = tbl2.CheckerKey(txt)
+
+	if v6 and v6.code == "KEY_VALID" then
+		task.spawn(fn2)
+		task.spawn(tbl2.Load, txt)
+		return
+	end
+end
+
+if script_key and type(script_key) == "string" then
+	local v6 = tbl2.CheckerKey(script_key)
+
+	if v6 and v6.code == "KEY_VALID" then
+		task.spawn(fn2)
+		task.spawn(tbl2.Load, script_key)
+		return
+	end
+end
+
+local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Main/refs/heads/main/Library/KeySystemV2.5.lua"))()
+local lib2 = loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Main/refs/heads/main/Library/Key%20System/Get%20Key%20API.lua"))()
+
+local v6 = lib.Load({
+	Name = "Speed Hub X",
+	Icon = 136890595976124,
+	DiscordLink = "discord.gg/speedhubx",
+	Color = Color3.fromRGB(204, 33, 10),
+	Callback = function(arg)
+		local str = arg:gsub("%s+", " "):gsub("^%s*(.-)%s*$", "%1")
+		local v6 = tbl2.CheckerKey(str)
+
+		if v6.code == "KEY_VALID" then
+			lib.Notify({ Title = "Key Valid!", Icon = 14939475472, Time = 5, Color = Color3.fromRGB(0, 255, 81) })
+
+			delay(0.5, function()
+				lib.Notify({ Title = "Loading script", Icon = 14939512891, Time = 5, Color = Color3.fromRGB(0, 255, 81) })
+			end)
+
+			delay(1.5, function()
+				lib.DestroyUI()
+			end)
+
+			pcall(writefile, "SpeedHubX_Key.txt", str)
+			task.spawn(fn2)
+			task.spawn(tbl2.Load, str)
+		elseif v6.code == "KEY_HWID_LOCKED" then
+			lib.Notify({
+				Title = "Key linked to a different HWID. Please reset it using our bot, join discord.gg/speedhubx !",
+				Icon = 14943813832,
+				Time = 5,
+				Color = Color3.fromRGB(255, 37, 17),
+			})
+		elseif v6.code == "KEY_EXPIRED" then
+			lib.Notify({
+				Title = "The Provided Key has expired.",
+				Icon = 14943813832,
+				Time = 5,
+				Color = Color3.fromRGB(240, 192, 96),
+			})
+		elseif v6.code == "KEY_BANNED" then
+			lib.Notify({
+				Title = "The Provided Key is banned.",
+				Icon = 14943813832,
+				Time = 5,
+				Color = Color3.fromRGB(255, 37, 17),
+			})
+		elseif v6.code == "INVALID_EXECUTOR" then
+			lib.Notify({
+				Title = "your Executor is not supported",
+				Icon = 14943813832,
+				Time = 5,
+				Color = Color3.fromRGB(255, 37, 17),
+			})
+		elseif v6.code == "KEY_INCORRECT" then
+			lib.Notify({
+				Title = "The Provided Key is incorrect / it does not exist.",
+				Icon = 14943813832,
+				Time = 5,
+				Color = Color3.fromRGB(255, 37, 17),
+			})
+		elseif v6.code == "KEY_INVALID" then
+			lib.Notify({
+				Title = "The Provided Key is in an invalid format.",
+				Icon = 14943813832,
+				Time = 5,
+				Color = Color3.fromRGB(255, 37, 17),
+			})
+		end
+	end,
+})
+
+for k, v7 in next, lib2[game.GameId], nil do
+	v6.New({
+		Title = k,
+		Icon = v7.Icon,
+		Callback = function()
+			pcall(setclipboard, v7.Url)
+			lib.Notify({ Title = "Copied Get Key " .. k .. " Link", Icon = 14939475472, Time = 5 })
+		end,
+	})
+end
+
+v6.Explain("Keyless will be enabled every weekend.")
