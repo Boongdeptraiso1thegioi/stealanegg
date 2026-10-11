@@ -27485,7 +27485,7 @@ do
 		do
 			if type(SenaLibOverride) ~= "table" then
 				local ok, result = pcall(function()
-					return loadstring(game:HttpGet("https://senahub.xyz/raw/libsenuy"))()
+					return loadstring(game:HttpGet("https://raw.githubusercontent.com/Boongdeptraiso1thegioi/stealanegg/refs/heads/main/lib.lua"))()
 				end)
 
 				SenaLibOverride = ok and type(result) == "table" and result or nil
