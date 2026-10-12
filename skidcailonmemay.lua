@@ -1,3947 +1,1297 @@
--- DUCKHub | Steal An Egg
--- Key system removed for educational purposes
---
+-- ==============================================================================
+--  CHILLI HUB V3.7 - DYNAMIC ISLAND & MASTER 100% TRANSLATION (CLEAN MINI BADGE)
+-- ==============================================================================
 
-for _, obj in getgc(true) do
-    if typeof(obj) ~= "table" or getrawmetatable(obj) then continue end
-    local mainrun = false
-    for _, v in obj do
-        if v == obj then mainrun = true break end
-    end
-    if not mainrun then continue end
-    for _, v in obj do
-        if typeof(v) == "number" and v >= 1 and v <= 3 and obj[v] == nil then
-            setmetatable(obj, {__newindex = function() end})
-            break
+-- ==================== 0. DỌN DẸP SẠCH TÀN DƯ GUI CŨ ====================
+local cleanupList = {
+    "Chilli_Dynamic_Island",
+    "Chilli_AutoConfig_Btn",
+    "Chilli_AutoFarm_Widget",
+    "Chilli_Liquid_Capsule",
+    "Sparkling_New_Badge"
+}
+
+for _, root in ipairs({gethui and gethui(), game:GetService("CoreGui"), game:GetService("Players").LocalPlayer:FindFirstChild("PlayerGui")}) do
+    if root then
+        for _, name in ipairs(cleanupList) do
+            local f = root:FindFirstChild(name, true)
+            while f do
+                pcall(function() f:Destroy() end)
+                f = root:FindFirstChild(name, true)
+            end
         end
     end
 end
-local _chk_Players = game:GetService("Players")
-local _chk_TweenService = game:GetService("TweenService")
-local _chk_CoreGui = game:GetService("CoreGui")
-local _chk_player = _chk_Players.LocalPlayer
 
-local REQUIRED_FUNCS = {
-    { Name = "loadstring", Test = function() return type(loadstring) == "function" end },
-    { Name = "HTTP", Test = function()
-        if type(game.HttpGet) == "function" then return true end
-        if type(request) == "function" or type(http_request) == "function" then return true end
-        if type(syn) == "table" and type(syn.request) == "function" then return true end
-        return false
-    end },
-}
-
-local missing = {}
-for _, item in ipairs(REQUIRED_FUNCS) do
-    local ok = pcall(item.Test)
-    if not ok then
-        table.insert(missing, item.Name)
-    end
+-- ==================== 1. BẢO VỆ KHỞI ĐỘNG (SAFE BOOT GUARD) ====================
+if not game:IsLoaded() then
+    game.Loaded:Wait()
 end
-
-local function showWarning(msg)
-    local sg = Instance.new("ScreenGui")
-    sg.Name = "ExecutorCompatWarning"
-    sg.ResetOnSpawn = false
-    sg.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    pcall(function() sg.Parent = _chk_CoreGui end)
-    if not sg.Parent then sg.Parent = _chk_player:WaitForChild("PlayerGui") end
-
-    local blur = Instance.new("Frame")
-    blur.Size = UDim2.new(1, 0, 1, 0)
-    blur.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-    blur.BackgroundTransparency = 0.35
-    blur.BorderSizePixel = 0
-    blur.ZIndex = 100
-    blur.Parent = sg
-
-    local card = Instance.new("Frame")
-    card.Size = UDim2.new(0, 340, 0, 160)
-    card.Position = UDim2.new(0.5, -170, 0.5, -80)
-    card.BackgroundColor3 = Color3.fromRGB(28, 28, 34)
-    card.BorderSizePixel = 0
-    card.ZIndex = 101
-    card.Parent = sg
-
-    Instance.new("UICorner", card).CornerRadius = UDim.new(0, 14)
-
-    local stroke = Instance.new("UIStroke", card)
-    stroke.Color = Color3.fromRGB(255, 80, 80)
-    stroke.Thickness = 2
-
-    local icon = Instance.new("TextLabel", card)
-    icon.Size = UDim2.new(1, 0, 0, 40)
-    icon.Position = UDim2.new(0, 0, 0, 14)
-    icon.BackgroundTransparency = 1
-    icon.Text = "⚠️"
-    icon.TextSize = 32
-    icon.Font = Enum.Font.GothamBold
-    icon.TextColor3 = Color3.fromRGB(255, 80, 80)
-    icon.ZIndex = 102
-
-    local title = Instance.new("TextLabel", card)
-    title.Size = UDim2.new(1, -24, 0, 24)
-    title.Position = UDim2.new(0, 12, 0, 56)
-    title.BackgroundTransparency = 1
-    title.Text = "Executor Not Supported"
-    title.TextSize = 17
-    title.Font = Enum.Font.GothamBold
-    title.TextColor3 = Color3.fromRGB(240, 240, 245)
-    title.ZIndex = 102
-
-    local body = Instance.new("TextLabel", card)
-    body.Size = UDim2.new(1, -24, 0, 50)
-    body.Position = UDim2.new(0, 12, 0, 84)
-    body.BackgroundTransparency = 1
-    body.Text = msg
-    body.TextSize = 12
-    body.Font = Enum.Font.Gotham
-    body.TextColor3 = Color3.fromRGB(180, 180, 190)
-    body.TextWrapped = true
-    body.ZIndex = 102
-end
-
-local function showSuccessPopup()
-    local sg = Instance.new("ScreenGui")
-    sg.Name = "ExecutorCompatSuccess"
-    sg.ResetOnSpawn = false
-    sg.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    pcall(function() sg.Parent = _chk_CoreGui end)
-    if not sg.Parent then sg.Parent = _chk_player:WaitForChild("PlayerGui") end
-
-    local card = Instance.new("Frame")
-    card.Size = UDim2.new(0, 260, 0, 44)
-    card.Position = UDim2.new(0.5, -130, 0, -60)
-    card.BackgroundColor3 = Color3.fromRGB(28, 28, 34)
-    card.BorderSizePixel = 0
-    card.ZIndex = 101
-    card.Parent = sg
-
-    Instance.new("UICorner", card).CornerRadius = UDim.new(0, 10)
-
-    local stroke = Instance.new("UIStroke", card)
-    stroke.Color = Color3.fromRGB(0, 255, 0)
-    stroke.Thickness = 1.5
-
-    local icon = Instance.new("TextLabel", card)
-    icon.Size = UDim2.new(0, 30, 1, 0)
-    icon.Position = UDim2.new(0, 10, 0, 0)
-    icon.BackgroundTransparency = 1
-    icon.Text = "✅"
-    icon.TextSize = 18
-    icon.Font = Enum.Font.GothamBold
-    icon.TextColor3 = Color3.fromRGB(0, 255, 0)
-    icon.ZIndex = 102
-
-    local lbl = Instance.new("TextLabel", card)
-    lbl.Size = UDim2.new(1, -50, 1, 0)
-    lbl.Position = UDim2.new(0, 40, 0, 0)
-    lbl.BackgroundTransparency = 1
-    lbl.Text = "Executor Supported"
-    lbl.TextSize = 14
-    lbl.Font = Enum.Font.GothamBold
-    lbl.TextColor3 = Color3.fromRGB(240, 240, 245)
-    lbl.ZIndex = 102
-
-    _chk_TweenService:Create(card, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-        Position = UDim2.new(0.5, -130, 0, 24)
-    }):Play()
-
-    task.delay(2.5, function()
-        local out = _chk_TweenService:Create(card, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-            Position = UDim2.new(0.5, -130, 0, -60)
-        })
-        out:Play()
-        out.Completed:Wait()
-        sg:Destroy()
-    end)
-end
-
-if #missing > 0 then
-    showWarning("Your executor is missing required functions:\n" .. table.concat(missing, ", ") .. "\n\nThis script requires a full Roblox executor.")
-    return
-else
-    showSuccessPopup()
-end
-
-local WindUILoadOk, WindUILoadResult = pcall(function()
-    local body = game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua")
-    return loadstring(body)()
-end)
-
-if not WindUILoadOk or not WindUILoadResult then
-    warn("[DUCKHub] WindUI failed to load: " .. tostring(WindUILoadResult))
-    return
-end
-
-local WindUI = WindUILoadResult
 
 local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local UserInputService = game:GetService("UserInputService")
-local TweenService = game:GetService("TweenService")
-local TeleportService = game:GetService("TeleportService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Workspace = game:GetService("Workspace")
-local player = Players.LocalPlayer
+local LocalPlayer = Players.LocalPlayer or Players:GetPropertyChangedSignal("LocalPlayer"):Wait()
 
-local Memory = getgenv().MergedUtilityMemory
-if not Memory then
-    Memory = {
-        SpeedEnabled = true,
-        DesiredSpeed = 500,
-        SpeedBypassMethod = "Humanoid Clone",
-        AntiKnockbackEnabled = false,
-        AntiRagdollEnabled = false,
-        InstantAccelerationEnabled = false,
-        AntiRejoinEnabled = false,
-        FlyEnabled = false,
-        FlySpeed = 50,
-        EggEspEnabled = false,
-        EggAutoStealEnabled = false,
-        EggRarityFilter = "All",
-        EggBigOnly = false,
-        AntiTrapEnabled = false,
-        AutoSellEnabled = false,
-        AutoSellRarities = {"Common", "Uncommon", "Rare", "Epic"},
-        AutoPlaceAll = false,
-        AutoHatch = false,
-        AutoEnterAbyss = false,
-        AutoClaim = false,
-        AutoUpgradeBase = false,
-        AutoUpgradeTreadmill = false,
-        AutoBuyTrail = false,
-    }
-    getgenv().MergedUtilityMemory = Memory
+if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+    LocalPlayer.CharacterAdded:Wait()
+    repeat task.wait(0.2) until LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
 end
 
-local DesiredSpeed = Memory.DesiredSpeed or 500
-local SpeedEnabled = Memory.SpeedEnabled or false
-local SpeedBypassMethod = Memory.SpeedBypassMethod or "Humanoid Clone"
+task.wait(2.5) -- Đệm an toàn chống BAC-8512
 
-local AntiKnockbackEnabled = Memory.AntiKnockbackEnabled or false
-local AntiRagdollEnabled = Memory.AntiRagdollEnabled or false
-local InstantAccelerationEnabled = Memory.InstantAccelerationEnabled or false
-local AntiRejoinEnabled = Memory.AntiRejoinEnabled or false
-local FlyEnabled = Memory.FlyEnabled or false
-local FlySpeed = Memory.FlySpeed or 50
-local AntiTrapEnabled = Memory.AntiTrapEnabled or false
-local AutoSellEnabled = Memory.AutoSellEnabled or false
-local AutoSellRarities = Memory.AutoSellRarities or {"Common", "Uncommon", "Rare", "Epic"}
-
-local FlyBodyVelocity = nil
-local FlyBodyGyro = nil
-local FlyConnection = nil
-local CurrentHumanoid = nil
-local ragdollConnection = nil
-local joints = {}
-
-local DEFAULT_THEME = "DUCKHub Dark Green"
-
-local function Gradient(colors, rotation)
-    local points = {}
-    for position, color in pairs(colors) do
-        if type(color) == "table" then
-            points[position] = {
-                Color = Color3.fromHex(color.Color),
-                Transparency = color.Transparency or 0,
-            }
-        else
-            points[position] = {
-                Color = Color3.fromHex(color),
-                Transparency = 0,
-            }
-        end
-    end
-    return WindUI:Gradient(points, { Rotation = rotation or 45 })
-end
-
-WindUI:AddTheme({
-    Name = DEFAULT_THEME,
-    Accent = Gradient({ ["0"] = "#00A000", ["50"] = "#00FF00", ["100"] = "#004D00" }, 45),
-    Background = Gradient({
-        ["0"] = { Color = "#001A00", Transparency = 0.06 },
-        ["25"] = { Color = "#003300", Transparency = 0.08 },
-        ["50"] = { Color = "#004D00", Transparency = 0.10 },
-        ["75"] = { Color = "#006600", Transparency = 0.12 },
-        ["100"] = { Color = "#001000", Transparency = 0.06 },
-    }, 135),
-    Outline = Gradient({
-        ["0"] = { Color = "#008000", Transparency = 0.45 },
-        ["50"] = { Color = "#00CC44", Transparency = 0.22 },
-        ["100"] = { Color = "#006600", Transparency = 0.42 },
-    }, 90),
-    Button = Gradient({
-        ["0"] = { Color = "#003300", Transparency = 0.72 },
-        ["50"] = { Color = "#00AA33", Transparency = 0.61 },
-        ["100"] = { Color = "#002200", Transparency = 0.74 },
-    }, 90),
-    Text = Color3.fromHex("#FFFFFF"),
-    Placeholder = Color3.fromHex("#B8FFB8"),
-    Icon = Color3.fromHex("#FFFFFF"),
-})
-
-WindUI:SetTheme(DEFAULT_THEME)
-
-local Window = WindUI:CreateWindow({
-    Title = "DUCK Hub",
-    Icon = "rbxassetid://132401977734278",
-    Author = "by DUCZ",
-    Folder = "DUCKHub",
-    Size = UDim2.fromOffset(520, 420),
-    MinSize = Vector2.new(420, 320),
-    ToggleKey = Enum.KeyCode.K,
-    Transparent = true,
-    Theme = DEFAULT_THEME,
-    Resizable = true,
-    SideBarWidth = 160,
-    HideSearchBar = true,
-    ScrollBarEnabled = true,
-    ShadowTransparency = 0.22,
-    Radius = 14,
-    ElementsRadius = 10,
-    Acrylic = true,
-    NewElements = true,
-    HidePanelBackground = true,
-    Topbar = { Height = 44, ButtonsType = "Mac" },
-    OpenButton = {
-        Title = "Open DUCKHub",
-        Icon = "rbxassetid://132401977734278",
-        CornerRadius = UDim.new(1, 0),
-        StrokeThickness = 1,
-        Draggable = true,
-        Enabled = true,
-        OnlyMobile = false,
-        Scale = 0.92,
-        Color = ColorSequence.new(Color3.fromHex("#00A000"), Color3.fromHex("#32CD32")),
-    },
-    User = {
-        Enabled = true,
-        Anonymous = false,
-        Image = "rbxassetid://132401977734278",
-        Callback = function()
-            WindUI:Notify({
-                Title = "DUCKHub",
-                Content = player.Name,
-                Icon = "user",
-                Duration = 3,
-            })
-        end,
-    },
-})
-
-Window:SetBackgroundTransparency(0.5)
-
-local MainTab = Window:Tab({ Title = "Main", Icon = "layout-dashboard" })
-local EggTab = Window:Tab({ Title = "Egg Steal", Icon = "egg" })
-local AutoSellTab = Window:Tab({ Title = "Auto Sell", Icon = "tag" })
-local AutomationTab = Window:Tab({ Title = "Automation", Icon = "bot" })
-
-local DISCORD_LINK = "https://discord.gg/PEsmsDCHdf"
-
-local function copyDiscordLink()
-    local funcs = {
-        function() return setclipboard(DISCORD_LINK) end,
-        function() return toclipboard(DISCORD_LINK) end,
-        function() return set_clipboard(DISCORD_LINK) end,
-    }
-
-    for _, fn in ipairs(funcs) do
-        local ok = pcall(fn)
-        if ok then
-            return true
-        end
-    end
-
-    return false
-end
-
-local function showDiscordPopup()
-    local existing = _chk_CoreGui:FindFirstChild("DiscordPopupGui")
-    if not existing and LocalPlayer then
-        local playerGui = LocalPlayer:FindFirstChild("PlayerGui")
-        existing = playerGui and playerGui:FindFirstChild("DiscordPopupGui")
-    end
-
-    if existing then
-        existing:Destroy()
-    end
-
-    local screenGui = Instance.new("ScreenGui")
-    screenGui.Name = "DiscordPopupGui"
-    screenGui.ResetOnSpawn = false
-    screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    screenGui.DisplayOrder = 1000
-
-    pcall(function()
-        screenGui.Parent = game:GetService("CoreGui")
-    end)
-
-    if not screenGui.Parent then
-        screenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
-    end
-
-    local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(0, 320, 0, 150)
-    frame.Position = UDim2.new(0.5, -160, 0.5, -75)
-    frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    frame.BorderSizePixel = 0
-    frame.Parent = screenGui
-
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 8)
-    corner.Parent = frame
-
-    local stroke = Instance.new("UIStroke")
-    stroke.Color = Color3.fromRGB(88, 101, 242)
-    stroke.Thickness = 2
-    stroke.Parent = frame
-
-    local title = Instance.new("TextLabel")
-    title.Size = UDim2.new(1, 0, 0, 60)
-    title.BackgroundTransparency = 1
-    title.Text = "Join our discord for more scripts!"
-    title.TextColor3 = Color3.fromRGB(255, 255, 255)
-    title.TextSize = 16
-    title.Font = Enum.Font.GothamBold
-    title.Parent = frame
-
-    local copyBtn = Instance.new("TextButton")
-    copyBtn.Size = UDim2.new(0, 120, 0, 40)
-    copyBtn.Position = UDim2.new(0, 30, 0, 80)
-    copyBtn.BackgroundColor3 = Color3.fromRGB(88, 101, 242)
-    copyBtn.Text = "Copy Link"
-    copyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    copyBtn.Font = Enum.Font.GothamSemibold
-    copyBtn.TextSize = 14
-    copyBtn.Parent = frame
-
-    local copyCorner = Instance.new("UICorner")
-    copyCorner.CornerRadius = UDim.new(0, 6)
-    copyCorner.Parent = copyBtn
-
-    local closeBtn = Instance.new("TextButton")
-    closeBtn.Size = UDim2.new(0, 120, 0, 40)
-    closeBtn.Position = UDim2.new(0, 170, 0, 80)
-    closeBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-    closeBtn.Text = "Close"
-    closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    closeBtn.Font = Enum.Font.GothamSemibold
-    closeBtn.TextSize = 14
-    closeBtn.Parent = frame
-
-    local closeCorner = Instance.new("UICorner")
-    closeCorner.CornerRadius = UDim.new(0, 6)
-    closeCorner.Parent = closeBtn
-
-    copyBtn.Activated:Connect(function()
-        if copyDiscordLink() then
-            copyBtn.Text = "Copied!"
-        else
-            copyBtn.Text = "Clipboard unavailable"
-        end
-
-        task.delay(1.5, function()
-            if copyBtn and copyBtn.Parent then
-                copyBtn.Text = "Copy Link"
-            end
-        end)
-    end)
-
-    closeBtn.Activated:Connect(function()
-        if screenGui and screenGui.Parent then
-            screenGui:Destroy()
-        end
-    end)
-end
-
-local SettingsTab = Window:Tab({ Title = "Settings", Icon = "settings" })
-
-local LocalPlayer = Players.LocalPlayer
-local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
-
-
-task.defer(function()
-    pcall(showDiscordPopup)
-end)
-
-
-local function safeRequire(parent, ...)
-    local current = parent
-    for _, name in ipairs({...}) do
-        local child = current:FindFirstChild(name)
-        if not child then
-            local success, result = pcall(function() return current:WaitForChild(name, 5) end)
-            if success and result then child = result else return nil end
-        end
-        current = child
-    end
-    if not current:IsA("ModuleScript") then return nil end
-    local success, result = pcall(require, current)
-    return success and result or nil
-end
-
-local EggState = safeRequire(ReplicatedStorage, "Client", "EggState")
-local Assets = safeRequire(ReplicatedStorage, "Data", "Assets")
-local WorkspaceEggVisibility = nil
-pcall(function()
-    WorkspaceEggVisibility = require(LocalPlayer.PlayerScripts.Game.AreaEggs.WorkspaceEggVisibility)
-end)
-
-if not EggState or not Assets then
-    warn("Axur Steal: Critical modules missing.")
-end
-
-local RarityColors = {
-    Common = Color3.fromRGB(150,150,150), Uncommon = Color3.fromRGB(100,200,100),
-    Rare = Color3.fromRGB(100,150,255), SuperRare = Color3.fromRGB(80,120,255),
-    Epic = Color3.fromRGB(180,80,255), Legendary = Color3.fromRGB(255,200,50),
-    Mythic = Color3.fromRGB(255,100,200), Mythical = Color3.fromRGB(255,100,200),
-    Divine = Color3.fromRGB(255,50,50), Secret = Color3.fromRGB(255,30,30),
-    BrainrotGod = Color3.fromRGB(255,0,0), God = Color3.fromRGB(255,0,0),
-    Exclusive = Color3.fromRGB(255,100,50), Limited = Color3.fromRGB(255,150,50),
-    Prismatic = Color3.fromRGB(255,100,255), Transcendent = Color3.fromRGB(200,50,255),
-    Eternal = Color3.fromRGB(100,255,255), Exotic = Color3.fromRGB(255,200,100),
-    Rainbow = Color3.fromRGB(255,100,255), Superior = Color3.fromRGB(255,80,80),
-    Titan = Color3.fromRGB(255,120,50), Celestial = Color3.fromRGB(100,200,255),
-    Cosmic = Color3.fromRGB(150,100,255), Admin = Color3.fromRGB(255,0,0),
-}
-
-local espEnabled = Memory.EggEspEnabled or false
-local autoStealEnabled = Memory.EggAutoStealEnabled or false
-local eggRarityFilter = Memory.EggRarityFilter or "All"
-local eggBigOnly = Memory.EggBigOnly or false
-local trackedEggs = {}
-local bestEggUid = nil
-local espBeam = nil
-local espPlayerAttach = nil
-local espEggAttach = nil
-local modelCache = {}
-local promptCache = {}
-local espLoopRunning = false
-local autoLoopRunning = false
-local bigOnlyAutoStealEnabled = false
-local bigOnlyLoopRunning = false
-
-local function findEggModel(uid)
-    local cached = modelCache[uid]
-    if cached and cached.Parent then return cached end
-
-    if WorkspaceEggVisibility and WorkspaceEggVisibility.ResolveModel then
-        local s, r = pcall(function() return WorkspaceEggVisibility.ResolveModel(uid) end)
-        if s and r and r:IsA("Model") then
-            modelCache[uid] = r
-            return r
-        end
-    end
-
-    local m = Workspace:FindFirstChild(uid)
-    if m and m:IsA("Model") then
-        modelCache[uid] = m
-        return m
-    end
-
-    local aesc = Workspace:FindFirstChild("AreaEggSlotsClient")
-    if aesc then
-        m = aesc:FindFirstChild(uid)
-        if m and m:IsA("Model") then
-            modelCache[uid] = m
-            return m
-        end
-    end
-
-    return nil
-end
-
-local function getModelBasePart(model)
-    if not model then return nil end
-    if model.PrimaryPart then return model.PrimaryPart end
-    for _, d in ipairs(model:GetDescendants()) do
-        if d:IsA("BasePart") then return d end
-    end
-    return nil
-end
-
-local function getModelPrompt(model)
-    if not model then return nil end
-    local cached = promptCache[model]
-    if cached and cached.Parent then return cached end
-    for _, d in ipairs(model:GetDescendants()) do
-        if d:IsA("ProximityPrompt") and d.Name == "CarryAreaEgg" then
-            promptCache[model] = d
-            return d
-        end
-    end
-    for _, d in ipairs(model:GetDescendants()) do
-        if d:IsA("ProximityPrompt") then
-            promptCache[model] = d
-            return d
-        end
-    end
-    return nil
-end
-
-local function isEggCarriedByOtherPlayer(uid)
-    local data = trackedEggs[uid]
-    if not data then return false end
-    local model = data.model
-    if not model then return false end
-
-    
-    local parent = model.Parent
-    if parent then
-        for _, plr in ipairs(Players:GetPlayers()) do
-            if plr ~= LocalPlayer and plr.Character and parent:IsDescendantOf(plr.Character) then
-                return true, plr
-            end
-        end
-    end
-
-    
-    local record = data.record
-    local eggName = nil
-    if record and record.AssetCategory then
-        eggName = tostring(record.AssetCategory):lower()
-    end
-    local modelName = model.Name:lower()
-
-    for _, plr in ipairs(Players:GetPlayers()) do
-        if plr ~= LocalPlayer then
-            local char = plr.Character
-            if char then
-                for _, tool in ipairs(char:GetChildren()) do
-                    if tool:IsA("Tool") then
-                        local tName = tool.Name:lower()
-                        if tName:find("area egg") or tName:find("carryareaegg") or
-                           tName == "egg" or tName:find("^egg_") or tName:find("_egg$") then
-                            
-                            if eggName and (tName:find(eggName) or modelName:find(tName) or tName:find(modelName)) then
-                                return true, plr
-                            elseif not eggName then
-                                return true, plr
-                            end
-                        end
-                    end
-                end
-            end
-            local backpack = plr:FindFirstChild("Backpack")
-            if backpack then
-                for _, tool in ipairs(backpack:GetChildren()) do
-                    if tool:IsA("Tool") then
-                        local tName = tool.Name:lower()
-                        if tName:find("area egg") or tName:find("carryareaegg") or
-                           tName == "egg" or tName:find("^egg_") or tName:find("_egg$") then
-                            if eggName and (tName:find(eggName) or modelName:find(tName) or tName:find(modelName)) then
-                                return true, plr
-                            elseif not eggName then
-                                return true, plr
-                            end
-                        end
-                    end
-                end
-            end
-        end
-    end
-
-    
-    local prompt = getModelPrompt(model)
-    if prompt and prompt.Enabled == false then
-        return true, nil
-    end
-
-    
-    local carrierAttr = model:GetAttribute("Carrier")
-    if carrierAttr and carrierAttr ~= LocalPlayer.UserId then
-        return true, Players:GetPlayerByUserId(carrierAttr)
-    end
-
-    return false, nil
-end
-
-local carriedEggsCache = {}
-local lastCarryCheckTime = 0
-
-local function refreshCarriedEggsCache()
-    local now = tick()
-    if now - lastCarryCheckTime < 0.3 then return end
-    lastCarryCheckTime = now
-    carriedEggsCache = {}
-    for uid in pairs(trackedEggs) do
-        local carried, carrier = isEggCarriedByOtherPlayer(uid)
-        if carried then
-            carriedEggsCache[uid] = carrier
-        end
-    end
-end
-
-local function findPromptNearPosition(position, maxDist)
-    maxDist = maxDist or 25
-    local bestPrompt, bestDist = nil, maxDist
-    for _, obj in ipairs(Workspace:GetDescendants()) do
-        if obj:IsA("ProximityPrompt") and obj.Name == "CarryAreaEgg" and obj.Enabled then
-            local parent = obj.Parent
-            if parent and parent:IsA("BasePart") then
-                local dist = (parent.Position - position).Magnitude
-                if dist < bestDist then
-                    bestDist = dist
-                    bestPrompt = obj
-                end
-            end
-        end
-    end
-    return bestPrompt
-end
-
-local function getRarityColor(category)
-    local info = Assets and Assets.Directory and Assets.Directory[category]
-    local r = info and info.Rarity
-    if not r or not r.Name then return Color3.fromRGB(150,150,150) end
-    return RarityColors[tostring(r.Name)] or Color3.fromRGB(150,150,150)
-end
-
-local rarityNameCache = {}
-local function getEggRarityName(record)
-    if not record then return "Unknown" end
-    local cat = record.AssetCategory
-    if not cat then return "Unknown" end
-    local cached = rarityNameCache[cat]
-    if cached then return cached end
-    local info = Assets and Assets.Directory and Assets.Directory[cat]
-    local r = info and info.Rarity
-    if not r then
-        rarityNameCache[cat] = "Unknown"
-        return "Unknown"
-    end
-    local name = "Unknown"
-    if r.Name ~= nil then
-        name = tostring(r.Name)
-    elseif type(r) == "string" then
-        name = r
-    end
-    rarityNameCache[cat] = name
-    return name
-end
-
-local RarityPriority = {
-    ["admin"] = 100, ["secret"] = 99, ["brainrotgod"] = 98,
-    ["divine"] = 97, ["god"] = 96,
-    ["eternal"] = 90, ["transcendent"] = 89, ["prismatic"] = 88,
-    ["celestial"] = 87, ["cosmic"] = 86, ["titan"] = 85,
-    ["mythical"] = 80, ["mythic"] = 79, ["superior"] = 78,
-    ["exclusive"] = 77, ["limited"] = 76,
-    ["legendary"] = 60,
-    ["epic"] = 50, ["exotic"] = 49, ["rainbow"] = 48,
-    ["superrare"] = 30, ["rare"] = 20, ["uncommon"] = 10, ["common"] = 1,
-}
-
-local function getModelSizeScore(model)
-    if not model or not model.Parent then return 0 end
-    local success, size = pcall(function()
-        return model:GetExtentsSize()
-    end)
-    if success and size then
-        local maxDim = math.max(size.X, size.Y, size.Z)
-        return math.floor(maxDim * 100)
-    end
-    return 0
-end
-
-local function getEggRarityPriority(record)
-    local info = Assets and Assets.Directory and Assets.Directory[record.AssetCategory]
-    local r = info and info.Rarity
-    if not r then return 0 end
-    local name = r.Name and tostring(r.Name):lower() or ""
-    local priority = RarityPriority[name] or 0
-    if priority == 0 and record.AssetCategory then
-        local catName = tostring(record.AssetCategory):lower()
-        for rarityName, p in pairs(RarityPriority) do
-            if catName:find(rarityName) then
-                priority = p
-                break
-            end
-        end
-    end
-    return priority
-end
-
-local function scoreEgg(data)
-    local record = data.record
-    local sizeScore = getModelSizeScore(data.model)
-    if eggBigOnly then
-        return sizeScore
-    end
-    local priority = getEggRarityPriority(record)
-    local info = Assets and Assets.Directory and Assets.Directory[record.AssetCategory]
-    local r = info and info.Rarity
-    local rarityNumber = (r and r.RarityNumber) or 0
-
-    
-    if eggRarityFilter ~= "All" then
-        return (sizeScore * 100000000) + rarityNumber
-    end
-
-    return (priority * 100000000) + (rarityNumber * 10000) + sizeScore
-end
-
-local function findBestEgg()
-    local bestUid, bestScore = nil, -1
-    local char = LocalPlayer.Character
-    local hrp = char and char:FindFirstChild("HumanoidRootPart")
-    local playerPos = hrp and hrp.Position or nil
-
-    refreshCarriedEggsCache()
-
-    for uid, data in pairs(trackedEggs) do
-        if data.model and data.model.Parent then
-            
-            if carriedEggsCache[uid] then continue end
-
-            
-            local passesFilter = true
-            if eggRarityFilter ~= "All" then
-                local rarityName = getEggRarityName(data.record)
-                if rarityName:lower() ~= eggRarityFilter:lower() then
-                    passesFilter = false
-                end
-            end
-            if not passesFilter then continue end
-
-            local s = scoreEgg(data)
-            local isBetter = false
-            if s > bestScore then
-                isBetter = true
-            elseif s == bestScore and playerPos then
-                local bp = data.basePart or getModelBasePart(data.model)
-                if bp then
-                    local dist = (playerPos - bp.Position).Magnitude
-                    local bestData = bestUid and trackedEggs[bestUid]
-                    local bestBp = bestData and (bestData.basePart or getModelBasePart(bestData.model))
-                    local bestDist = bestBp and (playerPos - bestBp.Position).Magnitude or math.huge
-                    if dist < bestDist then
-                        isBetter = true
-                    end
-                end
-            end
-            if isBetter then
-                bestScore = s
-                bestUid = uid
-            end
-        end
-    end
-    return bestUid, bestScore
-end
-
-local function clearAll()
-    for uid, data in pairs(trackedEggs) do
-        pcall(function() if data.highlight then data.highlight:Destroy() end end)
-    end
-    trackedEggs = {}
-    modelCache = {}
-    promptCache = {}
-    bestEggUid = nil
-    pcall(function() if espBeam then espBeam:Destroy() end end)
-    pcall(function() if espPlayerAttach then espPlayerAttach:Destroy() end end)
-    pcall(function() if espEggAttach then espEggAttach:Destroy() end end)
-    espBeam = nil
-    espPlayerAttach = nil
-    espEggAttach = nil
-end
-
-local function ensureHighlight(uid)
-    local data = trackedEggs[uid]
-    if not data then return end
-    local model = data.model
-    if not model or not model.Parent then return end
-    if data.highlight and data.highlight.Parent then
-        pcall(function()
-            local color = getRarityColor(data.record.AssetCategory)
-            data.highlight.FillColor = color
-            data.highlight.OutlineColor = color
-        end)
-        return
-    end
-    pcall(function()
-        local color = getRarityColor(data.record.AssetCategory)
-        local hl = Instance.new("Highlight")
-        hl.Name = "AxurEggESP"
-        hl.Adornee = model
-        hl.FillTransparency = 0.7
-        hl.OutlineTransparency = 0
-        hl.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-        hl.FillColor = color
-        hl.OutlineColor = color
-        hl.Parent = model
-        data.highlight = hl
-    end)
-end
-
-local function updateBeam()
-    if not espEnabled or not bestEggUid then return end
-    local data = trackedEggs[bestEggUid]
-    if not data then return end
-    local model = data.model
-    if not model or not model.Parent then return end
-    local basePart = data.basePart
-    if not basePart or not basePart.Parent then
-        basePart = getModelBasePart(model)
-        data.basePart = basePart
-        if not basePart then return end
-    end
-    local char = LocalPlayer.Character
-    if not char then return end
-    local hrp = char:FindFirstChild("HumanoidRootPart")
-    if not hrp then return end
-
-    if not espPlayerAttach or espPlayerAttach.Parent ~= hrp then
-        pcall(function() if espPlayerAttach then espPlayerAttach:Destroy() end end)
-        espPlayerAttach = Instance.new("Attachment")
-        espPlayerAttach.Name = "BestEggESP_PlayerAttachment"
-        espPlayerAttach.Parent = hrp
-        if espBeam then espBeam.Attachment0 = espPlayerAttach end
-    end
-    if not espEggAttach or espEggAttach.Parent ~= basePart then
-        pcall(function() if espEggAttach then espEggAttach:Destroy() end end)
-        espEggAttach = Instance.new("Attachment")
-        espEggAttach.Name = "BestEggESP_EggAttachment"
-        espEggAttach.Parent = basePart
-        if espBeam then espBeam.Attachment1 = espEggAttach end
-    end
-    if not espBeam or espBeam.Parent == nil then
-        espBeam = Instance.new("Beam")
-        espBeam.Name = "BestEggESP_Tracer"
-        espBeam.FaceCamera = true
-        espBeam.LightEmission = 1
-        espBeam.LightInfluence = 0
-        espBeam.Width0 = 0.18
-        espBeam.Width1 = 0.18
-        espBeam.Transparency = NumberSequence.new(0)
-        espBeam.Segments = 12
-        espBeam.Color = ColorSequence.new(Color3.fromRGB(255, 0, 0))
-        espBeam.Parent = hrp
-        espBeam.Attachment0 = espPlayerAttach
-        espBeam.Attachment1 = espEggAttach
-    end
-end
-
-local function syncEggs()
-    if not EggState or not EggState.ReadFieldEggs then return end
-    lastSyncTime = tick()
-    local success, snapshot = pcall(EggState.ReadFieldEggs, EggState)
-    if not success or not snapshot or not snapshot.Records then
-        clearAll()
-        return
-    end
-
-    local currentUids = {}
-    for _, record in ipairs(snapshot.Records) do
-        currentUids[record.Uid] = true
-        if not trackedEggs[record.Uid] then
-            trackedEggs[record.Uid] = {record = record, highlight = nil, model = nil, basePart = nil}
-        else
-            trackedEggs[record.Uid].record = record
-        end
-    end
-
-    for uid in pairs(trackedEggs) do
-        if not currentUids[uid] then
-            pcall(function() if trackedEggs[uid].highlight then trackedEggs[uid].highlight:Destroy() end end)
-            trackedEggs[uid] = nil
-            modelCache[uid] = nil
-            if bestEggUid == uid then bestEggUid = nil end
-        end
-    end
-
-    for uid, data in pairs(trackedEggs) do
-        if not data.model or not data.model.Parent then
-            local model = findEggModel(uid)
-            if model then
-                data.model = model
-                data.basePart = getModelBasePart(model)
-            end
-        end
-        if data.model and data.model.Parent then
-            
-            local passesFilter = true
-            if eggRarityFilter ~= "All" then
-                local rarityName = getEggRarityName(data.record)
-                if rarityName:lower() ~= eggRarityFilter:lower() then
-                    passesFilter = false
-                end
-            end
-            if passesFilter then
-                ensureHighlight(uid)
-            else
-                pcall(function()
-                    if data.highlight then
-                        data.highlight:Destroy()
-                        data.highlight = nil
-                    end
-                end)
-            end
-        end
-    end
-
-    local newBest = findBestEgg()
-    if newBest ~= bestEggUid then
-        bestEggUid = newBest
-        pcall(function() if espEggAttach then espEggAttach:Destroy() end end)
-        espEggAttach = nil
-    end
-end
-
-EggTab:Section({ Title = "Auto Steal", Icon = "egg", Opened = true })
-
-local EggEspToggle = EggTab:Toggle({
-    Title = "Best Egg ESP",
-    Desc = "Esp's best egg currently at the game.",
-    Icon = "eye",
-    Type = "Toggle",
-    Value = espEnabled,
-    Callback = function(value)
-        espEnabled = value
-        Memory.EggEspEnabled = value
-        if espEnabled then
-            syncEggs()
-            if not espLoopRunning then
-                espLoopRunning = true
-                task.spawn(function()
-                    while espEnabled do
-                        syncEggs()
-                        task.wait(0.5)
-                    end
-                    espLoopRunning = false
-                end)
-            end
-        else
-            clearAll()
-        end
-    end,
-})
-
-local StealState = {
-    IDLE = "IDLE",
-    MOVING_TO_EGG = "MOVING_TO_EGG",
-    COLLECTING = "COLLECTING",
-    RETURNING = "RETURNING",
-    DEPOSITING = "DEPOSITING",
-    WAITING_RESET = "WAITING_RESET",
-    WAITING = "WAITING",
-    RAGDOLLED_RUSH = "RAGDOLLED_RUSH",
-    MOVING_TO_BEST = "MOVING_TO_BEST",
-    COLLECTING_BEST = "COLLECTING_BEST",
-}
-
-local currentStealState = StealState.IDLE
-local activeTween = nil
-local targetEggUid = nil
-local safePosition = Vector3.new(536.423340, 70.333313, -364.236969)
-local antiTrapPosition = Vector3.new(806, 167, -407)
-local tweenSpeed = 600
-local isCarryingEgg = false
-
-local function getReturnPosition()
-    if AntiTrapEnabled then
-        return Vector3.new(safePosition.X, antiTrapPosition.Y, safePosition.Z)
-    end
-    return safePosition
-end
-
-local virtualAnchor = Instance.new("Part")
-virtualAnchor.Anchored = true
-virtualAnchor.CanCollide = false
-virtualAnchor.Transparency = 1
-virtualAnchor.Size = Vector3.new(1, 1, 1)
-virtualAnchor.Parent = workspace.Terrain
-
-local currentConnection = nil
-local tweenCancelled = false
-
-local AreaEggResetWall = safeRequire(ReplicatedStorage, "Client", "AreaEggResetWall")
-local EggStateModule = safeRequire(ReplicatedStorage, "Client", "EggState")
-
-local rawCarryState = false
-if EggStateModule and EggStateModule.CarryChanged then
-    pcall(function()
-        EggStateModule.CarryChanged:Connect(function(carryData)
-            rawCarryState = carryData and carryData.IsCarrying == true
-        end)
-    end)
-end
-
-local function cancelActiveTween()
-    tweenCancelled = true
-    if activeTween then
-        pcall(function() activeTween:Cancel() end)
-        activeTween = nil
-    end
-    if currentConnection then
-        pcall(function() currentConnection:Disconnect() end)
-        currentConnection = nil
-    end
-    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-        local hrp = LocalPlayer.Character.HumanoidRootPart
-        hrp.AssemblyLinearVelocity = Vector3.zero
-        hrp.AssemblyAngularVelocity = Vector3.zero
-    end
-end
-
-local function tweenCharacterTo(targetPos, speed)
-    cancelActiveTween()
-    local char = LocalPlayer.Character
-    if not char then return false end
-    local hrp = char:FindFirstChild("HumanoidRootPart")
-    if not hrp then return false end
-
-    local dist = (hrp.Position - targetPos).Magnitude
-    if dist < 3 then return true end
-
-    tweenCancelled = false
-    virtualAnchor.CFrame = hrp.CFrame
-
-    local duration = math.max(dist / speed, 0.03)
-    local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Linear)
-    local targetCFrame = CFrame.new(targetPos + Vector3.new(0, 3, 0)) * CFrame.Angles(0, math.atan2(
-        targetPos.X - hrp.Position.X,
-        targetPos.Z - hrp.Position.Z
-    ), 0)
-
-    activeTween = TweenService:Create(virtualAnchor, tweenInfo, {CFrame = targetCFrame})
-
-    local completed = false
-    currentConnection = RunService.Heartbeat:Connect(function()
-        if not completed and not tweenCancelled and hrp and hrp.Parent and virtualAnchor and virtualAnchor.Parent then
-            hrp.CFrame = virtualAnchor.CFrame
-            hrp.AssemblyLinearVelocity = Vector3.zero
-            hrp.AssemblyAngularVelocity = Vector3.zero
-        end
-    end)
-
-    activeTween.Completed:Connect(function()
-        completed = true
-        if currentConnection then
-            pcall(function() currentConnection:Disconnect() end)
-            currentConnection = nil
-        end
-        if hrp and hrp.Parent and not tweenCancelled then
-            hrp.CFrame = targetCFrame
-        end
-        activeTween = nil
-    end)
-
-    activeTween:Play()
-    return true
-end
-
-local function isAtPosition(pos, threshold)
-    threshold = threshold or 5
-    local char = LocalPlayer.Character
-    if not char then return false end
-    local hrp = char:FindFirstChild("HumanoidRootPart")
-    if not hrp then return false end
-    return (hrp.Position - pos).Magnitude <= threshold
-end
-
-local carryConfirmations = 0
-local CARRY_CONFIRM_THRESHOLD = 1
-local lastVerifiedCarry = false
-
-local function checkCarryingEgg()
-    local detected = false
-
-    if EggStateModule then
-        local ok, carrying = pcall(function()
-            if type(EggStateModule.IsCarrying) == "function" then
-                return EggStateModule:IsCarrying()
-            elseif EggStateModule.CarryData then
-                return EggStateModule.CarryData.IsCarrying == true
-            end
-            return rawCarryState
-        end)
-        if ok and carrying then detected = true end
-    elseif rawCarryState then
-        detected = true
-    end
-
-    if not detected then
-        local backpack = LocalPlayer:FindFirstChild("Backpack")
-        if backpack then
-            for _, tool in ipairs(backpack:GetChildren()) do
-                if tool:IsA("Tool") then
-                    local name = tool.Name:lower()
-                    if (name:find("area egg") or name:find("carryareaegg") or 
-                        name == "egg" or name:find("^egg_") or name:find("_egg$")) then
-                        detected = true
-                        break
-                    end
-                end
-            end
-        end
-    end
-
-    if not detected then
-        local char = LocalPlayer.Character
-        if char then
-            for _, tool in ipairs(char:GetChildren()) do
-                if tool:IsA("Tool") then
-                    local name = tool.Name:lower()
-                    if (name:find("area egg") or name:find("carryareaegg") or 
-                        name == "egg" or name:find("^egg_") or name:find("_egg$")) then
-                        detected = true
-                        break
-                    end
-                end
-            end
-        end
-    end
-
-    if detected then
-        carryConfirmations = carryConfirmations + 1
-    else
-        carryConfirmations = 0
-    end
-
-    local verified = carryConfirmations >= CARRY_CONFIRM_THRESHOLD
-
-    if verified ~= lastVerifiedCarry then
-        lastVerifiedCarry = verified
-        if verified then
-        else
-        end
-    end
-
-    return verified
-end
-
-local function resetCarryDetection()
-    carryConfirmations = 0
-    lastVerifiedCarry = false
-end
-
-local function instantFirePrompt(prompt)
-    if not prompt or not prompt.Parent then return end
-    pcall(function()
-        local originalHold = prompt.HoldDuration
-        prompt.HoldDuration = 0
-        if fireproximityprompt then
-            fireproximityprompt(prompt)
-        else
-            prompt:InputHoldBegin()
-            task.wait(0.05)
-            prompt:InputHoldEnd()
-        end
-        prompt.HoldDuration = originalHold
-    end)
-end
-
-local function isAreaSealed()
-    if AreaEggResetWall and AreaEggResetWall.IsSealed ~= nil then
-        if type(AreaEggResetWall.IsSealed) == "function" then
-            local ok, sealed = pcall(function() return AreaEggResetWall:IsSealed() end)
-            if ok then return sealed end
-        else
-            return AreaEggResetWall.IsSealed
-        end
-    end
-    return false
-end
-
-local function findBiggestEgg()
-    refreshCarriedEggsCache()
-    local biggestUid, biggestSize = nil, -1
-    for uid, data in pairs(trackedEggs) do
-        if data.model and data.model.Parent then
-            if carriedEggsCache[uid] then continue end
-            local size = getModelSizeScore(data.model)
-            if size > biggestSize then
-                biggestSize = size
-                biggestUid = uid
-            end
-        end
-    end
-    return biggestUid, biggestSize
-end
-
-local function findNearestBigEgg()
-    local char = LocalPlayer.Character
-    local hrp = char and char:FindFirstChild("HumanoidRootPart")
-    if not hrp then return nil end
-    local playerPos = hrp.Position
-    local nearestUid, nearestDist = nil, math.huge
-
-    refreshCarriedEggsCache()
-
-    for uid, data in pairs(trackedEggs) do
-        if data.model and data.model.Parent then
-            if carriedEggsCache[uid] then continue end
-            local bp = data.basePart or getModelBasePart(data.model)
-            if bp then
-                local dist = (playerPos - bp.Position).Magnitude
-                if dist < nearestDist then
-                    nearestDist = dist
-                    nearestUid = uid
-                end
-            end
-        end
-    end
-    return nearestUid, nearestDist
-end
-
-local isPlayerRagdolled
-
-local function runBigOnlyAutoSteal()
-    local bigTargetUid = nil
-    local bigTargetScore = nil
-    local bigCollectionAttempts = 0
-    local bigMaxCollectionAttempts = 20
-    local bigLastPromptFire = 0
-    local bigPromptFireInterval = 0.08
-    local bigRushMode = false
-    local bigCurrentState = StealState.IDLE
-
-    while bigOnlyAutoStealEnabled do
-        local waitTime = 0.03
-
-        syncEggs()
-
-        local carrying = checkCarryingEgg()
-        local ragdolled = isPlayerRagdolled()
-
-        if isAreaSealed() then
-            if bigCurrentState ~= StealState.WAITING_RESET then
-                bigCurrentState = StealState.WAITING_RESET
-                cancelActiveTween()
-            end
-            waitTime = 0.3
-        elseif bigCurrentState == StealState.WAITING_RESET then
-            bigCurrentState = StealState.IDLE
-            waitTime = 0.5
-        else
-            
-            if bigCurrentState == StealState.IDLE then
-                
-                local nearestUid = findNearestBigEgg()
-                if nearestUid and trackedEggs[nearestUid] then
-                    local data = trackedEggs[nearestUid]
-                    local bp = data.basePart or getModelBasePart(data.model)
-                    data.basePart = bp
-                    if bp then
-                        bigTargetUid = nearestUid
-                        bigTargetScore = nil
-                        bigCollectionAttempts = 0
-                        bigCurrentState = StealState.MOVING_TO_EGG
-                        tweenCharacterTo(bp.Position, 240)
-                    end
-                else
-                    waitTime = 0.2
-                end
-
-            elseif bigCurrentState == StealState.MOVING_TO_EGG then
-                if carrying then
-                    bigCurrentState = StealState.WAITING
-                    cancelActiveTween()
-                    bigRushMode = false
-                elseif not bigTargetUid or not trackedEggs[bigTargetUid] then
-                    bigCurrentState = StealState.IDLE
-                    cancelActiveTween()
-                    bigTargetUid = nil
-                    bigTargetScore = nil
-                    bigCollectionAttempts = 0
-                elseif carriedEggsCache[bigTargetUid] then
-                    bigCurrentState = StealState.IDLE
-                    cancelActiveTween()
-                    bigTargetUid = nil
-                    bigTargetScore = nil
-                    bigCollectionAttempts = 0
-                    waitTime = 0.1
-                else
-                    local data = trackedEggs[bigTargetUid]
-                    local bp = data.basePart
-                    if bp and bp.Parent and isAtPosition(bp.Position, 8) then
-                        cancelActiveTween()
-                        bigCollectionAttempts = 0
-                        bigCurrentState = StealState.COLLECTING
-                    end
-                end
-
-            elseif bigCurrentState == StealState.COLLECTING then
-                if carrying then
-                    bigCollectionAttempts = 0
-                    bigCurrentState = StealState.WAITING
-                    cancelActiveTween()
-                    bigRushMode = false
-                elseif not bigTargetUid or not trackedEggs[bigTargetUid] then
-                    bigCurrentState = StealState.IDLE
-                    cancelActiveTween()
-                    bigTargetUid = nil
-                    bigTargetScore = nil
-                    bigCollectionAttempts = 0
-                else
-                    local data = trackedEggs[bigTargetUid]
-                    local model = data.model
-                    local prompt = nil
-                    local promptPos = nil
-
-                    if model and model.Parent then
-                        prompt = getModelPrompt(model)
-                    end
-                    if not prompt then
-                        local bp = data.basePart or getModelBasePart(model)
-                        if bp then
-                            prompt = findPromptNearPosition(bp.Position, 30)
-                            if prompt and prompt.Parent then
-                                promptPos = prompt.Parent.Position
-                            end
-                        end
-                    elseif prompt and prompt.Parent then
-                        promptPos = prompt.Parent.Position
-                    end
-
-                    if prompt then
-                        bigCollectionAttempts = bigCollectionAttempts + 1
-                        if bigCollectionAttempts <= bigMaxCollectionAttempts then
-                            local char = LocalPlayer.Character
-                            local hrp = char and char:FindFirstChild("HumanoidRootPart")
-                            local canFire = true
-                            if hrp and promptPos then
-                                local dist = (hrp.Position - promptPos).Magnitude
-                                canFire = dist <= (prompt.MaxActivationDistance + 5)
-                            end
-
-                            if canFire then
-                                local now = tick()
-                                if now - bigLastPromptFire >= bigPromptFireInterval then
-                                    instantFirePrompt(prompt)
-                                    bigLastPromptFire = now
-                                end
-                            end
-                            waitTime = 0.08
-                        else
-                            bigCurrentState = StealState.IDLE
-                            cancelActiveTween()
-                            bigTargetUid = nil
-                            bigTargetScore = nil
-                            bigCollectionAttempts = 0
-                        end
-                    else
-                        bigCurrentState = StealState.IDLE
-                        cancelActiveTween()
-                        bigTargetUid = nil
-                        bigTargetScore = nil
-                        bigCollectionAttempts = 0
-                    end
-                end
-
-            elseif bigCurrentState == StealState.WAITING then
-                
-                if ragdolled or not carrying then
-                    
-                    
-                    bigRushMode = true
-                    bigCurrentState = StealState.RAGDOLLED_RUSH
-                    cancelActiveTween()
-                    bigTargetUid = nil
-                    bigTargetScore = nil
-                    bigCollectionAttempts = 0
-                end
-
-            elseif bigCurrentState == StealState.RAGDOLLED_RUSH then
-                if bigRushMode and carrying then
-                    
-                    bigRushMode = false
-                    bigCurrentState = StealState.RETURNING
-                    tweenCharacterTo(getReturnPosition(), 1000)
-                elseif bigRushMode then
-                    
-                    refreshCarriedEggsCache()
-                    local bestUid = findBiggestEgg()
-                    if bestUid and trackedEggs[bestUid] then
-                        if bestUid ~= bigTargetUid then
-                            bigTargetUid = bestUid
-                            bigCollectionAttempts = 0
-                            local data = trackedEggs[bestUid]
-                            local bp = data.basePart or getModelBasePart(data.model)
-                            data.basePart = bp
-                            if bp then
-                                tweenCharacterTo(bp.Position, 5000)
-                            end
-                        else
-                            local data = trackedEggs[bigTargetUid]
-                            local bp = data.basePart or getModelBasePart(data.model)
-                            data.basePart = bp
-                            if bp and bp.Parent and isAtPosition(bp.Position, 8) then
-                                cancelActiveTween()
-                                bigCollectionAttempts = 0
-                                bigCurrentState = StealState.COLLECTING_BEST
-                            elseif not data.model or not data.model.Parent then
-                                bigTargetUid = nil
-                                bigCollectionAttempts = 0
-                            end
-                        end
-                    else
-                        waitTime = 0.05
-                    end
-                elseif not ragdolled and carrying then
-                    
-                    bigCurrentState = StealState.RETURNING
-                    tweenCharacterTo(getReturnPosition(), 1000)
-                elseif not ragdolled then
-                    
-                    bigCurrentState = StealState.MOVING_TO_BEST
-                    cancelActiveTween()
-                    bigTargetUid = nil
-                    bigTargetScore = nil
-                    bigCollectionAttempts = 0
-                elseif carrying then
-                    
-                    bigCurrentState = StealState.RETURNING
-                    tweenCharacterTo(getReturnPosition(), 1000)
-                else
-                    
-                    refreshCarriedEggsCache()
-                    local bestUid = findBiggestEgg()
-                    if bestUid and trackedEggs[bestUid] then
-                        if bestUid ~= bigTargetUid then
-                            bigTargetUid = bestUid
-                            bigCollectionAttempts = 0
-                            local data = trackedEggs[bestUid]
-                            local bp = data.basePart or getModelBasePart(data.model)
-                            data.basePart = bp
-                            if bp then
-                                tweenCharacterTo(bp.Position, 5000)
-                            end
-                        else
-                            local data = trackedEggs[bigTargetUid]
-                            local bp = data.basePart or getModelBasePart(data.model)
-                            data.basePart = bp
-                            if bp and bp.Parent and isAtPosition(bp.Position, 8) then
-                                cancelActiveTween()
-                                bigCollectionAttempts = 0
-                                bigCurrentState = StealState.COLLECTING_BEST
-                            elseif not data.model or not data.model.Parent then
-                                bigTargetUid = nil
-                                bigCollectionAttempts = 0
-                            end
-                        end
-                    else
-                        waitTime = 0.05
-                    end
-                end
-
-            elseif bigCurrentState == StealState.MOVING_TO_BEST then
-                if ragdolled then
-                    bigRushMode = false
-                    bigCurrentState = StealState.RAGDOLLED_RUSH
-                    cancelActiveTween()
-                    bigTargetUid = nil
-                    bigTargetScore = nil
-                    bigCollectionAttempts = 0
-                elseif carrying then
-                    bigRushMode = false
-                    bigCurrentState = StealState.RETURNING
-                    tweenCharacterTo(getReturnPosition(), 1000)
-                elseif not bigTargetUid or not trackedEggs[bigTargetUid] then
-                    local bestUid = findBiggestEgg()
-                    if bestUid and trackedEggs[bestUid] then
-                        bigTargetUid = bestUid
-                        local data = trackedEggs[bestUid]
-                        local bp = data.basePart or getModelBasePart(data.model)
-                        data.basePart = bp
-                        if bp then
-                            tweenCharacterTo(bp.Position, 240)
-                        end
-                    else
-                        bigCurrentState = StealState.IDLE
-                        cancelActiveTween()
-                        bigTargetUid = nil
-                        bigTargetScore = nil
-                        bigCollectionAttempts = 0
-                    end
-                elseif carriedEggsCache[bigTargetUid] then
-                    bigCurrentState = StealState.IDLE
-                    cancelActiveTween()
-                    bigTargetUid = nil
-                    bigTargetScore = nil
-                    bigCollectionAttempts = 0
-                else
-                    local data = trackedEggs[bigTargetUid]
-                    local bp = data.basePart
-                    if bp and bp.Parent and isAtPosition(bp.Position, 8) then
-                        cancelActiveTween()
-                        bigCollectionAttempts = 0
-                        bigCurrentState = StealState.COLLECTING_BEST
-                    end
-                end
-
-            elseif bigCurrentState == StealState.COLLECTING_BEST then
-                if ragdolled then
-                    bigCurrentState = StealState.RAGDOLLED_RUSH
-                    cancelActiveTween()
-                    bigTargetUid = nil
-                    bigTargetScore = nil
-                    bigCollectionAttempts = 0
-                elseif carrying then
-                    bigCollectionAttempts = 0
-                    bigRushMode = false
-                    bigCurrentState = StealState.RETURNING
-                    tweenCharacterTo(getReturnPosition(), 1000)
-                elseif not bigTargetUid or not trackedEggs[bigTargetUid] then
-                    bigCurrentState = StealState.IDLE
-                    cancelActiveTween()
-                    bigTargetUid = nil
-                    bigTargetScore = nil
-                    bigCollectionAttempts = 0
-                else
-                    local data = trackedEggs[bigTargetUid]
-                    local model = data.model
-                    local prompt = nil
-                    local promptPos = nil
-
-                    if model and model.Parent then
-                        prompt = getModelPrompt(model)
-                    end
-                    if not prompt then
-                        local bp = data.basePart or getModelBasePart(model)
-                        if bp then
-                            prompt = findPromptNearPosition(bp.Position, 30)
-                            if prompt and prompt.Parent then
-                                promptPos = prompt.Parent.Position
-                            end
-                        end
-                    elseif prompt and prompt.Parent then
-                        promptPos = prompt.Parent.Position
-                    end
-
-                    if prompt then
-                        bigCollectionAttempts = bigCollectionAttempts + 1
-                        if bigCollectionAttempts <= bigMaxCollectionAttempts then
-                            local char = LocalPlayer.Character
-                            local hrp = char and char:FindFirstChild("HumanoidRootPart")
-                            local canFire = true
-                            if hrp and promptPos then
-                                local dist = (hrp.Position - promptPos).Magnitude
-                                canFire = dist <= (prompt.MaxActivationDistance + 5)
-                            end
-
-                            if canFire then
-                                local now = tick()
-                                if now - bigLastPromptFire >= bigPromptFireInterval then
-                                    instantFirePrompt(prompt)
-                                    bigLastPromptFire = now
-                                end
-                            end
-                            waitTime = 0.08
-                        else
-                            bigCurrentState = StealState.IDLE
-                            cancelActiveTween()
-                            bigTargetUid = nil
-                            bigTargetScore = nil
-                            bigCollectionAttempts = 0
-                        end
-                    else
-                        bigCurrentState = StealState.IDLE
-                        cancelActiveTween()
-                        bigTargetUid = nil
-                        bigTargetScore = nil
-                        bigCollectionAttempts = 0
-                    end
-                end
-
-            elseif bigCurrentState == StealState.RETURNING then
-                if not carrying then
-                    cancelActiveTween()
-                    bigCurrentState = StealState.IDLE
-                    bigTargetUid = nil
-                    bigTargetScore = nil
-                    bigCollectionAttempts = 0
-                    resetCarryDetection()
-                    bigRushMode = false
-                elseif isAtPosition(getReturnPosition(), 12) then
-                    cancelActiveTween()
-                    bigCurrentState = StealState.DEPOSITING
-                end
-
-            elseif bigCurrentState == StealState.DEPOSITING then
-                if not carrying then
-                    bigCurrentState = StealState.IDLE
-                    bigTargetUid = nil
-                    bigTargetScore = nil
-                    bigCollectionAttempts = 0
-                    resetCarryDetection()
-                    bigRushMode = false
-                end
-            end
-        end
-
-        task.wait(waitTime)
-    end
-
-    bigOnlyLoopRunning = false
-    cancelActiveTween()
-    bigCurrentState = StealState.IDLE
-    bigTargetUid = nil
-    bigTargetScore = nil
-    bigCollectionAttempts = 0
-    resetCarryDetection()
-    bigRushMode = false
-end
-
-
-local EggBigOnlyToggle = EggTab:Toggle({
-    Title = "Big Eggs Only",
-    Desc = "Steals the biggiest balls in the current eggs.",
-    Icon = "maximize",
-    Type = "Toggle",
-    Value = eggBigOnly,
-    Callback = function(value)
-        eggBigOnly = value
-        Memory.EggBigOnly = value
-
-        
-        if value then
-            
-            if autoStealEnabled then
-                autoStealEnabled = false
-                Memory.EggAutoStealEnabled = false
-                autoLoopRunning = false
-                pcall(function()
-                    if EggStealToggle and EggStealToggle.Set then
-                        EggStealToggle:Set(false)
-                    elseif EggStealToggle and EggStealToggle.SetValue then
-                        EggStealToggle:SetValue(false)
-                    end
-                end)
-                cancelActiveTween()
-                currentStealState = StealState.IDLE
-                targetEggUid = nil
-                targetEggScore = nil
-                collectionAttempts = 0
-                resetCarryDetection()
-            end
-            bigOnlyAutoStealEnabled = true
-            if not bigOnlyLoopRunning then
-                bigOnlyLoopRunning = true
-                task.spawn(runBigOnlyAutoSteal)
-            end
-        else
-            bigOnlyAutoStealEnabled = false
-            cancelActiveTween()
-            resetCarryDetection()
-            bigCurrentState = StealState.IDLE
-            bigTargetUid = nil
-            bigTargetScore = nil
-            bigCollectionAttempts = 0
-            bigRushMode = false
-        end
-
-        syncEggs()
-    end,
-})
-
-isPlayerRagdolled = function()
-    local char = LocalPlayer.Character
-    if not char then return true end
-    local hum = char:FindFirstChildOfClass("Humanoid")
-    if not hum then return true end
-
-    
-    if hum.PlatformStand then return true end
-
-    
-    local state = hum:GetState()
-    if state == Enum.HumanoidStateType.Physics or state == Enum.HumanoidStateType.FallingDown then
-        return true
-    end
-
-    
-    if char:GetAttribute("Ragdolled") == true then return true end
-    if hum:GetAttribute("Ragdolled") == true then return true end
-    if char:GetAttribute("Ragdoll") == true then return true end
-    if hum:GetAttribute("Ragdoll") == true then return true end
-
-    
-    for _, v in ipairs(char:GetDescendants()) do
-        if v:IsA("BallSocketConstraint") then
-            return true
-        end
-    end
-
-    
-    local hasMotor6D = false
-    local hasConstraint = false
-    for _, v in ipairs(char:GetDescendants()) do
-        if v:IsA("Motor6D") then
-            hasMotor6D = true
-        elseif v:IsA("Constraint") then
-            hasConstraint = true
-        end
-    end
-    if hasConstraint and not hasMotor6D then
-        return true
-    end
-
-    return false
-end
-
-local function findNearestEgg()
-    local char = LocalPlayer.Character
-    local hrp = char and char:FindFirstChild("HumanoidRootPart")
-    if not hrp then return nil end
-    local playerPos = hrp.Position
-    local nearestUid, nearestDist = nil, math.huge
-
-    refreshCarriedEggsCache()
-
-    for uid, data in pairs(trackedEggs) do
-        if data.model and data.model.Parent then
-            if carriedEggsCache[uid] then continue end
-            local bp = data.basePart or getModelBasePart(data.model)
-            if bp then
-                local dist = (playerPos - bp.Position).Magnitude
-                if dist < nearestDist then
-                    nearestDist = dist
-                    nearestUid = uid
-                end
-            end
-        end
-    end
-    return nearestUid, nearestDist
-end
-
-local EggStealToggle = EggTab:Toggle({
-    Title = "Auto Steal Best",
-    Desc = "Steals best egg currently on the game",
-    Icon = "mouse-pointer-click",
-    Type = "Toggle",
-    Value = autoStealEnabled,
-    Callback = function(value)
-        autoStealEnabled = value
-        Memory.EggAutoStealEnabled = value
-
-        
-        if value then
-            if bigOnlyAutoStealEnabled then
-                bigOnlyAutoStealEnabled = false
-                Memory.EggBigOnly = false
-                eggBigOnly = false
-                bigOnlyLoopRunning = false
-                pcall(function()
-                    if EggBigOnlyToggle and EggBigOnlyToggle.Set then
-                        EggBigOnlyToggle:Set(false)
-                    elseif EggBigOnlyToggle and EggBigOnlyToggle.SetValue then
-                        EggBigOnlyToggle:SetValue(false)
-                    end
-                end)
-                cancelActiveTween()
-                resetCarryDetection()
-            end
-        end
-
-        if not autoStealEnabled then
-            cancelActiveTween()
-            currentStealState = StealState.IDLE
-            targetEggUid = nil
-            targetEggScore = nil
-            collectionAttempts = 0
-            resetCarryDetection()
-            return
-        end
-
-        if autoLoopRunning then return end
-        autoLoopRunning = true
-
-        local targetEggScore = nil
-        local collectionAttempts = 0
-        local maxCollectionAttempts = 20
-        local lastPromptFire = 0
-        local promptFireInterval = 0.08
-        local wasRagdolled = false
-        local rushMode = false
-
-        task.spawn(function()
-            while autoStealEnabled do
-                local waitTime = 0.03
-
-                syncEggs()
-
-                local carrying = checkCarryingEgg()
-                local ragdolled = isPlayerRagdolled()
-
-                if isAreaSealed() then
-                    if currentStealState ~= StealState.WAITING_RESET then
-                        currentStealState = StealState.WAITING_RESET
-                        cancelActiveTween()
-                    end
-                    waitTime = 0.3
-                elseif currentStealState == StealState.WAITING_RESET then
-                    currentStealState = StealState.IDLE
-                    waitTime = 0.5
-                else
-                    
-                    if currentStealState == StealState.IDLE then
-                        
-                        local nearestUid = findNearestEgg()
-                        if nearestUid and trackedEggs[nearestUid] then
-                            local data = trackedEggs[nearestUid]
-                            local bp = data.basePart or getModelBasePart(data.model)
-                            data.basePart = bp
-                            if bp then
-                                targetEggUid = nearestUid
-                                targetEggScore = nil
-                                collectionAttempts = 0
-                                currentStealState = StealState.MOVING_TO_EGG
-                                tweenCharacterTo(bp.Position, 240)
-                            end
-                        else
-                            waitTime = 0.2
-                        end
-
-                    elseif currentStealState == StealState.MOVING_TO_EGG then
-                        if carrying then
-                            
-                            currentStealState = StealState.WAITING
-                            cancelActiveTween()
-                            wasRagdolled = false
-                        elseif not targetEggUid or not trackedEggs[targetEggUid] then
-                            currentStealState = StealState.IDLE
-                            cancelActiveTween()
-                            targetEggUid = nil
-                            targetEggScore = nil
-                            collectionAttempts = 0
-                        elseif carriedEggsCache[targetEggUid] then
-                            currentStealState = StealState.IDLE
-                            cancelActiveTween()
-                            targetEggUid = nil
-                            targetEggScore = nil
-                            collectionAttempts = 0
-                            waitTime = 0.1
-                        else
-                            local data = trackedEggs[targetEggUid]
-                            local bp = data.basePart
-                            if bp and bp.Parent and isAtPosition(bp.Position, 8) then
-                                cancelActiveTween()
-                                collectionAttempts = 0
-                                currentStealState = StealState.COLLECTING
-                            end
-                        end
-
-                    elseif currentStealState == StealState.COLLECTING then
-                        if carrying then
-                            collectionAttempts = 0
-                            currentStealState = StealState.WAITING
-                            cancelActiveTween()
-                            wasRagdolled = false
-                        elseif not targetEggUid or not trackedEggs[targetEggUid] then
-                            currentStealState = StealState.IDLE
-                            cancelActiveTween()
-                            targetEggUid = nil
-                            targetEggScore = nil
-                            collectionAttempts = 0
-                        else
-                            local data = trackedEggs[targetEggUid]
-                            local model = data.model
-                            local prompt = nil
-                            local promptPos = nil
-
-                            if model and model.Parent then
-                                prompt = getModelPrompt(model)
-                            end
-                            if not prompt then
-                                local bp = data.basePart or getModelBasePart(model)
-                                if bp then
-                                    prompt = findPromptNearPosition(bp.Position, 30)
-                                    if prompt and prompt.Parent then
-                                        promptPos = prompt.Parent.Position
-                                    end
-                                end
-                            elseif prompt and prompt.Parent then
-                                promptPos = prompt.Parent.Position
-                            end
-
-                            if prompt then
-                                collectionAttempts = collectionAttempts + 1
-                                if collectionAttempts <= maxCollectionAttempts then
-                                    local char = LocalPlayer.Character
-                                    local hrp = char and char:FindFirstChild("HumanoidRootPart")
-                                    local canFire = true
-                                    if hrp and promptPos then
-                                        local dist = (hrp.Position - promptPos).Magnitude
-                                        canFire = dist <= (prompt.MaxActivationDistance + 5)
-                                    end
-
-                                    if canFire then
-                                        local now = tick()
-                                        if now - lastPromptFire >= promptFireInterval then
-                                            instantFirePrompt(prompt)
-                                            lastPromptFire = now
-                                        end
-                                    end
-                                    waitTime = 0.08
-                                else
-                                    currentStealState = StealState.IDLE
-                                    cancelActiveTween()
-                                    targetEggUid = nil
-                                    targetEggScore = nil
-                                    collectionAttempts = 0
-                                end
-                            else
-                                currentStealState = StealState.IDLE
-                                cancelActiveTween()
-                                targetEggUid = nil
-                                targetEggScore = nil
-                                collectionAttempts = 0
-                            end
-                        end
-
-                    elseif currentStealState == StealState.WAITING then
-                        
-                        if ragdolled or not carrying then
-                            
-                            
-                            wasRagdolled = true
-                            rushMode = true
-                            currentStealState = StealState.RAGDOLLED_RUSH
-                            cancelActiveTween()
-                            targetEggUid = nil
-                            targetEggScore = nil
-                            collectionAttempts = 0
-                        end
-
-                    elseif currentStealState == StealState.RAGDOLLED_RUSH then
-                        if rushMode and carrying then
-                            
-                            rushMode = false
-                            currentStealState = StealState.RETURNING
-                            tweenCharacterTo(getReturnPosition(), 1000)
-                        elseif rushMode then
-                            
-                            refreshCarriedEggsCache()
-                            local bestUid = findBestEgg()
-                            if bestUid and trackedEggs[bestUid] then
-                                if bestUid ~= targetEggUid then
-                                    targetEggUid = bestUid
-                                    collectionAttempts = 0
-                                    local data = trackedEggs[bestUid]
-                                    local bp = data.basePart or getModelBasePart(data.model)
-                                    data.basePart = bp
-                                    if bp then
-                                        tweenCharacterTo(bp.Position, 5000)
-                                    end
-                                else
-                                    local data = trackedEggs[targetEggUid]
-                                    local bp = data.basePart or getModelBasePart(data.model)
-                                    data.basePart = bp
-                                    if bp and bp.Parent and isAtPosition(bp.Position, 8) then
-                                        cancelActiveTween()
-                                        collectionAttempts = 0
-                                        currentStealState = StealState.COLLECTING_BEST
-                                    elseif not data.model or not data.model.Parent then
-                                        targetEggUid = nil
-                                        collectionAttempts = 0
-                                    end
-                                end
-                            else
-                                
-                                waitTime = 0.05
-                            end
-                        elseif not ragdolled and carrying then
-                            
-                            currentStealState = StealState.RETURNING
-                            tweenCharacterTo(getReturnPosition(), 1000)
-                        elseif not ragdolled then
-                            
-                            currentStealState = StealState.MOVING_TO_BEST
-                            cancelActiveTween()
-                            targetEggUid = nil
-                            targetEggScore = nil
-                            collectionAttempts = 0
-                        elseif carrying then
-                            
-                            currentStealState = StealState.RETURNING
-                            tweenCharacterTo(getReturnPosition(), 1000)
-                        else
-                            
-                            refreshCarriedEggsCache()
-                            local bestUid = findBestEgg()
-                            if bestUid and trackedEggs[bestUid] then
-                                if bestUid ~= targetEggUid then
-                                    targetEggUid = bestUid
-                                    collectionAttempts = 0
-                                    local data = trackedEggs[bestUid]
-                                    local bp = data.basePart or getModelBasePart(data.model)
-                                    data.basePart = bp
-                                    if bp then
-                                        tweenCharacterTo(bp.Position, 5000)
-                                    end
-                                else
-                                    local data = trackedEggs[targetEggUid]
-                                    local bp = data.basePart or getModelBasePart(data.model)
-                                    data.basePart = bp
-                                    if bp and bp.Parent and isAtPosition(bp.Position, 8) then
-                                        cancelActiveTween()
-                                        collectionAttempts = 0
-                                        currentStealState = StealState.COLLECTING_BEST
-                                    elseif not data.model or not data.model.Parent then
-                                        targetEggUid = nil
-                                        collectionAttempts = 0
-                                    end
-                                end
-                            else
-                                
-                                waitTime = 0.05
-                            end
-                        end
-
-                    elseif currentStealState == StealState.MOVING_TO_BEST then
-                        if ragdolled then
-                            
-                            rushMode = false
-                            currentStealState = StealState.RAGDOLLED_RUSH
-                            cancelActiveTween()
-                            targetEggUid = nil
-                            targetEggScore = nil
-                            collectionAttempts = 0
-                        elseif carrying then
-                            
-                            rushMode = false
-                            currentStealState = StealState.RETURNING
-                            tweenCharacterTo(getReturnPosition(), 1000)
-                        elseif not targetEggUid or not trackedEggs[targetEggUid] then
-                            
-                            local bestUid = findBestEgg()
-                            if bestUid and trackedEggs[bestUid] then
-                                targetEggUid = bestUid
-                                local data = trackedEggs[bestUid]
-                                local bp = data.basePart or getModelBasePart(data.model)
-                                data.basePart = bp
-                                if bp then
-                                    tweenCharacterTo(bp.Position, 240)
-                                end
-                            else
-                                currentStealState = StealState.IDLE
-                                cancelActiveTween()
-                                targetEggUid = nil
-                                targetEggScore = nil
-                                collectionAttempts = 0
-                            end
-                        elseif carriedEggsCache[targetEggUid] then
-                            currentStealState = StealState.IDLE
-                            cancelActiveTween()
-                            targetEggUid = nil
-                            targetEggScore = nil
-                            collectionAttempts = 0
-                        else
-                            local data = trackedEggs[targetEggUid]
-                            local bp = data.basePart
-                            if bp and bp.Parent and isAtPosition(bp.Position, 8) then
-                                cancelActiveTween()
-                                collectionAttempts = 0
-                                currentStealState = StealState.COLLECTING_BEST
-                            end
-                        end
-
-                    elseif currentStealState == StealState.COLLECTING_BEST then
-                        if ragdolled then
-                            currentStealState = StealState.RAGDOLLED_RUSH
-                            cancelActiveTween()
-                            targetEggUid = nil
-                            targetEggScore = nil
-                            collectionAttempts = 0
-                        elseif carrying then
-                            collectionAttempts = 0
-                            rushMode = false
-                            currentStealState = StealState.RETURNING
-                            tweenCharacterTo(getReturnPosition(), 1000)
-                        elseif not targetEggUid or not trackedEggs[targetEggUid] then
-                            currentStealState = StealState.IDLE
-                            cancelActiveTween()
-                            targetEggUid = nil
-                            targetEggScore = nil
-                            collectionAttempts = 0
-                        else
-                            local data = trackedEggs[targetEggUid]
-                            local model = data.model
-                            local prompt = nil
-                            local promptPos = nil
-
-                            if model and model.Parent then
-                                prompt = getModelPrompt(model)
-                            end
-                            if not prompt then
-                                local bp = data.basePart or getModelBasePart(model)
-                                if bp then
-                                    prompt = findPromptNearPosition(bp.Position, 30)
-                                    if prompt and prompt.Parent then
-                                        promptPos = prompt.Parent.Position
-                                    end
-                                end
-                            elseif prompt and prompt.Parent then
-                                promptPos = prompt.Parent.Position
-                            end
-
-                            if prompt then
-                                collectionAttempts = collectionAttempts + 1
-                                if collectionAttempts <= maxCollectionAttempts then
-                                    local char = LocalPlayer.Character
-                                    local hrp = char and char:FindFirstChild("HumanoidRootPart")
-                                    local canFire = true
-                                    if hrp and promptPos then
-                                        local dist = (hrp.Position - promptPos).Magnitude
-                                        canFire = dist <= (prompt.MaxActivationDistance + 5)
-                                    end
-
-                                    if canFire then
-                                        local now = tick()
-                                        if now - lastPromptFire >= promptFireInterval then
-                                            instantFirePrompt(prompt)
-                                            lastPromptFire = now
-                                        end
-                                    end
-                                    waitTime = 0.08
-                                else
-                                    currentStealState = StealState.IDLE
-                                    cancelActiveTween()
-                                    targetEggUid = nil
-                                    targetEggScore = nil
-                                    collectionAttempts = 0
-                                end
-                            else
-                                currentStealState = StealState.IDLE
-                                cancelActiveTween()
-                                targetEggUid = nil
-                                targetEggScore = nil
-                                collectionAttempts = 0
-                            end
-                        end
-
-                    elseif currentStealState == StealState.RETURNING then
-                        if not carrying then
-                            cancelActiveTween()
-                            currentStealState = StealState.IDLE
-                            targetEggUid = nil
-                            targetEggScore = nil
-                            collectionAttempts = 0
-                            resetCarryDetection()
-                            wasRagdolled = false
-                            rushMode = false
-                        elseif isAtPosition(getReturnPosition(), 12) then
-                            cancelActiveTween()
-                            currentStealState = StealState.DEPOSITING
-                        end
-
-                    elseif currentStealState == StealState.DEPOSITING then
-                        if not carrying then
-                            currentStealState = StealState.IDLE
-                            targetEggUid = nil
-                            targetEggScore = nil
-                            collectionAttempts = 0
-                            resetCarryDetection()
-                            wasRagdolled = false
-                            rushMode = false
-                        end
-                    end
-                end
-
-                task.wait(waitTime)
-            end
-
-            autoLoopRunning = false
-            cancelActiveTween()
-            currentStealState = StealState.IDLE
-            targetEggUid = nil
-            targetEggScore = nil
-            collectionAttempts = 0
-            resetCarryDetection()
-            wasRagdolled = false
-            rushMode = false
-        end)
-    end,
-})
-    if espEnabled then updateBeam()
-end
-
-LocalPlayer.CharacterAdded:Connect(function()
-    if espEnabled then
-        task.wait(0.5)
-        pcall(function()
-            if espBeam then espBeam.Attachment0 = nil end
-            if espPlayerAttach then espPlayerAttach:Destroy(); espPlayerAttach = nil end
-        end)
-    end
-    if autoStealEnabled then
-        cancelActiveTween()
-        currentStealState = StealState.IDLE
-        targetEggUid = nil
-        targetEggScore = nil
-        collectionAttempts = 0
-        isCarryingEgg = false
-        rushMode = false
-    end
-    if bigOnlyAutoStealEnabled then
-        cancelActiveTween()
-        bigCurrentState = StealState.IDLE
-        bigTargetUid = nil
-        bigTargetScore = nil
-        bigCollectionAttempts = 0
-        bigRushMode = false
-    end
-end)
-
-
-
-
-local CRZAutomation = {
-    Remotes = nil,
-    Save = nil,
-    EggState = nil,
-    Assets = nil,
-    Trails = nil,
-    PlotState = nil,
-    Treadmills = nil,
-    initialized = false,
-    loops = {},
-    autoPlaceAll = false,
-    autoHatch = false,
-    autoClaim = false,
-    autoBaseUpgrade = false,
-    autoTreadmillUpgrade = false,
-    autoBuyTrail = false,
-    autoAbyss = false,
-}
-
-local function CRZAutoRequire(parent, childName)
-    local child = parent and parent:FindFirstChild(childName)
-    if not child or not child:IsA("ModuleScript") then return nil end
-    local ok, result = pcall(require, child)
-    return ok and result or nil
-end
-
-local function CRZInitAutomation()
-    local shared = ReplicatedStorage:FindFirstChild("Shared")
-    local client = ReplicatedStorage:FindFirstChild("Client")
-    local data = ReplicatedStorage:FindFirstChild("Data")
-    if not shared or not client or not data then
-        return false
-    end
-
-    CRZAutomation.Remotes = CRZAutoRequire(shared, "Remotes")
-    CRZAutomation.Save = CRZAutoRequire(shared, "Save")
-    CRZAutomation.EggState = CRZAutoRequire(client, "EggState")
-    CRZAutomation.Assets = CRZAutoRequire(data, "Assets")
-    CRZAutomation.Trails = CRZAutoRequire(data, "Trails")
-    CRZAutomation.PlotState = CRZAutoRequire(client, "PlotState")
-    CRZAutomation.Treadmills = CRZAutoRequire(data, "Treadmills")
-    CRZAutomation.initialized =
-        CRZAutomation.Remotes ~= nil and
-        CRZAutomation.Save ~= nil and
-        CRZAutomation.EggState ~= nil
-    return CRZAutomation.initialized
-end
-
-local function CRZEnsureAutomation()
-    if CRZAutomation.initialized then return true end
-    return CRZInitAutomation()
-end
-
-local function CRZInvokeAutomation(remote, ...)
-    if not remote then return false, nil end
-    local args = table.pack(...)
-    local ok, a, b, c = pcall(function()
-        return remote:InvokeServer(table.unpack(args, 1, args.n))
-    end)
-    return ok, a, b, c
-end
-
-local function CRZFireAutomation(remote, ...)
-    if not remote then return false end
-    local args = table.pack(...)
-    local ok = pcall(function()
-        remote:FireServer(table.unpack(args, 1, args.n))
-    end)
-    return ok
-end
-
-local function CRZAutomationSave()
-    if not CRZEnsureAutomation() or not CRZAutomation.Save then return nil end
-    local ok, save = pcall(CRZAutomation.Save.Get, player)
-    return ok and save or nil
-end
-
-local function CRZAutomationNotify(title, content, icon)
-    pcall(function()
-        WindUI:Notify({
-            Title = title,
-            Content = content,
-            Icon = icon or "check",
-            Duration = 3,
-        })
-    end)
-end
-
-local function CRZResolveAutomationSlot()
-    if not CRZEnsureAutomation() then return nil end
-    local r = CRZAutomation.Remotes
-    if not (r and r.Homestead and r.Homestead.AskState) then return nil end
-    local ok, state = CRZInvokeAutomation(r.Homestead.AskState)
-    if not ok or type(state) ~= "table" or type(state.OwnersBySlot) ~= "table" then
-        return nil
-    end
-    for slot, userId in pairs(state.OwnersBySlot) do
-        if tostring(userId) == tostring(player.UserId) then
-            return tostring(slot)
-        end
-    end
-    return nil
-end
-
-local function CRZGetAutomationPlacementFrames()
-    if not CRZEnsureAutomation() or not CRZAutomation.PlotState then return {} end
-    local ok, plot = pcall(CRZAutomation.PlotState.ResolvePlot)
-    if not ok or type(plot) ~= "table" or not plot.PetArea or not plot.CenterPoint then
-        return {}
-    end
-    local petArea, center = plot.PetArea, plot.CenterPoint
-    if not petArea.Size or not center.CFrame then return {} end
-    local frames = {}
-    for x = -petArea.Size.X * 0.5 + 5, petArea.Size.X * 0.5 - 5, 7 do
-        for z = -petArea.Size.Z * 0.5 + 5, petArea.Size.Z * 0.5 - 5, 7 do
-            local world = petArea.CFrame:PointToWorldSpace(Vector3.new(x, 1, z))
-            table.insert(frames, center.CFrame:ToObjectSpace(CFrame.new(world)))
-        end
-    end
-    return frames
-end
-
-local function CRZGetAutomationEggs()
-    local save = CRZAutomationSave()
-    local inventory = save and save.EggInventory
-    local result = {}
-    if type(inventory) ~= "table" then return result end
-    for uid, egg in pairs(inventory) do
-        if type(uid) == "string" and type(egg) == "table" and egg.Placement == nil then
-            table.insert(result, uid)
-        end
-    end
-    return result
-end
-
-local automationPlaceIndex = 1
-local function CRZRunAutomationPlaceAll()
-    if not CRZEnsureAutomation() or not CRZAutomation.EggState then return 0 end
-    local eggs = CRZGetAutomationEggs()
-    local frames = CRZGetAutomationPlacementFrames()
-    if #eggs == 0 or #frames == 0 then return 0 end
-
-    local placed = 0
-    for _, uid in ipairs(eggs) do
-        pcall(function()
-            if CRZAutomation.EggState.WearEggTool then
-                CRZAutomation.EggState.WearEggTool(uid)
-            end
-        end)
-        task.wait(0.12)
-
-        local didPlace = false
-        for offset = 0, #frames - 1 do
-            local index = ((automationPlaceIndex + offset - 1) % #frames) + 1
-            local ok, result = pcall(function()
-                return CRZAutomation.EggState.PlantEgg(uid, frames[index])
-            end)
-            if ok and result == true then
-                automationPlaceIndex = index + 1
-                didPlace = true
-                placed = placed + 1
-                task.wait(0.2)
-                break
-            end
-        end
-
-        if not didPlace then
-            break
-        end
-    end
-    return placed
-end
-
-local function CRZRunAutomationHatch()
-    if not CRZEnsureAutomation() or not CRZAutomation.EggState then return 0 end
-    local save = CRZAutomationSave()
-    if not save then return 0 end
-
-    local done = 0
-    for uid, egg in pairs(save.EggInventory or {}) do
-        if type(uid) == "string" and type(egg) == "table" then
-            local ready = true
-            if egg.Placement == nil and CRZAutomation.EggState.PlantEgg then
-                local slot = CRZResolveAutomationSlot()
-                local plots = Workspace:FindFirstChild("Plots")
-                local center = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-                local pos = center and center.Position or Vector3.zero
-                if plots and slot and plots:FindFirstChild(slot) then
-                    local plot = plots[slot]
-                    local point = plot:FindFirstChild("CenterPoint") or plot:FindFirstChild("PlotSign")
-                    if point and point:IsA("BasePart") then
-                        pos = point.Position
-                    end
-                end
-                pcall(CRZAutomation.EggState.PlantEgg, uid, CFrame.new(pos + Vector3.new(math.random(-6, 6), 0, math.random(-6, 6))))
-                task.wait(0.15)
-            elseif CRZAutomation.EggState.IsReadyToHatch then
-                local okReady, resultReady = pcall(CRZAutomation.EggState.IsReadyToHatch, uid)
-                ready = okReady and resultReady == true
-            end
-
-            if ready and CRZAutomation.EggState.BeginHatch then
-                local okHatch, started = pcall(CRZAutomation.EggState.BeginHatch, uid)
-                if okHatch and started == true then
-                    if CRZAutomation.EggState.FinishHatch then
-                        pcall(CRZAutomation.EggState.FinishHatch, uid)
-                    end
-                    done = done + 1
-                    task.wait(0.2)
-                end
-            end
-        end
-    end
-    return done
-end
-
-local function CRZRunAutomationClaim()
-    if not CRZEnsureAutomation() then return 0 end
-    local r, claimed = CRZAutomation.Remotes, 0
-
-    if r.Codex and r.Codex.AskRedeemAll then
-        local ok, result = CRZInvokeAutomation(r.Codex.AskRedeemAll)
-        if ok and result == true then claimed = claimed + 1 end
-    end
-    if r.Codex and r.Codex.AskRedeemLimitedEgg then
-        local ok, result = CRZInvokeAutomation(r.Codex.AskRedeemLimitedEgg)
-        if ok and result == true then claimed = claimed + 1 end
-    end
-    if r.GroupPerk and r.GroupPerk.RedeemPerk then
-        local ok, result = CRZInvokeAutomation(r.GroupPerk.RedeemPerk)
-        if ok and result == true then claimed = claimed + 1 end
-    end
-    if r.AwayEarnings and r.AwayEarnings.FetchSummary and r.AwayEarnings.AskCollect then
-        local okSummary, summary = CRZInvokeAutomation(r.AwayEarnings.FetchSummary)
-        if okSummary and type(summary) == "table" and (tonumber(summary.ClaimableAmount) or 0) > 0 then
-            local okCollect = CRZInvokeAutomation(r.AwayEarnings.AskCollect)
-            if okCollect then claimed = claimed + 1 end
-        end
-    end
-    return claimed
-end
-
-local function CRZRunAutomationBaseUpgrade()
-    if not CRZEnsureAutomation() then return false end
-    local r = CRZAutomation.Remotes
-    return r and r.Homestead and r.Homestead.AskBaseTierRaise
-        and CRZFireAutomation(r.Homestead.AskBaseTierRaise) or false
-end
-
-local function CRZRunAutomationTreadmillUpgrade()
-    if not CRZEnsureAutomation() then return false end
-    local r, tm = CRZAutomation.Remotes, CRZAutomation.Treadmills
-    if not (r and r.Treadmill and r.Treadmill.AskTierRaise and tm and type(tm.GetByUpgradeLevel) == "function") then
-        return false
-    end
-    local save = CRZAutomationSave()
-    if not save then return false end
-
-    local level = tonumber(save.TreadmillUpgradeLevel) or 0
-    local okCfg, nextCfg = pcall(tm.GetByUpgradeLevel, level + 1)
-    if not okCfg or type(nextCfg) ~= "table" or not nextCfg._id then return false end
-    if (tonumber(save.Money) or 0) < (tonumber(nextCfg.Price) or math.huge) then return false end
-
-    local ok, result = CRZInvokeAutomation(r.Treadmill.AskTierRaise, nextCfg._id)
-    return ok and result == true
-end
-
-local CRZ_TRAIL_VALUES_WIND = {}
-local CRZ_TRAIL_ID_WIND = {}
-local CRZ_TRAIL_PRICE_WIND = {}
-local function CRZRefreshAutomationTrails()
-    table.clear(CRZ_TRAIL_VALUES_WIND)
-    table.clear(CRZ_TRAIL_ID_WIND)
-    table.clear(CRZ_TRAIL_PRICE_WIND)
-    local trails = CRZAutomation.Trails
-    local directory = trails and (trails.Directory or trails.Trails or trails)
-    local ordered = {}
-    if type(directory) == "table" then
-        for id, data in pairs(directory) do
-            if type(data) == "table" and type(data.DisplayName) == "string" then
-                table.insert(ordered, {
-                    id = id,
-                    name = data.DisplayName,
-                    price = tonumber(data.Price) or 0,
-                })
-            end
-        end
-    end
-    table.sort(ordered, function(a, b) return a.price < b.price end)
-    for _, entry in ipairs(ordered) do
-        table.insert(CRZ_TRAIL_VALUES_WIND, entry.name)
-        CRZ_TRAIL_ID_WIND[entry.name] = entry.id
-        CRZ_TRAIL_PRICE_WIND[entry.name] = entry.price
-    end
-end
-
-local function CRZRunAutomationBuyTrail(selected)
-    if not CRZEnsureAutomation() then return 0 end
-    local save = CRZAutomationSave()
-    local r = CRZAutomation.Remotes
-    local buyRemote = r and r.Trailwear and r.Trailwear.AskPurchase
-    if not save or not buyRemote or type(selected) ~= "table" then return 0 end
-
-    local inventory = save.TrailInventory or {}
-    local bought = 0
-    for _, name in ipairs(CRZ_TRAIL_VALUES_WIND) do
-        if selected[name] then
-            local id = CRZ_TRAIL_ID_WIND[name]
-            local price = CRZ_TRAIL_PRICE_WIND[name] or 0
-            if id and not inventory[id] and (tonumber(save.Money) or 0) >= price then
-                local ok, result = CRZInvokeAutomation(buyRemote, id)
-                if ok and result ~= false then
-                    bought = bought + 1
-                end
-                task.wait(0.3)
-                save = CRZAutomationSave() or save
-                inventory = save.TrailInventory or inventory
-            end
-        end
-    end
-    return bought
-end
-
-local function CRZAutomationEnterAbyss()
-    local net = ReplicatedStorage:FindFirstChild("Packages")
-        and ReplicatedStorage.Packages:FindFirstChild("Networking")
-    local remote = net and net:FindFirstChild("RF/BossEvent/AskEnter")
-    if not remote then
-        return false, "Abyss entry remote not found"
-    end
-
-    local ok, accepted, msg = pcall(function()
-        return remote:InvokeServer()
-    end)
-    if not ok then return false, tostring(accepted) end
-    if accepted == true then return true, "Entering the Abyss World" end
-    return false, tostring(msg or "Boss entry refused")
-end
-
-local AutomationTrailSelection = Memory.AutoBuyTrailSelection or {}
-local AutomationTrailDropdown = nil
-
-CRZEnsureAutomation()
-CRZRefreshAutomationTrails()
-
-AutomationTab:Section({ Title = "Automation", Icon = "bot", Opened = true })
-
-AutomationTab:Toggle({
-    Title = "Auto Place All",
-    Desc = "Automatically places all unplaced eggs in your plot.",
-    Icon = "layers",
-    Type = "Toggle",
-    Value = Memory.AutoPlaceAll or false,
-    Callback = function(value)
-        CRZAutomation.autoPlaceAll = value
-        Memory.AutoPlaceAll = value
-        if value and not CRZAutomation.loops.place then
-            CRZAutomation.loops.place = true
-            task.spawn(function()
-                while CRZAutomation.autoPlaceAll do
-                    local count = 0
-                    pcall(function() count = CRZRunAutomationPlaceAll() end)
-                    task.wait(count > 0 and 0.8 or 1.5)
-                end
-                CRZAutomation.loops.place = false
-            end)
-        end
-    end,
-})
-
-AutomationTab:Toggle({
-    Title = "Auto Hatch",
-    Desc = "Automatically hatches eggs when possible.",
-    Icon = "egg",
-    Type = "Toggle",
-    Value = Memory.AutoHatch or false,
-    Callback = function(value)
-        CRZAutomation.autoHatch = value
-        Memory.AutoHatch = value
-        if value and not CRZAutomation.loops.hatch then
-            CRZAutomation.loops.hatch = true
-            task.spawn(function()
-                while CRZAutomation.autoHatch do
-                    pcall(CRZRunAutomationHatch)
-                    task.wait(1.2)
-                end
-                CRZAutomation.loops.hatch = false
-            end)
-        end
-    end,
-})
-
-AutomationTab:Divider()
-
-AutomationTab:Button({
-    Title = "Enter Abyss World Now",
-    Desc = "Enter the Abyss World immediately.",
-    Icon = "door-open",
-    Callback = function()
-        local ok, msg = CRZAutomationEnterAbyss()
-        CRZAutomationNotify("Abyss World", msg, ok and "check" or "circle-alert")
-    end,
-})
-
-AutomationTab:Toggle({
-    Title = "Auto Enter Abyss World",
-    Desc = "Automatically enters the Abyss World when the event is open.",
-    Icon = "rocket",
-    Type = "Toggle",
-    Value = Memory.AutoEnterAbyss or false,
-    Callback = function(value)
-        CRZAutomation.autoAbyss = value
-        Memory.AutoEnterAbyss = value
-        if value and not CRZAutomation.loops.abyss then
-            CRZAutomation.loops.abyss = true
-            task.spawn(function()
-                while CRZAutomation.autoAbyss do
-                    pcall(function()
-                        if player:GetAttribute("InBossArena") ~= true then
-                            local net = ReplicatedStorage:FindFirstChild("Packages")
-                                and ReplicatedStorage.Packages:FindFirstChild("Networking")
-                            local snapshotRemote = net and net:FindFirstChild("RF/BossEvent/AskSnapshot")
-                            local shouldEnter = true
-                            if snapshotRemote then
-                                local okSnap, snap = pcall(snapshotRemote.InvokeServer, snapshotRemote)
-                                if okSnap and type(snap) == "table" and snap.Open ~= nil then
-                                    shouldEnter = snap.Open == true
-                                end
-                            end
-                            if shouldEnter then
-                                CRZAutomationEnterAbyss()
-                            end
-                        end
-                    end)
-                    task.wait(2)
-                end
-                CRZAutomation.loops.abyss = false
-            end)
-        end
-    end,
-})
-
-AutomationTab:Divider()
-
-AutomationTab:Button({
-    Title = "Claim Index now",
-    Desc = "Claims available rewards now.",
-    Icon = "gift",
-    Callback = function()
-        local count = 0
-        pcall(function() count = CRZRunAutomationClaim() end)
-        CRZAutomationNotify("Claim Rewards", count > 0 and ("Claimed " .. count .. " reward(s).") or "No claimable rewards.", count > 0 and "check" or "info")
-    end,
-})
-
-AutomationTab:Toggle({
-    Title = "Auto Index",
-    Desc = "Automatically claims available Index.",
-    Icon = "badge-check",
-    Type = "Toggle",
-    Value = Memory.AutoClaim or false,
-    Callback = function(value)
-        CRZAutomation.autoClaim = value
-        Memory.AutoClaim = value
-        if value and not CRZAutomation.loops.claim then
-            CRZAutomation.loops.claim = true
-            task.spawn(function()
-                while CRZAutomation.autoClaim do
-                    pcall(CRZRunAutomationClaim)
-                    task.wait(30)
-                end
-                CRZAutomation.loops.claim = false
-            end)
-        end
-    end,
-})
-
-AutomationTab:Divider()
-
-AutomationTab:Toggle({
-    Title = "Auto Upgrade Base",
-    Desc = "Automatically upgrades your base when affordable.",
-    Icon = "castle",
-    Type = "Toggle",
-    Value = Memory.AutoUpgradeBase or false,
-    Callback = function(value)
-        CRZAutomation.autoBaseUpgrade = value
-        Memory.AutoUpgradeBase = value
-        if value and not CRZAutomation.loops.base then
-            CRZAutomation.loops.base = true
-            task.spawn(function()
-                while CRZAutomation.autoBaseUpgrade do
-                    pcall(CRZRunAutomationBaseUpgrade)
-                    task.wait(15)
-                end
-                CRZAutomation.loops.base = false
-            end)
-        end
-    end,
-})
-
-AutomationTab:Toggle({
-    Title = "Auto Upgrade Treadmill",
-    Desc = "Automatically upgrades the treadmill when affordable.",
-    Icon = "gauge",
-    Type = "Toggle",
-    Value = Memory.AutoUpgradeTreadmill or false,
-    Callback = function(value)
-        CRZAutomation.autoTreadmillUpgrade = value
-        Memory.AutoUpgradeTreadmill = value
-        if value and not CRZAutomation.loops.treadmill then
-            CRZAutomation.loops.treadmill = true
-            task.spawn(function()
-                while CRZAutomation.autoTreadmillUpgrade do
-                    pcall(CRZRunAutomationTreadmillUpgrade)
-                    task.wait(15)
-                end
-                CRZAutomation.loops.treadmill = false
-            end)
-        end
-    end,
-})
-
-AutomationTab:Divider()
-
-AutomationTrailDropdown = AutomationTab:Dropdown({
-    Title = "Trail Selection",
-    Desc = "Choose trails for Auto Buy Trail.",
-    Icon = "footprints",
-    Values = CRZ_TRAIL_VALUES_WIND,
-    Multi = true,
-    Value = {},
-    AllowNull = true,
-    Callback = function(value)
-        AutomationTrailSelection = value
-        Memory.AutoBuyTrailSelection = value
-    end,
-})
-
-AutomationTab:Toggle({
-    Title = "Auto Buy Trail",
-    Desc = "Automatically buys selected trails you can afford.",
-    Icon = "shopping-cart",
-    Type = "Toggle",
-    Value = Memory.AutoBuyTrail or false,
-    Callback = function(value)
-        CRZAutomation.autoBuyTrail = value
-        Memory.AutoBuyTrail = value
-        if value and not CRZAutomation.loops.trail then
-            CRZAutomation.loops.trail = true
-            task.spawn(function()
-                while CRZAutomation.autoBuyTrail do
-                    pcall(function()
-                        CRZRunAutomationBuyTrail(AutomationTrailSelection)
-                    end)
-                    task.wait(6)
-                end
-                CRZAutomation.loops.trail = false
-            end)
-        end
-    end,
-})
-
-AutomationTab:Divider()
-
+-- ==================== 2. TẢI SCRIPT CHILLI HUB GỐC ====================
 task.spawn(function()
-    task.wait(1)
-    pcall(CRZEnsureAutomation)
-    pcall(CRZRefreshAutomationTrails)
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli.lua"))()
+    end)
 end)
 
-MainTab:Section({ Title = "Movement", Icon = "move", Opened = true })
+local CoreGui = game:GetService("CoreGui")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
 
-local SpeedInput = MainTab:Input({
-    Title = "Walk Speed",
-    Desc = "Set your desired movement speed.",
-    InputIcon = "gauge",
-    Value = tostring(DesiredSpeed),
-    Placeholder = "16",
-    Callback = function(value)
-        local num = tonumber(value)
-        if num then
-            DesiredSpeed = num
-            Memory.DesiredSpeed = num
-            if SpeedEnabled and CurrentHumanoid then
-                pcall(function() CurrentHumanoid.WalkSpeed = DesiredSpeed end)
-            end
-        end
-    end,
-})
+-- ==================== DỮ LIỆU CẤU HÌNH JSON (PROFILE: MAIN) ====================
+local RAW_CONFIG_JSON = [===[{"Config":{"Profile":"main","Version":2,"States":{"Farm HUD Stealing Position":{"Value":[]},"Quick Panel Collapsed":{"Value":{"1":true}},"Quick Keybinds":{"Value":{"Player > Movement > Speed Boost":"Q"}},"Farm HUD World Position":{"Value":[]},"Farm HUD Stolen Eggs":{"Value":{"History":[{"At":1791707562,"Name":"Parrotfish Egg","Category":"Parrotfish","Scale":0.9196704573013789,"Rarity":"Rare","Value":659.493259982963}],"Count":1,"Best":{"Category":"Parrotfish","Name":"Parrotfish Egg","Rarity":"Rare","Rank":3}}},"Farm HUD Top Eggs Position":{"Value":[]},"Anti Guard Enabled":{"Value":false},"Farm HUD Steal History Position":{"Value":[]},"Quick Pinned Features":{"Value":["Player > Movement > Speed Boost","Player > Movement > Boost Speed"]},"Open On Launch":{"Value":true},"Quick Panel Position":{"Value":{"1":{"Y":0.32634490728378298,"X":0.8134856224060059}}},"Notifications":{"Value":true},"Farm HUD Top Pets Position":{"Value":[]},"Quick Open Key":{"Value":"LeftControl"},"FPS and Ping Position":{"Value":{"XOffset":16,"XScale":0,"YScale":0,"YOffset":47}},"Farm HUD Status Position":{"Value":[]},"Farm HUD Events Position":{"Value":[]},"Steal Panel Open":{"Value":false},"Quick LeftCenter Hidden":{"Value":true},"Farm HUD Economy Position":{"Value":[]},"Quick Pin Groups":{"Value":[]},"Farm HUD Collection Position":{"Value":[]}},"Values":{"Admin Abuse":{"Minigame Eggs":{"Auto Steal Minigame Egg":{"Value":true,"Type":"toggle"}},"Instant Steal V3":{"Instant Steal V3 Note":{"Value":"Needs Admin Treadmill","Type":"text"},"Instant Steal V3":{"Value":false,"Type":"toggle"}},"Admin Treadmill":{"Auto Use Admin Treadmill":{"Value":true,"Type":"toggle"}},"Capture The Egg":{"Hold Height":{"Value":45,"Type":"slider","Unit":"studs"},"Auto Capture Event Egg":{"Value":false,"Type":"toggle"},"Keep Away Distance":{"Value":45,"Type":"slider","Unit":"studs"},"Take It From The Holder":{"Value":true,"Type":"toggle"}}},"Predictor":{"Egg Predictor":{"Sort By":{"Value":"Value","Type":"dropdown"},"Preview Card":{"Value":true,"Type":"toggle"}},"Discord Webhook":{"Webhook URL":{"Value":"","Type":"input"},"Notify Fused Eggs":{"Value":false,"Type":"toggle"},"Notify Stolen Eggs":{"Value":false,"Type":"toggle"},"Webhook Min Rarity":{"Value":"Any","Type":"dropdown"},"Webhook Eggs":{"Value":[],"Type":"multidropdown"},"Webhook Min Value":{"Value":0,"Type":"slider"},"Ping @everyone":{"Value":false,"Type":"toggle"}}},"Progress":{"Auto Progression":{"Auto Buy Trail":{"Value":true,"Type":"toggle"},"Auto Claim Index":{"Value":true,"Type":"toggle"},"Auto Upgrade Treadmill":{"Value":true,"Type":"toggle"},"Auto Claim":{"Value":true,"Type":"toggle"},"Auto Upgrade Base":{"Value":true,"Type":"toggle"}}},"Quick":{"Pin Pad":{"Pad Size":{"Value":150,"Type":"slider","Unit":"%"},"Enable Keybinds":{"Value":true,"Type":"toggle"},"Show Pin Pads":{"Value":true,"Type":"toggle"},"Visible Quick Bars":{"Value":["Quick Bar 1","Quick Bar 2","Quick Bar 3","Quick Bar 4","Quick Bar 5"],"Type":"multidropdown"}}},"Auto Hop":{"Egg Finder":{"Hop Mode":{"Value":"Steal Then Hop","Type":"dropdown"},"Min Rarity":{"Value":"Secret","Type":"dropdown"},"Rarity To Wait For":{"Value":"Cosmic","Type":"dropdown"},"First Hop Delay":{"Value":5,"Type":"slider","Unit":"s"},"Sync With Auto Steal Filters":{"Value":true,"Type":"toggle"},"Target Specific Eggs":{"Value":[],"Type":"multidropdown"},"Min Value To Find":{"Value":700.11,"Type":"slider"},"Auto Hop":{"Value":false,"Type":"toggle"},"Target Areas":{"Value":["Cherry Blossom","Light Dark","Titan Temple","Enchanted Forest"],"Type":"multidropdown"}}},"Player":{"ESP":{"ESP Eggs":{"Value":true,"Type":"toggle"},"ESP Show Info":{"Value":["Icon","Name","Value"],"Type":"multidropdown"},"ESP Guard Size":{"Value":75,"Type":"slider","Unit":"%"},"ESP Player Info":{"Value":["Name","Tool"],"Type":"multidropdown"},"ESP Other Base Eggs":{"Value":false,"Type":"toggle"},"ESP Min Rarity":{"Value":"7 - Cosmic","Type":"dropdown"},"ESP Guards":{"Value":true,"Type":"toggle"},"Min ESP Value":{"Value":0,"Type":"slider"},"ESP Player Size":{"Value":75,"Type":"slider","Unit":"%"},"ESP Players":{"Value":true,"Type":"toggle"},"ESP Own Base Eggs":{"Value":true,"Type":"toggle"},"ESP Fixed Size":{"Value":false,"Type":"toggle"},"ESP Egg Size":{"Value":75,"Type":"slider","Unit":"%"}},"Character":{"Instant Prompts":{"Value":true,"Type":"toggle"},"Anti Ragdoll":{"Value":true,"Type":"toggle"},"Anti Trap":{"Value":true,"Type":"toggle"},"Invisibility":{"Value":false,"Type":"toggle"}},"Movement":{"Speed Boost":{"Value":false,"Type":"toggle"},"Boost Speed":{"Value":1000,"Type":"slider","Unit":"studs/s"},"Infinite Jump":{"Value":false,"Type":"toggle"}},"Combat":{"Auto Hit Egg Holders":{"Value":false,"Type":"toggle"},"Hit Max Speed":{"Value":750,"Type":"slider","Unit":"studs/s"},"Auto Hit Nearest Player":{"Value":false,"Type":"toggle"},"Hit Player":{"Value":"crs_st","Type":"dropdown"},"Hit Lead":{"Value":-275,"Type":"slider"},"Hit Tween Speed":{"Value":400,"Type":"slider","Unit":"studs/s"},"Hit Sweep":{"Value":60,"Type":"slider","Unit":"%"},"Chase Settings":{"Value":"Cài Đặt Đuổi Đánh","Type":"label"},"Auto Hit Specific Player":{"Value":false,"Type":"toggle"},"Hit Aura":{"Value":true,"Type":"toggle"},"Hit Status":{"Value":"Aura ready, nobody in reach","Type":"text"}}},"Settings":{"Interface":{"UI Size":{"Value":100,"Type":"slider","Unit":"%"}}},"Farm":{"Auto Steal":{"Drop Eggs At Safe Zone":{"Value":false,"Type":"toggle"},"Target Specific Eggs":{"Value":[],"Type":"multidropdown"},"Biohazard Lab Eggs":{"Value":["Red Panda Egg (43%)","Snowy Owl Egg (40%)","Salamander Egg (38%)"],"Type":"multidropdown"},"Anti Guard Panel":{"Value":true,"Type":"toggle"},"Steal Missing Lab Eggs":{"Value":false,"Type":"toggle"},"Instant Steal Steps":{"Value":2,"Type":"slider"},"Instant Steal Zones":{"Value":["Light Dark","Titan Temple","Enchanted Forest"],"Type":"multidropdown"},"Target Areas":{"Value":["Cherry Blossom","Light Dark","Titan Temple","Enchanted Forest"],"Type":"multidropdown"},"Unstable DNA Lab Eggs":{"Value":["Toro Egg (24%)","Winged Lamb Egg (23%)","Bladehide Egg (23%)","Imp Egg (22%)","Crustacia Egg (22%)"],"Type":"multidropdown"},"Stock Per Egg":{"Value":3,"Type":"slider","Unit":""},"Auto Steal":{"Value":true,"Type":"toggle"},"Min Rarity":{"Value":"Secret","Type":"dropdown"},"Teleport To Egg":{"Value":true,"Type":"toggle"},"Carry Speed":{"Value":120,"Type":"slider","Unit":"%"},"Experimental Lab Eggs":{"Value":["Bladehide Egg (34%)","Red Panda Egg (34%)","Crustacia Egg (33%)","Salamander Egg (33%)","Snowy Owl Egg (32%)"],"Type":"multidropdown"},"Fast Delivery":{"Value":true,"Type":"toggle"},"Skip Owned Lab Eggs":{"Value":true,"Type":"toggle"},"Steal Priority":{"Value":"Highest Value","Type":"dropdown"},"Instant Steal V2":{"Value":true,"Type":"toggle"},"Instant Steal":{"Value":false,"Type":"toggle"},"Steal Missing Index Eggs":{"Value":false,"Type":"toggle"},"Min Steal Value":{"Value":700.11,"Type":"slider"},"Tween Speed":{"Value":120,"Type":"slider","Unit":"%"},"Stock Lab Eggs For":{"Value":[],"Type":"multidropdown"}},"Auto Sell":{"Egg Sell Value":{"Value":0,"Type":"slider"},"Sell Egg Rule":{"Value":"Rarity Only","Type":"dropdown"},"Auto Sell Egg":{"Value":false,"Type":"toggle"},"Blacklist Sell Eggs":{"Value":[],"Type":"multidropdown"},"Keep Mutated Eggs":{"Value":true,"Type":"toggle"},"Egg Max Rarity":{"Value":"3 - Rare","Type":"dropdown"},"Blacklist Sell Pets":{"Value":[],"Type":"multidropdown"},"Egg Sell Preview":{"Value":"Egg matches  -  0 eggs for $0","Type":"text"},"Auto Sell Pet":{"Value":true,"Type":"toggle"},"Pet Sell Value":{"Value":777.78,"Type":"slider"},"Pet Sell Preview":{"Value":"Pet matches  -  0 pets for $0","Type":"text"},"Keep Mutated Pets":{"Value":false,"Type":"toggle"},"Sell Pet Rule":{"Value":"Rarity Only","Type":"dropdown"},"Pet Max Rarity":{"Value":"8 - Secret","Type":"dropdown"}},"Auto Fuse Machine":{"Max Rarity to Fuse":{"Value":"6 - Mythic","Type":"dropdown"},"Skip Mutated Pets":{"Value":true,"Type":"toggle"},"Auto Fuse Machine":{"Value":true,"Type":"toggle"},"Specific Species to Fuse":{"Value":[],"Type":"multidropdown"},"Eject Incomplete Slots":{"Value":true,"Type":"toggle"},"Pets To Use":{"Value":"Lowest To Highest","Type":"dropdown"},"Fuse Priority Mode":{"Value":"Lowest Rarity First","Type":"dropdown"},"Fuse Preview":{"Value":"No three matching pets","Type":"text"}},"Auto Favorite":{"Favorite Mutations":{"Value":[],"Type":"multidropdown"},"Favorite Preview":{"Value":"Favorite matches  -  0 pets, 0 to mark  |  18 favorited","Type":"text"},"Favorite Min Rarity":{"Value":"10 - Divine","Type":"dropdown"},"Auto Favorite Equipped":{"Value":true,"Type":"toggle"},"Auto Favorite Pet":{"Value":true,"Type":"toggle"},"Always Favorite Species":{"Value":[],"Type":"multidropdown"},"Min Favorite Value":{"Value":797.34,"Type":"slider"},"Auto Unfavorite Equipped":{"Value":true,"Type":"toggle"},"Favorite Rule":{"Value":"Match All","Type":"dropdown"}},"Auto Treadmill":{"Stay On Treadmill":{"Value":true,"Type":"toggle"},"Auto Treadmill":{"Value":true,"Type":"toggle"}},"Auto Place Egg":{"Place Egg Rule":{"Value":"Always","Type":"dropdown"},"Place Rarities":{"Value":[],"Type":"multidropdown"},"Pen Status":{"Value":"Eggs placed 26/30  -  18/18 pets equipped, 1 in bag","Type":"text"},"Auto Place Egg":{"Value":true,"Type":"toggle"},"Place Egg Order":{"Value":"Highest Value","Type":"dropdown"},"Min Place Value":{"Value":0,"Type":"slider"},"Place Specific Eggs":{"Value":[],"Type":"multidropdown"}},"Wisp Companion":{"Auto Banjo Cricket":{"Value":true,"Type":"toggle"},"Auto Wisp":{"Value":true,"Type":"toggle"},"Wisp Status":{"Value":"Needs 50B Speed Power to meet the Wisp (you have 0.92B)","Type":"text"}},"Butterfly Bloom":{"Auto Butterfly Bloom":{"Value":true,"Type":"toggle"},"Trade Up Tiers":{"Value":["Emerald To Sapphire","Sapphire To Amethyst","Amethyst To Radiant"],"Type":"multidropdown"},"Auto Craft Essence":{"Value":true,"Type":"toggle"},"Auto Trade Up":{"Value":true,"Type":"toggle"},"Catch Priority":{"Value":"Rarest","Type":"dropdown"},"Tween Speed  ":{"Value":600,"Type":"slider","Unit":"studs/s"},"Catch Mode":{"Value":"Chase","Type":"dropdown"},"Catch Butterflies":{"Value":["Radiant Butterfly","Amethyst Butterfly","Sapphire Butterfly","Emerald Butterfly"],"Type":"multidropdown"},"Smart Trade For Essence":{"Value":true,"Type":"toggle"}},"Racing Event":{"Race Speed":{"Value":400,"Type":"slider"},"Auto Race":{"Value":true,"Type":"toggle"},"Race Shop Items":{"Value":["Nitro Mutation"],"Type":"multidropdown"},"Auto Equip Racer":{"Value":true,"Type":"toggle"},"Auto Buy Race Shop":{"Value":true,"Type":"toggle"},"Auto Claim Race Rewards":{"Value":true,"Type":"toggle"},"Auto Use Power-Ups":{"Value":true,"Type":"toggle"},"Racer":{"Value":"Best Owned","Type":"dropdown"}},"Auto Mutation":{"Mutate Priority":{"Value":"Highest Value","Type":"dropdown"},"Mutations To Use":{"Value":["Fractured","Scrambled","Enchanted","Nitro"],"Type":"multidropdown"},"Mutate Target Eggs":{"Value":[],"Type":"multidropdown"},"Mutate Min Value":{"Value":797.34,"Type":"slider"},"Auto Mutate":{"Value":true,"Type":"toggle"},"Mutate Status":{"Value":"Waiting  |  No egg to mutate","Type":"text"},"Auto Buy Nitro":{"Value":true,"Type":"toggle"},"Mutate Min Rarity":{"Value":"Secret","Type":"dropdown"}},"Auto Sell Lab Egg":{"Lab Egg Sell Value":{"Value":700.11,"Type":"slider"},"Sell Lab Egg Rule":{"Value":"Rarity And Value","Type":"dropdown"},"Lab Egg Max Rarity":{"Value":"Off","Type":"dropdown"},"Auto Sell Lab Egg":{"Value":true,"Type":"toggle"},"Lab Egg Sell Preview":{"Value":"Lab egg matches  -  0 eggs for $0","Type":"text"},"Keep Lab Pets":{"Value":[],"Type":"multidropdown"},"Keep Mutated Lab Eggs":{"Value":true,"Type":"toggle"}},"Auto Hatch & Equip":{"Hatch Specific Eggs":{"Value":[],"Type":"multidropdown"},"Auto Hatch":{"Value":true,"Type":"toggle"},"Hatch Min Rarity":{"Value":"Any","Type":"dropdown"},"Min Hatch Value":{"Value":0,"Type":"slider"},"Auto Equip Best":{"Value":true,"Type":"toggle"}},"Dr Scramble Lab":{"Lab Banners":{"Value":[],"Type":"multidropdown"},"Lab Status":{"Value":"Experimental Pets  -  needs Crustacia, Salamander, Red Panda  -  pity 0/100  -  free rerolls 0  -  rotates in 25:48  -  Need a Crustacia egg","Type":"text"},"Auto Place Lab Reward Eggs":{"Value":true,"Type":"toggle"},"Auto Reroll Lab Recipe":{"Value":true,"Type":"toggle"},"Auto Lab Trade-In":{"Value":true,"Type":"toggle"}},"Shooting Star":{"Auto Catch Shooting Star":{"Value":true,"Type":"toggle"},"Shooting Star Status":{"Value":"Waiting for a shooting star","Type":"text"}}},"Misc":{"Performance":{"Optimizer":{"Value":true,"Type":"toggle"},"Farm HUD":{"Value":false,"Type":"toggle"},"Background Color":{"Value":"White","Type":"dropdown"},"Egg Card Image":{"Value":"Egg Image","Type":"dropdown"},"Disable 3D Render":{"Value":false,"Type":"toggle"},"FPS and Ping":{"Value":true,"Type":"toggle"},"FPS Cap":{"Value":240,"Type":"slider","Unit":" FPS"},"HUD Size":{"Value":70,"Type":"slider","Unit":"%"},"Showcase Cards":{"Value":4,"Type":"slider"},"Hide Game UI":{"Value":true,"Type":"toggle"},"HUD Items":{"Value":["Money","Income","Speed","Treadmill","Eggs Stolen","Best Steal","Night Timer","Session Time","Activity","Racing Event","Race Wins","Shooting Star","Pets","Eggs","Top Pets","Top Eggs","Steal History"],"Type":"multidropdown"},"FPS and Ping Size":{"Value":100,"Type":"slider","Unit":"%"}},"Utility":{"Anti AFK":{"Value":true,"Type":"toggle"}}},"Server":{"Server":{"Server Hop Mode":{"Value":"Least Players","Type":"dropdown"},"Auto Load Script":{"Value":true,"Type":"toggle"},"Auto Rejoin When Disconnect":{"Value":true,"Type":"toggle"}}}},"SavedAt":1791707652},"Format":"ChilliLibraryConfig","ExportVersion":1,"Name":"main"}]===]
 
-local SpeedBypassDropdown = MainTab:Dropdown({
-    Title = "Speed Bypass Method",
-    Desc = "Choose which bypass method to use for speed.",
-    Icon = "settings-2",
-    Values = {"Humanoid Clone", "GC Hook Bypass"},
-    Value = SpeedBypassMethod,
-    Callback = function(value)
-        SpeedBypassMethod = value
-        Memory.SpeedBypassMethod = value
-        if SpeedEnabled then
-            stopNewBypass()
-            task.wait(0.1)
-            startNewBypass()
-        end
-    end,
-})
+-- ==================== 3. TỪ ĐIỂN DỊCH THUẬT MASTER FULL ====================
+local currentLanguage = "VI"
+local FastCache = {}
+local switchGlobalLanguage = nil
+local updateIslandContentLanguage = nil
 
-local SpeedToggle = MainTab:Toggle({
-    Title = "Speed Hack",
-    Desc = "Enable custom walk speed.",
-    Icon = "zap",
-    Type = "Toggle",
-    Value = SpeedEnabled,
-    Callback = function(value)
-        SpeedEnabled = value
-        Memory.SpeedEnabled = value
+local function replaceAll(str, findStr, replaceStr)
+    local startIdx, endIdx = str:find(findStr, 1, true)
+    while startIdx do
+        str = str:sub(1, startIdx - 1) .. replaceStr .. str:sub(endIdx + 1)
+        startIdx, endIdx = str:find(findStr, startIdx + #replaceStr, true)
+    end
+    return str
+end
 
-        if SpeedEnabled then
-            startNewBypass()
-        else
-            stopNewBypass()
-            if CurrentHumanoid then
-                pcall(function() CurrentHumanoid.WalkSpeed = 16 end)
-            end
-        end
-    end,
-})
-
-local FlyInput = MainTab:Input({
-    Title = "Fly Speed",
-    Desc = "Set your flight speed.",
-    InputIcon = "plane",
-    Value = tostring(FlySpeed),
-    Placeholder = "50",
-    Callback = function(value)
-        local num = tonumber(value)
-        if num then
-            FlySpeed = num
-            Memory.FlySpeed = num
-        end
-    end,
-})
-
-local FlyToggle = MainTab:Toggle({
-    Title = "Fly",
-    Desc = "Enable noclip flight.",
-    Icon = "plane",
-    Type = "Toggle",
-    Value = FlyEnabled,
-    Callback = function(value)
-        FlyEnabled = value
-        Memory.FlyEnabled = value
-        if FlyEnabled then
-            startFly()
-        else
-            stopFly()
-        end
-    end,
-})
-
-MainTab:Divider()
-
-MainTab:Section({ Title = "Combat", Icon = "shield", Opened = true })
-
-local AntiKnockbackToggle = MainTab:Toggle({
-    Title = "Anti Knockback",
-    Desc = "Prevents being flung.",
-    Icon = "anchor",
-    Type = "Toggle",
-    Value = AntiKnockbackEnabled,
-    Callback = function(value)
-        AntiKnockbackEnabled = value
-        Memory.AntiKnockbackEnabled = value
-    end,
-})
-
-local AntiRagdollToggle = MainTab:Toggle({
-    Title = "Anti Ragdoll",
-    Desc = "Prevents ragdoll by either gaurd or player.",
-    Icon = "user-x",
-    Type = "Toggle",
-    Value = AntiRagdollEnabled,
-    Callback = function(value)
-        AntiRagdollEnabled = value
-        Memory.AntiRagdollEnabled = value
-    end,
-})
-
-local InstantAccelToggle = MainTab:Toggle({
-    Title = "Smooth movement",
-    Desc = "Instantly reach max velocity when moving Dork.",
-    Icon = "fast-forward",
-    Type = "Toggle",
-    Value = InstantAccelerationEnabled,
-    Callback = function(value)
-        InstantAccelerationEnabled = value
-        Memory.InstantAccelerationEnabled = value
-    end,
-})
-
-local AntiRejoinToggle = MainTab:Toggle({
-    Title = "Anti Rejoin / Kick",
-    Desc = "Blocks Kick and Teleport attempts.",
-    Icon = "ban",
-    Type = "Toggle",
-    Value = AntiRejoinEnabled,
-    Callback = function(value)
-        AntiRejoinEnabled = value
-        Memory.AntiRejoinEnabled = value
-    end,
-})
-
-local AntiTrapToggle = EggTab:Toggle({
-    Title = "Anti Trap",
-    Desc = "Anti trap while stealing",
-    Icon = "shield",
-    Type = "Toggle",
-    Value = AntiTrapEnabled,
-    Callback = function(value)
-        AntiTrapEnabled = value
-        Memory.AntiTrapEnabled = value
-    end,
-})
-
-MainTab:Divider()
-
-MainTab:Section({ Title = "Avatar", Icon = "user", Opened = true })
-
-MainTab:Button({
-    Title = "R6",
-    Desc = "Execute R6 avatar script.",
-    Icon = "person-standing",
-    Callback = function()
-        local success, err = pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Methions/Thingsomething/refs/heads/main/R6"))()
-        end)
-        if not success then
-            warn("[R6] Failed to execute: " .. tostring(err))
-        end
-    end,
-})
-
-
-
-AutoSellTab:Section({ Title = "Auto Sell", Icon = "tag", Opened = true })
-
-local RarityOptions = {
-    "Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic",
-    "Cosmic", "Secret", "Prismatic", "Eternal", "Transcendent",
-    "Divine", "Celestial", "Titan"
+local EXACT_MATCH_VI = {
+    ["Hop"] = "Đổi Server",
+    ["Join"] = "Vào Phòng",
+    ["Copy"] = "Sao Chép",
+    ["Rejoin"] = "Vào Lại",
+    ["Add"] = "Thêm",
+    ["Sell"] = "Bán",
+    ["Favorite"] = "Khóa",
+    ["Unfavorite"] = "Mở Khóa",
+    ["RESET"] = "ĐẶT LẠI",
+    ["All"] = "Tất cả",
+    ["ALL"] = "TẤT CẢ",
+    ["Any"] = "Tất cả",
+    ["None"] = "Không có",
+    ["Off"] = "Tắt",
+    ["OFF"] = "TẮT",
+    ["On"] = "Bật",
+    ["ON"] = "BẬT",
+    ["Idle"] = "Đang chờ",
+    ["IDLE"] = "ĐANG CHỜ",
+    ["Stand"] = "Đứng yên",
+    ["Chase"] = "Đuổi theo",
+    ["Circle"] = "Xoay vòng",
+    ["Patrol"] = "Tuần tra",
+    ["Rarest"] = "Hiếm nhất",
+    ["Nearest"] = "Gần nhất",
+    ["Always"] = "Luôn luôn",
+    ["Value"] = "Giá trị",
+    ["Cosmic"] = "Vũ Trụ (Cosmic)",
+    ["Divine"] = "Thánh Thần (Divine)",
+    ["Eternal"] = "Vĩnh Cửu (Eternal)",
+    ["Mythic"] = "Thần Thoại (Mythic)",
+    ["Legendary"] = "Huyền Thoại (Legendary)",
+    ["Epic"] = "Sử Thi (Epic)",
+    ["Rare"] = "Hiếm (Rare)",
+    ["Uncommon"] = "Thường (Uncommon)",
+    ["Common"] = "Phổ Thông (Common)",
+    ["Secret"] = "Bí Ẩn (Secret)",
+    ["Least Players"] = "Ít người chơi nhất",
+    ["Steal Then Hop"] = "Cướp xong đổi server",
+    ["Rarity Only"] = "Chỉ theo độ hiếm",
+    ["Rarity And Value"] = "Độ hiếm & Giá trị",
+    ["Value Only"] = "Chỉ theo giá trị",
+    ["Lowest Rarity First"] = "Độ hiếm thấp trước",
+    ["Lowest To Highest"] = "Từ thấp đến cao",
+    ["Highest To Lowest"] = "Từ cao đến thấp",
+    ["Match All"] = "Khớp tất cả",
+    ["Match Any"] = "Khớp bất kỳ",
+    ["Highest Value"] = "Giá trị cao nhất",
+    ["Lowest Value"] = "Giá trị thấp nhất",
+    ["3 - Rare"] = "3 - Hiếm (Rare)",
+    ["6 - Mythic"] = "6 - Thần Thoại (Mythic)",
+    ["8 - Secret"] = "8 - Bí Ẩn (Secret)",
+    ["10 - Divine"] = "10 - Thánh Thần (Divine)",
+    ["EGGS"] = "TRỨNG",
+    ["READY"] = "SẴN SÀNG",
+    ["GROWING"] = "ĐANG LỚN",
+    ["IN BAG"] = "TRONG TÚI",
+    ["TOTAL / S"] = "TỔNG / GIÂY",
+    ["WAITING"] = "ĐANG CHỜ",
+    ["INACTIVE"] = "KHÔNG HOẠT ĐỘNG"
 }
 
-local SellRarityDropdown = AutoSellTab:Dropdown({
-    Title = "Sell Rarities",
-    Desc = "Select which egg rarities to auto sell.",
-    Icon = "filter",
-    Multi = true,
-    Values = RarityOptions,
-    Value = AutoSellRarities,
-    Callback = function(selected)
-        AutoSellRarities = selected
-        Memory.AutoSellRarities = selected
-    end,
-})
+local MAP_VI = {
+    -- MENU CHÍNH
+    ["Farm"] = "Cày Cuốc",
+    ["Player"] = "Người Chơi",
+    ["Predictor"] = "Dự Đoán",
+    ["Progress"] = "Tiến Trình",
+    ["Server"] = "Máy Chủ",
+    ["Misc"] = "Khác",
+    ["Auto Hop"] = "Tự Đổi Máy Chủ",
+    ["Admin Abuse"] = "Menu Admin (Abuse)",
+    ["Discord"] = "Discord",
+    ["Quick & Keys"] = "Phím Tắt & Key",
+    ["Settings"] = "Cài Đặt",
+    ["Config"] = "Cấu Hình",
+    ["Filter features..."] = "Lọc tính năng...",
+    ["Search"] = "Tìm kiếm",
 
+    -- TIỆN ÍCH NGOÀI MÀN HÌNH
+    ["Anti Guard"] = "Chống Vệ Sĩ",
 
-AutoSellTab:Toggle({
-    Title = "Auto Sell Eggs",
-    Desc = "Automatically sell eggs of selected rarities.",
-    Icon = "tag",
-    Type = "Toggle",
-    Value = AutoSellEnabled,
-    Callback = function(value)
-        AutoSellEnabled = value
-        Memory.AutoSellEnabled = value
-    end,
-})
+    -- TIẾN TRÌNH (AUTO PROGRESSION - HÌNH 6449)
+    ["Auto Progression"] = "Tự Động Tiến Trình",
+    ["Auto Buy Trail"] = "Tự Mua Vệt Sáng",
+    ["Automatically buy available trails when affordable"] = "Tự động mua vệt sáng khi đủ tiền",
+    ["Auto Upgrade Base"] = "Tự Nâng Cấp Căn Cứ",
+    ["Automatically upgrade base when money is available"] = "Tự động nâng cấp căn cứ khi đủ tiền",
+    ["Auto Upgrade Treadmill"] = "Tự Nâng Cấp Máy Tập",
+    ["Automatically upgrade treadmill when money is available"] = "Tự động nâng cấp máy tập khi đủ tiền",
+    ["Auto Claim Index"] = "Tự Nhận Thưởng Chỉ Mục",
+    ["Claim index rewards as soon as they unlock"] = "Nhận thưởng chỉ mục ngay khi mở khóa",
+    ["Auto Claim"] = "Tự Nhận Thưởng",
+    ["Claim offline money & index rewards"] = "Nhận tiền offline & thưởng chỉ mục",
 
-SettingsTab:Section({ Title = "Window", Icon = "panel-top", Opened = true })
+    -- MÁY CHỦ (SERVER - HÌNH 6448)
+    ["Auto Load Script"] = "Tự Động Nạp Script",
+    ["Server Hop Mode"] = "Chế Độ Đổi Server",
+    ["Server Hop"] = "Đổi Server",
+    ["Job ID"] = "Mã Phòng (Job ID)",
+    ["Paste a server Job ID..."] = "Dán mã Job ID máy chủ...",
+    ["Join Job ID"] = "Vào Bằng Job ID",
+    ["Copy Current Job ID"] = "Sao Chép Job ID Hiện Tại",
+    ["Rejoin Server"] = "Vào Lại Máy Chủ",
+    ["Auto Rejoin When Disconnect"] = "Tự Kết Nối Lại Khi Mất Mạng",
 
-SettingsTab:Button({
-    Title = "Open Window",
-    Desc = "Open DUCKHub immediately.",
-    Icon = "panel-top-open",
-    Callback = function()
-        Window:Open()
-    end,
-})
+    -- HIỆU NĂNG & TIỆN ÍCH (PERFORMANCE & UTILITY - HÌNH 6447, 6446)
+    ["Performance"] = "Hiệu Năng",
+    ["FPS Cap"] = "Giới Hạn FPS",
+    ["Optimizer"] = "Tối Ưu Hóa (Giảm Lag)",
+    ["Strip shadows, textures and effects for the highest FPS"] = "Xóa bóng, bề mặt và hiệu ứng để tối đa FPS",
+    ["FPS and Ping Size"] = "Cỡ FPS & Ping",
+    ["FPS and Ping"] = "Hiện FPS & Ping",
+    ["Disable 3D Render"] = "Tắt Đồ Họa 3D",
+    ["Farm HUD"] = "Bảng Cày Cuốc (Farm HUD)",
+    ["Drag any panel to place it where you like"] = "Kéo bất kỳ bảng nào đến vị trí bạn muốn",
+    ["Utility"] = "Tiện Ích",
+    ["Anti AFK"] = "Chống Treo Máy (Anti AFK)",
 
-SettingsTab:Button({
-    Title = "Close Window",
-    Desc = "Close DUCK UI.",
-    Icon = "x",
-    Callback = function()
-        Window:Close()
-    end,
-})
+    -- DÒ TÌM TRỨNG (EGG FINDER - HÌNH 6445, 6444)
+    ["Egg Finder"] = "Dò Tìm Trứng",
+    ["Joins new servers to find eggs that match the filters below"] = "Tự vào server mới để tìm trứng khớp bộ lọc dưới",
+    ["Turn on Auto Hop to start hunting"] = "Bật Tự Đổi Máy Chủ để bắt đầu săn trứng",
+    ["Hop Mode"] = "Chế Độ Đổi Server",
+    ["When to move on to the next server"] = "Thời điểm chuyển sang máy chủ tiếp theo",
+    ["Rarity To Wait For"] = "Độ Hiếm Cần Đợi",
+    ["For After A Rare Spawns this rarity or higher"] = "Chờ sau khi xuất hiện trứng từ độ hiếm này trở lên",
+    ["For After A Rare Spawns: this rarity or higher"] = "Chờ sau khi xuất hiện trứng từ độ hiếm này trở lên",
+    ["Sync With Auto Steal Filters"] = "Đồng Bộ Bộ Lọc Cướp",
+    ["Changing a filter here also changes it in Auto Steal, and back"] = "Thay đổi bộ lọc tại đây sẽ đồng bộ với Tự Động Cướp",
+    ["First Hop Delay"] = "Độ Trễ Lần Đổi Server Đầu",
+    ["Wait after the script loads before the first hop"] = "Chờ sau khi nạp script hoàn tất trước khi đổi server",
+    ["Min Value To Find"] = "Giá Trị Min Cần Tìm",
+    ["Skip eggs worth less than this. Drag or type 350k, 50m, 10b"] = "Bỏ qua trứng giá nhỏ hơn mức này. Kéo hoặc nhập 350k, 50m, 10b",
+    ["Find eggs of the chosen rarity and every rarity above it"] = "Tìm trứng thuộc độ hiếm đã chọn và cao hơn",
+    ["Target Specific Eggs"] = "Mục Tiêu Trứng Chỉ Định",
+    ["Only look for these eggs (empty = all)"] = "Chỉ tìm các trứng này (trống = tất cả)",
+    ["Target Areas"] = "Khu Vực Mục Tiêu",
 
-SettingsTab:Keybind({
-    Title = "UI Keybind",
-    Desc = "Key to open/close the DUCKHub UI.",
-    Icon = "keyboard",
-    Value = "K",
-    CanChange = true,
-    Callback = function(key)
-        Window:SetToggleKey(Enum.KeyCode[key])
-    end,
-})
+    -- DISCORD WEBHOOK & PREDICTOR (HÌNH 6431, 6430)
+    ["Discord Webhook"] = "Webhook Discord",
+    ["Webhook URL"] = "Đường Dẫn Webhook",
+    ["Ping @everyone"] = "Tag @everyone",
+    ["Notify Stolen Eggs"] = "Báo Cáo Cướp Trứng",
+    ["Post eggs you bring home that match the filter"] = "Gửi thông báo các trứng mang về khớp bộ lọc",
+    ["Notify Fused Eggs"] = "Báo Cáo Trứng Dung Hợp",
+    ["Post eggs from the Fuse Machine that match the filter"] = "Gửi thông báo các trứng từ Máy Dung Hợp khớp bộ lọc",
+    ["Webhook Độ Hiếm Min"] = "Độ Hiếm Webhook Min",
+    ["Webhook Min Rarity"] = "Độ Hiếm Webhook Min",
+    ["Only post eggs of this rarity and above"] = "Chỉ gửi trứng từ độ hiếm này trở lên",
+    ["Webhook Min Value"] = "Giá Trị Webhook Min",
+    ["Only post eggs worth at least this. Drag or type 350k, 50m, 10b"] = "Chỉ gửi trứng đạt giá trị tối thiểu mức này. Kéo hoặc nhập 350k, 50m, 10b",
+    ["Egg Dự Đoán"] = "Dự Đoán Trứng",
+    ["Egg Predictor"] = "Dự Đoán Trứng",
+    ["Lab Predictor"] = "Dự Đoán Phòng Lab",
+    ["Fuse Predictor"] = "Dự Đoán Dung Hợp",
+    ["Sort By"] = "Sắp Xếp Theo",
+    ["Preview Card"] = "Thẻ Xem Trước",
+    ["Search eggs..."] = "Tìm kiếm trứng...",
+    ["FLY TO EGG"] = "BAY ĐẾN TRỨNG",
 
+    -- ADMIN ABUSE (HÌNH 6436, 6437)
+    ["Capture The Egg"] = "Cướp Trứng Sự Kiện",
+    ["Turn on Capture The Egg below to join the event"] = "Bật Cướp Trứng Sự Kiện bên dưới để tham gia",
+    ["Auto Capture Event Egg"] = "Tự Cướp Trứng Sự Kiện",
+    ["Take It From The Holder"] = "Giật Trứng Từ Người Bê",
+    ["Hold Height"] = "Độ Cao Bê Trứng",
+    ["Keep Away Distance"] = "Khoảng Cách Giữ An Toàn",
+    ["Admin Treadmill"] = "Máy Tập Admin",
+    ["Waiting for the Admin Treadmill"] = "Đang chờ Máy Tập Admin",
+    ["Auto Use Admin Treadmill"] = "Tự Dùng Máy Tập Admin",
+    ["Instant Steal V3 Note"] = "Ghi Chú Cướp Siêu Tốc V3",
+    ["Instant Steal V3"] = "Cướp Siêu Tốc V3",
+    ["Instant Steal V2"] = "Cướp Siêu Tốc V2",
+    ["Instant Steal"] = "Cướp Siêu Tốc",
+    ["Needs Admin Treadmill"] = "Cần Máy Tập Admin",
+    ["Toggle is off"] = "Đang tắt",
 
-SettingsTab:Section({ Title = "Community", Icon = "message-circle", Opened = true })
+    -- DANH MỤC LỚN TAB CÀY CUỐC (FARM)
+    ["Racing Event"] = "Sự Kiện Đua Xe",
+    ["Shooting Star"] = "Sao Băng Rơi",
+    ["Dr Scramble Lab & Mech"] = "Phòng Lab & Robot Scramble",
+    ["Dr Scramble Lab"] = "Phòng Lab Dr. Scramble",
+    ["Butterfly Bloom"] = "Sự Kiện Bắt Bướm",
+    ["Wisp Companion"] = "Đồng Hành Wisp",
+    ["Auto Steal"] = "Tự Động Cướp Trứng",
+    ["Auto Mutation"] = "Tự Động Đột Biến",
+    ["Auto Place Egg"] = "Tự Động Đặt Trứng",
+    ["Auto Treadmill"] = "Tự Động Máy Tập",
+    ["Auto Hatch & Equip"] = "Tự Ấp Trứng & Trang Bị",
+    ["Auto Sell"] = "Tự Động Bán",
+    ["Auto Sell Lab Egg"] = "Tự Động Bán Trứng Lab",
+    ["Auto Sell Egg"] = "Tự Động Bán Trứng",
+    ["Auto Sell Pet"] = "Tự Động Bán Pet",
+    ["Auto Fuse Machine"] = "Máy Dung Hợp Pet",
+    ["Auto Favorite"] = "Tự Động Khóa Pet",
 
-SettingsTab:Button({
-    Title = "Join Discord",
-    Desc = "Copy the DUCKHub Discord invite link.",
-    Icon = "message-circle",
-    Callback = function()
-        local copied = copyDiscordLink()
-        showDiscordPopup()
+    -- CHI TIẾT FARM
+    ["Race Speed"] = "Tốc Độ Đua",
+    ["Auto Race"] = "Tự Động Đua Xe",
+    ["Race Shop Items"] = "Vật Phẩm Shop Đua",
+    ["Nitro Mutation"] = "Đột Biến Nitro",
+    ["Auto Equip Racer"] = "Tự Trang Bị Xe Tốt Nhất",
+    ["Auto Buy Race Shop"] = "Tự Mua Shop Đua Xe",
+    ["Auto Claim Race Rewards"] = "Tự Nhận Thưởng Đua Xe",
+    ["Auto Use Power-Ups"] = "Tự Dùng Đạo Cụ Tăng Tốc",
+    ["Racer"] = "Tay Đua",
+    ["Best Owned"] = "Tốt Nhất Đang Có",
+    ["Auto Catch Shooting Star"] = "Tự Động Bắt Sao Băng",
+    ["Shooting Star Status"] = "Trạng Thái Sao Băng",
+    ["Waiting for a shooting star"] = "Đang chờ sao băng rơi",
+    ["Mutate Priority"] = "Ưu Tiên Đột Biến",
+    ["Mutations To Use"] = "Loại Đột Biến Dùng",
+    ["Mutate Target Eggs"] = "Mục Tiêu Trứng Đột Biến",
+    ["Mutate Min Value"] = "Giá Trị Đột Biến Min",
+    ["Auto Mutate"] = "Tự Động Đột Biến",
+    ["Mutate Status"] = "Trạng Thái Đột Biến",
+    ["Auto Buy Nitro"] = "Tự Mua Nitro",
+    ["Mutate Min Rarity"] = "Độ Hiếm Đột Biến Min",
+    ["Steal eggs of the chosen rarity and every rarity above it"] = "Cướp trứng thuộc độ hiếm đã chọn và cao hơn",
+    ["Min Steal Value"] = "Giá Trị Cướp Min",
+    ["Steal Missing Lab Eggs"] = "Cướp Trứng Lab Còn Thiếu",
+    ["Steal Missing Index Eggs"] = "Cướp Trứng Sách Còn Thiếu",
+    ["Also steal eggs missing from your index, highest area first"] = "Cướp trứng thiếu trong sách, ưu tiên khu cao nhất",
+    ["Steal Priority"] = "Ưu Tiên Cướp",
+    ["Tween Speed"] = "Tốc Độ Bay (Tween)",
+    ["Over 100% may glitch"] = "Trên 100% có thể bị lỗi vị trí",
+    ["Carry Speed"] = "Tốc Độ Bê Trứng",
+    ["Anti Guard Panel"] = "Bảng Chống Vệ Sĩ",
+    ["Delivers the egg to the safe zone in a few seconds, needs enough Speed"] = "Vận chuyển trứng về căn cứ trong vài giây (cần đủ tốc độ)",
+    ["Instant Steal Steps"] = "Số Bước Cướp Siêu Tốc",
+    ["Higher is safer but takes longer"] = "Càng nhiều bước càng an toàn nhưng bay chậm hơn",
+    ["Place Egg Rule"] = "Quy Tắc Đặt Trứng",
+    ["Place Egg Order"] = "Thứ Tự Đặt Trứng",
+    ["Place Rarities"] = "Độ Hiếm Đặt Trứng",
+    ["Only place eggs of the picked rarities (empty = all)"] = "Chỉ đặt trứng thuộc độ hiếm đã chọn (trống = tất cả)",
+    ["Place Specific Eggs"] = "Chọn Đích Danh Trứng Đặt",
+    ["Only place these eggs (empty = all)"] = "Chỉ đặt các loại trứng này (trống = tất cả)",
+    ["Min Place Value"] = "Giá Trị Đặt Min",
+    ["Skip eggs worth less than this (0 = off)"] = "Bỏ qua trứng giá nhỏ hơn mức này (0 = tắt)",
+    ["Stay On Treadmill"] = "Luôn Ở Trên Máy Tập",
+    ["Auto Hatch"] = "Tự Động Ấp Trứng",
+    ["Hatch Min Rarity"] = "Độ Hiếm Ấp Min",
+    ["Hatch eggs of the chosen rarity and every rarity above it"] = "Ấp trứng từ độ hiếm đã chọn trở lên",
+    ["Min Hatch Value"] = "Giá Trị Ấp Min",
+    ["Hatch Specific Eggs"] = "Chọn Đích Danh Trứng Ấp",
+    ["Auto Equip Best"] = "Tự Trang Bị Pet Tốt Nhất",
+    ["Equip Best when a better pet appears"] = "Tự trang bị khi xuất hiện pet mạnh hơn",
+    ["Sell Pets Now"] = "Bán Pet Ngay",
+    ["Sell matching pets once"] = "Bán một lần các pet khớp điều kiện",
+    ["Sell Pet Rule"] = "Quy Tắc Bán Pet",
+    ["Pet Max Rarity"] = "Độ Hiếm Bán Pet Max",
+    ["Sell pets at or below this rarity"] = "Bán pet từ độ hiếm này trở xuống",
+    ["Pet Sell Value"] = "Giá Trị Bán Pet",
+    ["Keep Mutated Pets"] = "Giữ Lại Pet Đột Biến",
+    ["Blacklist Sell Pets"] = "Danh Sách Đen Bán Pet",
+    ["Sell bag eggs matching the rules below"] = "Bán trứng trong túi khớp quy tắc dưới",
+    ["Sell Eggs Now"] = "Bán Trứng Ngay",
+    ["Sell matching eggs once"] = "Bán một lần các trứng khớp điều kiện",
+    ["Sell Egg Rule"] = "Quy Tắc Bán Trứng",
+    ["Egg Max Rarity"] = "Độ Hiếm Bán Trứng Max",
+    ["Sell eggs at or below this rarity"] = "Bán trứng từ độ hiếm này trở xuống",
+    ["Egg Sell Value"] = "Giá Trị Bán Trứng",
+    ["Keep Mutated Eggs"] = "Giữ Lại Trứng Đột Biến",
+    ["Blacklist Sell Eggs"] = "Danh Sách Đen Bán Trứng",
+    ["Sell Lab Eggs Now"] = "Bán Trứng Lab Ngay",
+    ["Sell Lab Egg Rule"] = "Quy Tắc Bán Trứng Lab",
+    ["Lab Egg Max Rarity"] = "Độ Hiếm Bán Trứng Lab Max",
+    ["Lab Egg Sell Value"] = "Giá Trị Bán Trứng Lab",
+    ["Keep Mutated Lab Eggs"] = "Giữ Lại Trứng Lab Đột Biến",
+    ["Keep Lab Pets"] = "Giữ Lại Pet Lab",
+    ["No three matching pets"] = "Không đủ 3 pet trùng khớp",
+    ["Fuse 3 same pets into an egg, nonstop"] = "Dung hợp 3 pet cùng loại thành 1 trứng liên tục",
+    ["Fuse Priority Mode"] = "Chế Độ Ưu Tiên Dung Hợp",
+    ["Pets To Use"] = "Loại Pet Sử Dụng",
+    ["Max Rarity to Fuse"] = "Độ Hiếm Dung Hợp Max",
+    ["Specific Species to Fuse"] = "Chỉ Định Loài Dung Hợp",
+    ["Skip Mutated Pets"] = "Bỏ Qua Pet Đột Biến",
+    ["Eject Incomplete Slots"] = "Nhả Các Ô Chưa Đủ Bộ",
+    ["Auto Favorite Pet"] = "Tự Động Khóa Pet",
+    ["Favorite Pets Now"] = "Khóa Pet Ngay",
+    ["Favorite Rule"] = "Quy Tắc Khóa",
+    ["Favorite Min Rarity"] = "Độ Hiếm Khóa Min",
+    ["Favorite Mutations"] = "Đột Biến Cần Khóa",
+    ["Min Favorite Value"] = "Giá Trị Khóa Min",
+    ["Always Favorite Species"] = "Luôn Khóa Các Loài Này",
+    ["Auto Favorite Equipped"] = "Tự Khóa Pet Đang Dùng",
+    ["Auto Unfavorite Equipped"] = "Tự Bỏ Khóa Pet Đang Dùng",
+    ["Auto Butterfly Bloom"] = "Tự Động Bắt Bướm",
+    ["Catch Mode"] = "Chế Độ Bắt",
+    ["Catch Priority"] = "Ưu Tiên Bắt",
+    ["Catch Butterflies"] = "Chọn Bướm Muốn Bắt",
+    ["Radiant Butterfly"] = "Bướm Rực Rỡ",
+    ["Amethyst Butterfly"] = "Bướm Thạch Anh Tím",
+    ["Sapphire Butterfly"] = "Bướm Lam Ngọc (Sapphire)",
+    ["Emerald Butterfly"] = "Bướm Lục Bảo (Emerald)",
+    ["Auto Trade Up"] = "Tự Nâng Cấp Bướm",
+    ["Trade Up Tiers"] = "Bậc Nâng Cấp",
+    ["Smart Trade For Essence"] = "Đổi Bướm Lấy Tinh Chất Thông Minh",
+    ["Going to the middle of the bloom"] = "Đang đi tới trung tâm khu bướm nở",
+    ["Auto Craft Essence"] = "Tự Chế Tạo Tinh Chất",
+    ["Auto Use Enchanted Essence"] = "Tự Dùng Tinh Chất Phù Phép",
+    ["Auto Wisp"] = "Tự Động Nhặt Wisp",
+    ["Auto Banjo Cricket"] = "Tự Động Bắt Dế Banjo",
+    ["Chase Settings"] = "Cài Đặt Đuổi Đánh",
+    ["Hit Tween Speed"] = "Tốc Độ Bay Đánh",
+    ["Hit Max Speed"] = "Tốc Độ Đánh Tối Đa",
+    ["Hit Lead"] = "Đón Đầu Mục Tiêu (Hit Lead)",
+    ["Hit Sweep"] = "Quét Đòn Đánh (Hit Sweep)",
+    ["Auto Hit Nearest Player"] = "Tự Đánh Người Gần Nhất",
+    ["Auto Hit Egg Holders"] = "Tự Đánh Người Bê Trứng",
+    ["Auto Hit Specific Player"] = "Tự Đánh Người Chỉ Định",
+    ["Hit Player"] = "Chọn Người Cần Đánh",
+    ["Hit Aura"] = "Vòng Đánh Tự Động (Hit Aura)",
+    ["Speed Boost"] = "Tăng Tốc Chạy",
+    ["Boost Speed"] = "Tốc Độ Tăng Tốc",
+    ["Infinite Jump"] = "Nhảy Vô Hạn",
+    ["Invisibility"] = "Tàng Hình (Invisibility)",
+    ["Anti Ragdoll"] = "Chống Ngã (Anti Ragdoll)",
+    ["Anti Trap"] = "Chống Bẫy (Anti Trap)",
+    ["Instant Prompts"] = "Tương Tác Nhanh (Instant E)",
+    ["ESP Eggs"] = "ESP Trứng",
+    ["ESP Guards"] = "ESP Vệ Sĩ",
+    ["ESP Lost Parts"] = "ESP Phụ Tùng Rơi",
+    ["ESP Players"] = "ESP Người Chơi",
+    ["Set Startup Config"] = "Cấu Hình Khởi Động",
+    ["Load Config"] = "Tải Cấu Hình",
+    ["Save Config"] = "Lưu Cấu Hình",
+    ["Import / Export"] = "Nhập / Xuất Cấu Hình",
+    ["Export Config"] = "Xuất Cấu Hình",
+    ["Import Config Text"] = "Nhập Văn Bản Cấu Hình",
+    ["Import Config"] = "Nhập Cấu Hình",
+    ["Creates a config only; use Load Config or Set Startup after"] = "Chỉ tạo cấu hình; hãy dùng Tải Cấu Hình hoặc Cài Khởi Động sau",
+    ["Pick a config, then press Load to apply it now"] = "Chọn một cấu hình, sau đó bấm Tải để áp dụng ngay",
+    ["selected"] = "đã chọn"
+}
 
-        local popup = _chk_CoreGui:FindFirstChild("DiscordPopupGui")
-        if not popup then
-            local playerGui = LocalPlayer:FindFirstChild("PlayerGui")
-            popup = playerGui and playerGui:FindFirstChild("DiscordPopupGui")
+local DYNAMIC_PATTERNS = {
+    { pattern = "ALL (%d+)", format = function(l, c) return l == "VI" and ("TẤT CẢ " .. c) or ("ALL " .. c) end },
+    { pattern = "READY (%d+)", format = function(l, c) return l == "VI" and ("SẴN SÀNG " .. c) or ("READY " .. c) end },
+    { pattern = "GROWING (%d+)", format = function(l, c) return l == "VI" and ("ĐANG LỚN " .. c) or ("GROWING " .. c) end },
+    { pattern = "IN BAG (%d+)", format = function(l, c) return l == "VI" and ("TRONG TÚI " .. c) or ("IN BAG " .. c) end },
+    { pattern = "Ends in (%d+h %d+m %d+s)", format = function(l, t) return l == "VI" and ("Kết thúc sau " .. t) or ("Ends in " .. t) end },
+    { pattern = "Players (%d+)/(%d+)", format = function(l, p1, p2) return l == "VI" and string.format("Người chơi %s/%s", p1, p2) or string.format("Players %s/%s", p1, p2) end },
+    { pattern = "#(%d+) of (%d+) eggs by value", format = function(l, r, t) return l == "VI" and string.format("#%s / %s trứng theo giá trị", r, t) or string.format("#%s of %s eggs by value", r, t) end },
+    { pattern = "Eggs placed (%d+)/(%d+) %- (%d+)/(%d+) pets equipped, (%d+) in bag", format = function(l, p1, p2, p3, p4, p5)
+        return l == "VI" and string.format("Trứng đã đặt %s/%s - %s/%s pet trang bị, %s trong túi", p1, p2, p3, p4, p5) or string.format("Eggs placed %s/%s - %s/%s pets equipped, %s in bag", p1, p2, p3, p4, p5)
+    end },
+    { pattern = "Pet matches %- (%d+) pets? for %$(.+)", format = function(l, c, v)
+        return l == "VI" and string.format("Khớp pet - %s pet giá $%s", c, v) or string.format("Pet matches - %s pets for $%s", c, v)
+    end },
+    { pattern = "Egg matches %- (%d+) eggs? for %$(.+)", format = function(l, c, v)
+        return l == "VI" and string.format("Khớp trứng - %s trứng giá $%s", c, v) or string.format("Egg matches - %s eggs for $%s", c, v)
+    end }
+}
+
+local SortedVI = {}
+for en, vi in pairs(MAP_VI) do table.insert(SortedVI, {en = en, out = vi, len = #en}) end
+table.sort(SortedVI, function(a, b) return a.len > b.len end)
+
+local function translateText(raw)
+    local cacheKey = currentLanguage .. "|" .. raw
+    if FastCache[cacheKey] then return FastCache[cacheKey] end
+
+    -- Khóa cứng định danh thương hiệu duy nhất một lần
+    if raw:find("Chilli Hub") then
+        local fixedBrand = raw:gsub("duck Hub%s*V?[%d%.]*", "DUCK Hub | by DUCZ)
+        if raw:match("^%s*Chilli Hub") then
+            FastCache[cacheKey] = fixedBrand
+            return fixedBrand
         end
+        raw = fixedBrand
+    end
 
-        local copyBtn = popup and popup:FindFirstChild("Frame") and popup.Frame:FindFirstChildWhichIsA("TextButton")
-        if copyBtn then
-            copyBtn.Text = copied and "Copied!" or "Clipboard unavailable"
-            task.delay(1.5, function()
-                if copyBtn and copyBtn.Parent then
-                    copyBtn.Text = "Copy Link"
-                end
+    if currentLanguage == "EN" then
+        FastCache[cacheKey] = raw
+        return raw
+    end
+
+    local trimmed = raw:match("^%s*(.-)%s*$") or raw
+    if EXACT_MATCH_VI[trimmed] then
+        local res = raw:gsub(trimmed, EXACT_MATCH_VI[trimmed], 1)
+        FastCache[cacheKey] = res
+        return res
+    end
+
+    local result = raw
+    local matched = false
+
+    for _, item in ipairs(DYNAMIC_PATTERNS) do
+        if result:find(item.pattern) then
+            result = result:gsub(item.pattern, function(...)
+                return item.format(currentLanguage, ...)
             end)
-        end
-    end,
-})
-
-
-
-local newBypassConnections = {}
-local newBypassCharConnection = nil
-
-
-local GCHookBypass = {
-    RunService = RunService,
-    Players = Players,
-    speedconn = nil,
-    hookedfunc3 = nil,
-}
-
-function GCHookBypass:collectgarbage()
-    local s, r = pcall(function(...)
-        return getgc()
-    end)
-    if s and r then
-        return r    
-    end
-    return warn("failed to get garbage: "..tostring(r))
-end
-
-function GCHookBypass:safehook(f, c)
-    local s, r = pcall(function(...)
-        return hookfunction(f, newlclosure(c))
-    end)
-    if s and r then
-        return r    
-    end
-    return warn("failed to hook function: "..tostring(r))
-end
-
-function GCHookBypass:findfunction(nups, linedefined)
-    local s, r = pcall(function(...)
-        for _, f in next, self:collectgarbage() do
-            if typeof(f) == 'function' and islclosure(f) then
-                local upvs = debug.getupvalues(f)
-                local line = debug.info(f, "l")
-
-                if upvs and #upvs == nups and line == linedefined then
-                    if nups == 10 then
-                        local t = debug.getupvalue(f, 3)
-                        if typeof(t) == "table" and rawget(t, "Humanoid") then
-                            return f
-                        end
-                    else
-                        return f
-                    end
-                end
-            end
-        end
-        return nil
-    end)
-    if s and r then
-        return r
-    end
-    return nil
-end
-
-function GCHookBypass:init()
-    self.LocalPlayer = self.Players.LocalPlayer
-    if not self.LocalPlayer then
-        return warn("failed to get localplayer")
-    end
-
-    if not getgc then
-        self.LocalPlayer:Kick("UNSUPPORT EXECUTOR MISSING getgc")
-    end
-
-    if not hookfunction then
-        self.LocalPlayer:Kick("UNSUPPORT EXECUTOR MISSING hookfunction")
-    end
-
-    if not islclosure then
-        self.LocalPlayer:Kick("UNSUPPORT EXECUTOR MISSING islclosure")
-    end
-
-    local func3 = self:findfunction(19, 3)
-    if not func3 then
-        return warn("failed to get function 3")
-    end
-
-    local v7 = debug.getupvalue(func3, 2)
-    if not v7 then
-        return warn("failed to get v7")
-    end
-
-    self.hookedfunc3 = self:safehook(v7, function(p1, p2)
-        if p2 and typeof(p2) == "table" then
-            setmetatable(p2, {})
-        end
-        return self.hookedfunc3(p1,p2)
-    end)
-
-    self.speedconn = self.RunService.Heartbeat:Connect(function()
-        local char = self.LocalPlayer.Character
-        if not char then 
-            return
-        end
-        local hum = char:FindFirstChild("Humanoid")
-        if not hum then 
-            return
-        end
-        hum.WalkSpeed = DesiredSpeed
-    end)
-
-    warn("[GC Hook Bypass] Initialized")
-    return true
-end
-
-function GCHookBypass:stop()
-    if self.speedconn then
-        pcall(function() self.speedconn:Disconnect() end)
-        self.speedconn = nil
-    end
-    warn("[GC Hook Bypass] Stopped")
-end
-
-local function startGCHookBypass()
-    GCHookBypass:init()
-end
-
-local function stopGCHookBypass()
-    GCHookBypass:stop()
-end
-
-
-
-local function forceWalkSpeedNewBypass(humanoid)
-    if newBypassConnections[humanoid] then
-        pcall(function() newBypassConnections[humanoid]:Disconnect() end)
-    end
-    newBypassConnections[humanoid] = RunService.Heartbeat:Connect(function()
-        if humanoid and humanoid.Parent then
-            if humanoid.WalkSpeed ~= DesiredSpeed then
-                humanoid.WalkSpeed = DesiredSpeed
-            end
-        else
-            if newBypassConnections[humanoid] then
-                newBypassConnections[humanoid]:Disconnect()
-                newBypassConnections[humanoid] = nil
-            end
-        end
-    end)
-end
-
-local function applyNewBypass(character)
-    local humanoid = character:FindFirstChildOfClass("Humanoid")
-    if not humanoid then return end
-
-    local camera = workspace.CurrentCamera
-    local animateScript = character:FindFirstChild("Animate")
-    local jumpPower = humanoid.JumpPower
-    local jumpHeight = humanoid.JumpHeight
-    local health = humanoid.Health
-    local maxHealth = humanoid.MaxHealth
-
-    if animateScript and animateScript:IsA("LocalScript") then
-        animateScript.Disabled = true
-    end
-
-    local animator = humanoid:FindFirstChildOfClass("Animator")
-    if animator then
-        for _, track in next, animator:GetPlayingAnimationTracks() do
-            track:Stop(0)
+            matched = true
         end
     end
 
-    humanoid.Archivable = true
-    local newHumanoid = humanoid:Clone()
-    for _, child in next, newHumanoid:GetChildren() do
-        if child:IsA("Animator") then
-            child:Destroy()
+    for _, item in ipairs(SortedVI) do
+        if result:find(item.en, 1, true) then
+            result = replaceAll(result, item.en, item.out)
+            matched = true
         end
     end
 
-    humanoid.Name = "_OldHumanoid"
-    newHumanoid.Name = "Humanoid"
-    newHumanoid.Parent = character
+    FastCache[cacheKey] = matched and result or raw
+    return FastCache[cacheKey]
+end
 
-    local newAnimator = Instance.new("Animator")
-    newAnimator.Parent = newHumanoid
+local TrackedElements = {}
 
-    newHumanoid.WalkSpeed = DesiredSpeed
-    newHumanoid.JumpPower = jumpPower
-    newHumanoid.JumpHeight = jumpHeight
-    newHumanoid.MaxHealth = maxHealth
-    newHumanoid.Health = math.min(health, maxHealth)
+local function applyTranslation(inst)
+    if not (inst:IsA("TextLabel") or inst:IsA("TextButton") or inst:IsA("TextBox")) then return end
+    if inst:FindFirstAncestor("Chilli_Dynamic_Island") or inst:FindFirstAncestor("Sparkling_New_Badge") then return end
+    if inst:GetAttribute("__IsTranslating") then return end
 
-    if camera then
-        camera.CameraSubject = newHumanoid
+    local original = inst:GetAttribute("OriginalRawText")
+    if not original then
+        original = inst.Text
+        inst:SetAttribute("OriginalRawText", original)
     end
 
-    humanoid:Destroy()
-
-    if animateScript and animateScript:IsA("LocalScript") then
-        task.wait()
-        animateScript.Disabled = false
+    local mappedText = translateText(original)
+    if inst.Text ~= mappedText then
+        inst:SetAttribute("__IsTranslating", true)
+        inst:SetAttribute("__LastTranslatedText", mappedText)
+        pcall(function() inst.Text = mappedText end)
         task.defer(function()
-            if animateScript.Parent then
-                animateScript.Disabled = true
-                task.wait()
-                animateScript.Disabled = false
-            end
+            inst:SetAttribute("__IsTranslating", false)
         end)
     end
-
-    task.defer(function()
-        if newHumanoid.Parent then
-            newHumanoid:ChangeState(Enum.HumanoidStateType.Running)
-        end
-    end)
-
-    forceWalkSpeedNewBypass(newHumanoid)
-    CurrentHumanoid = newHumanoid
-    return newHumanoid
 end
 
-local function setupNewBypass(character)
-    character:WaitForChild("Humanoid")
-    task.wait()
-    applyNewBypass(character)
-end
+local function hookElement(inst)
+    if not (inst:IsA("TextLabel") or inst:IsA("TextButton") or inst:IsA("TextBox")) then return end
+    if inst:GetAttribute("HasTranslateHook") then return end
+    inst:SetAttribute("HasTranslateHook", true)
 
-local function startHumanoidCloneBypass()
-    if newBypassCharConnection then
-        pcall(function() newBypassCharConnection:Disconnect() end)
-    end
-    newBypassCharConnection = player.CharacterAdded:Connect(function(char)
-        if SpeedEnabled then
-            task.spawn(setupNewBypass, char)
-        end
-    end)
-    if player.Character then
-        task.spawn(setupNewBypass, player.Character)
-    end
-end
+    table.insert(TrackedElements, inst)
+    task.defer(function() applyTranslation(inst) end)
 
-local function stopHumanoidCloneBypass()
-    for hum, conn in pairs(newBypassConnections) do
-        pcall(function() conn:Disconnect() end)
-    end
-    newBypassConnections = {}
-    if newBypassCharConnection then
-        pcall(function() newBypassCharConnection:Disconnect() end)
-        newBypassCharConnection = nil
-    end
-end
-
-local function startNewBypass()
-    if SpeedBypassMethod == "GC Hook Bypass" then
-        startGCHookBypass()
-    else
-        startHumanoidCloneBypass()
-    end
-end
-
-local function stopNewBypass()
-    if SpeedBypassMethod == "GC Hook Bypass" then
-        stopGCHookBypass()
-    else
-        stopHumanoidCloneBypass()
-    end
-end
-
-local function startFly()
-    if FlyConnection then
-        FlyConnection:Disconnect()
-        FlyConnection = nil
-    end
-    if FlyBodyVelocity then
-        FlyBodyVelocity:Destroy()
-        FlyBodyVelocity = nil
-    end
-    if FlyBodyGyro then
-        FlyBodyGyro:Destroy()
-        FlyBodyGyro = nil
-    end
-
-    local char = player.Character
-    if not char then return end
-    local hrp = char:FindFirstChild("HumanoidRootPart")
-    if not hrp then return end
-
-    FlyBodyGyro = Instance.new("BodyGyro")
-    FlyBodyGyro.MaxTorque = Vector3.new(9e9, 9e9, 9e9)
-    FlyBodyGyro.CFrame = hrp.CFrame
-    FlyBodyGyro.P = 9e4
-    FlyBodyGyro.Parent = hrp
-
-    FlyBodyVelocity = Instance.new("BodyVelocity")
-    FlyBodyVelocity.MaxForce = Vector3.new(9e9, 9e9, 9e9)
-    FlyBodyVelocity.Velocity = Vector3.new(0, 0, 0)
-    FlyBodyVelocity.Parent = hrp
-
-    FlyConnection = RunService.RenderStepped:Connect(function()
-        if not FlyEnabled then return end
-        if not (player.Character and player.Character:FindFirstChild("HumanoidRootPart")) then return end
-        local currentHrp = player.Character.HumanoidRootPart
-        local cam = workspace.CurrentCamera
-        local direction = Vector3.new(0, 0, 0)
-
-        if UserInputService:IsKeyDown(Enum.KeyCode.W) then
-            direction = direction + cam.CFrame.LookVector
-        end
-        if UserInputService:IsKeyDown(Enum.KeyCode.S) then
-            direction = direction - cam.CFrame.LookVector
-        end
-        if UserInputService:IsKeyDown(Enum.KeyCode.A) then
-            direction = direction - cam.CFrame.RightVector
-        end
-        if UserInputService:IsKeyDown(Enum.KeyCode.D) then
-            direction = direction + cam.CFrame.RightVector
-        end
-        if UserInputService:IsKeyDown(Enum.KeyCode.Space) then
-            direction = direction + Vector3.new(0, 1, 0)
-        end
-        if UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) then
-            direction = direction - Vector3.new(0, 1, 0)
-        end
-
-        if direction.Magnitude > 0 then
-            direction = direction.Unit * FlySpeed
-        end
-
-        if FlyBodyGyro and FlyBodyGyro.Parent then
-            FlyBodyGyro.CFrame = cam.CFrame
-        end
-        if FlyBodyVelocity and FlyBodyVelocity.Parent then
-            FlyBodyVelocity.Velocity = direction
-        end
+    inst:GetPropertyChangedSignal("Text"):Connect(function()
+        if inst:GetAttribute("__IsTranslating") then return end
+        local current = inst.Text
+        if current == inst:GetAttribute("__LastTranslatedText") then return end
+        inst:SetAttribute("OriginalRawText", current)
+        applyTranslation(inst)
     end)
 end
 
-local function stopFly()
-    if FlyConnection then
-        FlyConnection:Disconnect()
-        FlyConnection = nil
-    end
-    if FlyBodyVelocity then
-        FlyBodyVelocity:Destroy()
-        FlyBodyVelocity = nil
-    end
-    if FlyBodyGyro then
-        FlyBodyGyro:Destroy()
-        FlyBodyGyro = nil
-    end
-end
-
-local kickHook
-if type(hookmetamethod) == "function" and type(getnamecallmethod) == "function" then
-    local originalKickHook
-    originalKickHook = hookmetamethod(game, "__namecall", function(self, ...)
-        if AntiRejoinEnabled and (type(checkcaller) ~= "function" or not checkcaller()) then
-            local method = getnamecallmethod()
-            if method == "Kick" and self == player then
-                warn("[Anti Rejoin] Blocked kick attempt")
-                return nil
-            end
-            if method == "Teleport" and self == TeleportService then
-                warn("[Anti Rejoin] Blocked namecall teleport attempt")
-                return nil
-            end
-            if method == "TeleportAsync" and self == TeleportService then
-                warn("[Anti Rejoin] Blocked namecall TeleportAsync attempt")
-                return nil
-            end
-            if method == "TeleportToPlaceInstance" and self == TeleportService then
-                warn("[Anti Rejoin] Blocked namecall TeleportToPlaceInstance attempt")
-                return nil
-            end
-        end
-        return originalKickHook(self, ...)
-    end)
-    kickHook = originalKickHook
-else
-    warn("[DUCKHub] Namecall hook unavailable; Anti Rejoin/Kick hook is disabled.")
-end
-
-for _, remote in pairs(ReplicatedStorage:GetDescendants()) do
-    if remote:IsA("RemoteEvent") or remote:IsA("RemoteFunction") then
-        local name = remote.Name:lower()
-        if name:find("kick") or name:find("ban") or name:find("teleport") or name:find("rejoin") or name:find("hop") or name:find("server") then
-            local oldName = remote.Name
-        end
-    end
-end
-
-
-
-local function storeJoints(character)
-    joints = {}
-    for _, joint in pairs(character:GetDescendants()) do
-        if joint:IsA("Motor6D") then
-            joints[joint.Name] = {
-                Part0 = joint.Part0,
-                Part1 = joint.Part1,
-                C0 = joint.C0,
-                C1 = joint.C1
-            }
-        end
-    end
-end
-
-local function restoreJoints(character)
-    for name, data in pairs(joints) do
-        if data.Part0 and data.Part1 then
-            local existing = data.Part0:FindFirstChild(name)
-            if existing and existing:IsA("Motor6D") then
-                existing.Part0 = data.Part0
-                existing.Part1 = data.Part1
-                existing.C0 = data.C0
-                existing.C1 = data.C1
-            elseif not existing then
-                local joint = Instance.new("Motor6D")
-                joint.Name = name
-                joint.Part0 = data.Part0
-                joint.Part1 = data.Part1
-                joint.C0 = data.C0
-                joint.C1 = data.C1
-                joint.Parent = data.Part0
-            end
-        end
-    end
-end
-
-local function startAntiRagdoll(character)
-    local humanoid = character:WaitForChild("Humanoid")
-    storeJoints(character)
-
-    if ragdollConnection then
-        ragdollConnection:Disconnect()
-    end
-
-    ragdollConnection = RunService.RenderStepped:Connect(function()
-        if not AntiRagdollEnabled then return end
-        if not character.Parent then return end
-        local state = humanoid:GetState()
-        if state == Enum.HumanoidStateType.Physics or
-           state == Enum.HumanoidStateType.Freefall or
-           state == Enum.HumanoidStateType.Seated then
-            pcall(function()
-                humanoid:ChangeState(Enum.HumanoidStateType.Running)
-                restoreJoints(character)
-            end)
-        end
-    end)
-end
-
-local function onCharacterAdded(character)
-    CurrentHumanoid = character:FindFirstChildOfClass("Humanoid")
-    if CurrentHumanoid then
-        if SpeedEnabled then
-            CurrentHumanoid.WalkSpeed = DesiredSpeed
-        end
-    end
-    startAntiRagdoll(character)
-    if FlyEnabled then
-        task.wait(0.5)
-        startFly()
-    end
-end
-
-if player.Character then
-    onCharacterAdded(player.Character)
-end
-player.CharacterAdded:Connect(onCharacterAdded)
-
-RunService.Heartbeat:Connect(function()
-    if SpeedEnabled then
-        if not CurrentHumanoid or not CurrentHumanoid:IsDescendantOf(game) then
-            local char = player.Character
-            if char then
-                CurrentHumanoid = char:FindFirstChildOfClass("Humanoid")
-            end
-        end
-        if CurrentHumanoid then
-            pcall(function() CurrentHumanoid.WalkSpeed = DesiredSpeed end)
-        end
-        if InstantAccelerationEnabled then
-            local char = player.Character
-            local hrp = char and char:FindFirstChild("HumanoidRootPart")
-            if hrp and CurrentHumanoid then
-                pcall(function()
-                    local moveDir = CurrentHumanoid.MoveDirection
-                    if moveDir.Magnitude > 0 then
-                        local targetVel = moveDir.Unit * DesiredSpeed
-                        hrp.AssemblyLinearVelocity = Vector3.new(targetVel.X, hrp.AssemblyLinearVelocity.Y, targetVel.Z)
-                    end
-                end)
-            end
-        end
-    end
-end)
-
-RunService.Heartbeat:Connect(function()
-    if not AntiKnockbackEnabled then return end
-    local char = player.Character
-    local hrp = char and char:FindFirstChild("HumanoidRootPart")
-    local hum = char and char:FindFirstChild("Humanoid")
-    if not (hrp and hum) then return end
-
-    if hum.MoveDirection.Magnitude == 0 then
-        hrp.Velocity = Vector3.new(0, hrp.Velocity.Y, 0)
-    end
-    hrp.RotVelocity = Vector3.new(0, 0, 0)
-end)
-
-for _, v in ipairs(workspace:GetDescendants()) do
-    if v:IsA("ProximityPrompt") then
-        v.HoldDuration = 0
-    end
-end
-
-workspace.DescendantAdded:Connect(function(v)
-    if v:IsA("ProximityPrompt") then
-        v.HoldDuration = 0
-    end
-end)
-
-local DiabloUserBillboards = {}
-local DiabloUsersFolder = nil
-
-pcall(function()
-    DiabloUsersFolder = ReplicatedStorage:FindFirstChild("DiabloUsers")
-    if not DiabloUsersFolder then
-        DiabloUsersFolder = Instance.new("Folder")
-        DiabloUsersFolder.Name = "DiabloUsers"
-        DiabloUsersFolder.Parent = ReplicatedStorage
-    end
-end)
-
-if DiabloUsersFolder then
-    local function attachBillboardToHead(targetPlayer, billboard)
-        if not targetPlayer.Character then return false end
-        local head = targetPlayer.Character:FindFirstChild("Head")
-        if head then
-            billboard.Parent = head
-            return true
-        end
-        return false
-    end
-
-    local function createDiabloBillboard(targetPlayer)
-        if targetPlayer == player then return end
-        if DiabloUserBillboards[targetPlayer] then return end
-        if not targetPlayer:IsDescendantOf(game) then return end
-
-        local billboard = Instance.new("BillboardGui")
-        billboard.Name = "DiabloUserIndicator"
-        billboard.AlwaysOnTop = true
-        billboard.Size = UDim2.new(0, 150, 0, 42)
-        billboard.StudsOffset = Vector3.new(0, 3.4, 0)
-        billboard.LightInfluence = 0
-        billboard.MaxDistance = 200
-        billboard.ResetOnSpawn = false
-
-        local bg = Instance.new("Frame")
-        bg.Name = "Bg"
-        bg.Size = UDim2.new(1, 0, 1, 0)
-        bg.BackgroundColor3 = Color3.fromRGB(28, 28, 34)
-        bg.BackgroundTransparency = 0.12
-        bg.BorderSizePixel = 0
-        bg.Parent = billboard
-        Instance.new("UICorner", bg).CornerRadius = UDim.new(0, 10)
-
-        local stroke = Instance.new("UIStroke", bg)
-        stroke.Color = Color3.fromRGB(50, 205, 50)
-        stroke.Thickness = 1.8
-
-        local icon = Instance.new("TextLabel")
-        icon.Name = "Icon"
-        icon.Size = UDim2.new(0, 26, 1, 0)
-        icon.Position = UDim2.new(0, 8, 0, 0)
-        icon.BackgroundTransparency = 1
-        icon.Text = "🔥"
-        icon.TextSize = 17
-        icon.Font = Enum.Font.GothamBold
-        icon.TextColor3 = Color3.fromRGB(50, 205, 50)
-        icon.Parent = bg
-
-        local txt = Instance.new("TextLabel")
-        txt.Name = "Text"
-        txt.Size = UDim2.new(1, -40, 1, 0)
-        txt.Position = UDim2.new(0, 32, 0, 0)
-        txt.BackgroundTransparency = 1
-        txt.Text = "Diablo User"
-        txt.TextSize = 14
-        txt.Font = Enum.Font.GothamBold
-        txt.TextColor3 = Color3.fromRGB(240, 240, 245)
-        txt.Parent = bg
-
-        DiabloUserBillboards[targetPlayer] = billboard
-
-        if not attachBillboardToHead(targetPlayer, billboard) then
-            local charConn
-            charConn = targetPlayer.CharacterAdded:Connect(function()
-                task.wait(0.2)
-                if attachBillboardToHead(targetPlayer, billboard) then
-                    charConn:Disconnect()
-                end
-            end)
-        end
-
-        local respawnConn = targetPlayer.CharacterAdded:Connect(function()
-            task.wait(0.2)
-            attachBillboardToHead(targetPlayer, billboard)
-        end)
-
-        targetPlayer.AncestryChanged:Connect(function()
-            if not targetPlayer:IsDescendantOf(game) then
-                pcall(function() respawnConn:Disconnect() end)
-                if billboard and billboard.Parent then
-                    billboard:Destroy()
-                end
-                DiabloUserBillboards[targetPlayer] = nil
-            end
-        end)
-
-        pcall(function()
-            WindUI:Notify({
-                Title = "DUCKHub",
-                Content = targetPlayer.Name .. " is also using Diablo!",
-                Icon = "users",
-                Duration = 4,
-            })
-        end)
-    end
-
-    local function removeDiabloBillboard(targetPlayer)
-        if DiabloUserBillboards[targetPlayer] then
-            pcall(function() DiabloUserBillboards[targetPlayer]:Destroy() end)
-            DiabloUserBillboards[targetPlayer] = nil
-        end
-    end
-
-    local function onUserMarkerAdded(marker)
-        local userId = tonumber(marker.Name)
-        if not userId or userId == player.UserId then return end
-        local targetPlayer = Players:GetPlayerByUserId(userId)
-        if targetPlayer then
-            createDiabloBillboard(targetPlayer)
-        end
-    end
-
-    local function onUserMarkerRemoved(marker)
-        local userId = tonumber(marker.Name)
-        if not userId then return end
-        local targetPlayer = Players:GetPlayerByUserId(userId)
-        if targetPlayer then
-            removeDiabloBillboard(targetPlayer)
-        end
-    end
-
-    local myMarkerName = tostring(player.UserId)
-    local existingMarker = DiabloUsersFolder:FindFirstChild(myMarkerName)
-    if existingMarker then
-        pcall(function() existingMarker:Destroy() end)
-    end
-
-    local myMarker = Instance.new("BoolValue")
-    myMarker.Name = myMarkerName
-    myMarker.Value = true
-    myMarker.Parent = DiabloUsersFolder
-
-    for _, marker in ipairs(DiabloUsersFolder:GetChildren()) do
-        onUserMarkerAdded(marker)
-    end
-
-    DiabloUsersFolder.ChildAdded:Connect(onUserMarkerAdded)
-    DiabloUsersFolder.ChildRemoved:Connect(onUserMarkerRemoved)
-
-    Players.PlayerRemoving:Connect(function(plr)
-        if plr == player then
-            pcall(function()
-                local m = DiabloUsersFolder:FindFirstChild(myMarkerName)
-                if m then m:Destroy() end
-            end)
+local function updateAllActive()
+    for i = #TrackedElements, 1, -1 do
+        local el = TrackedElements[i]
+        if el and el.Parent then
+            applyTranslation(el)
         else
-            removeDiabloBillboard(plr)
+            table.remove(TrackedElements, i)
         end
-    end)
+    end
 end
 
-if SpeedEnabled then
-    startNewBypass()
-end
+-- ==================== 4. LÕI CÔ LẬP ĐỔI MÀU & HUY HIỆU '✨ NEW' HOLOGRAPHIC ====================
+local COLOR_FACE_TOP     = Color3.fromRGB(140, 195, 245)
+local COLOR_FACE_BOTTOM  = Color3.fromRGB(95, 155, 225)
+local COLOR_BEVEL_SHADOW = Color3.fromRGB(55, 110, 180)
 
-local AutoSellUtility = {
-    ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TARGET_BUTTON_KEYWORDS = {
+    ["cày cuốc"] = true, ["farm"] = true,
+    ["người chơi"] = true, ["player"] = true,
+    ["dự đoán"] = true, ["predictor"] = true,
+    ["tiến trình"] = true, ["progress"] = true,
+    ["máy chủ"] = true, ["server"] = true,
+    ["khác"] = true, ["misc"] = true,
+    ["tự đổi máy chủ"] = true, ["tự đổi server"] = true, ["auto hop"] = true,
+    ["admin abuse"] = true, ["menu admin (abuse)"] = true,
+    ["discord"] = true,
+    ["phím tắt & key"] = true, ["quick & keys"] = true,
+    ["cài đặt"] = true, ["settings"] = true,
+    ["cấu hình"] = true, ["config"] = true
 }
 
-function AutoSellUtility:init()
-    self.Shared = self.ReplicatedStorage:FindFirstChild("Shared")
-    if not self.Shared then
-        return warn("[Auto Sell] failed to get Shared")
-    end
+-- Huy hiệu Holographic Mini ✨ NEW: Gọn gàng, tinh xảo, không có khối đen
+local function attachSparklingNewBadge(headerFrame, titleObj)
+    if not headerFrame then return end
+    local oldBadge = headerFrame:FindFirstChild("Sparkling_New_Badge")
+    if oldBadge then oldBadge:Destroy() end
 
-    self.Data = self.ReplicatedStorage:FindFirstChild("Data")
-    if not self.Data then
-        return warn("[Auto Sell] failed to get Data")
-    end
+    local Badge = Instance.new("Frame")
+    Badge.Name = "Sparkling_New_Badge"
+    Badge.Size = UDim2.new(0, 38, 0, 15)
+    Badge.AnchorPoint = Vector2.new(0, 0.5)
+    Badge.Position = UDim2.new(0.5, 68, 0.5, 0)
+    Badge.BackgroundColor3 = Color3.fromRGB(35, 75, 125)
+    Badge.BackgroundTransparency = 0.2
+    Badge.BorderSizePixel = 0
+    Badge.Parent = headerFrame
 
-    self.Save = require(self.Shared:FindFirstChild("Save"))
-    if not self.Save then
-        return warn("[Auto Sell] failed to get Save")
-    end
+    local BadgeCorner = Instance.new("UICorner")
+    BadgeCorner.CornerRadius = UDim.new(0, 5)
+    BadgeCorner.Parent = Badge
 
-    self.Assets = require(self.Data:FindFirstChild("Assets"))
-    if not self.Assets then
-        return warn("[Auto Sell] failed to get Assets")
-    end
+    local BadgeStroke = Instance.new("UIStroke")
+    BadgeStroke.Thickness = 1.1
+    BadgeStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    BadgeStroke.Parent = Badge
 
-    self.Packages = self.ReplicatedStorage:FindFirstChild("Packages")
-    if not self.Packages then
-        return warn("[Auto Sell] failed to get Packages")
-    end
+    local RainbowGrad = Instance.new("UIGradient")
+    RainbowGrad.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 80, 80)),
+        ColorSequenceKeypoint.new(0.25, Color3.fromRGB(255, 215, 60)),
+        ColorSequenceKeypoint.new(0.50, Color3.fromRGB(60, 245, 140)),
+        ColorSequenceKeypoint.new(0.75, Color3.fromRGB(60, 180, 255)),
+        ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 80, 80))
+    })
+    RainbowGrad.Parent = BadgeStroke
 
-    self.Networking = self.Packages:FindFirstChild("Networking")
-    if not self.Networking then
-        return warn("[Auto Sell] failed to get Networking")
-    end
-
-    self.AskWearTool = self.Networking:FindFirstChild("RF/EggWorld/AskWearTool")
-    if not self.AskWearTool then
-        return warn("[Auto Sell] failed to get RF/EggWorld/AskWearTool")
-    end
-
-    self.SellPet = self.Networking:FindFirstChild("RE/PetSatchel/SellPet")
-    if not self.SellPet then
-        return warn("[Auto Sell] failed to get RE/PetSatchel/SellPet")
-    end
+    local BadgeLabel = Instance.new("TextLabel")
+    BadgeLabel.Size = UDim2.new(1, 0, 1, 0)
+    BadgeLabel.BackgroundTransparency = 1
+    BadgeLabel.Text = "✨ NEW"
+    BadgeLabel.Font = Enum.Font.GothamBold
+    BadgeLabel.TextSize = 8.5
+    BadgeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    BadgeLabel.Parent = Badge
 
     task.spawn(function()
-        while true do
-            task.wait(1)
-            if not AutoSellEnabled then continue end
+        while Badge and Badge.Parent do
+            RainbowGrad.Rotation = (RainbowGrad.Rotation + 3) % 360
+            RunService.RenderStepped:Wait()
+        end
+    end)
+end
 
-            local success, err = pcall(function()
-                local data = self.Save.Get()
-                if not data then return end
-                local inv = data.EggInventory
-                if not inv then return end
+local function recolorSingleButton(btnContainer, labelObj)
+    if not btnContainer then return end
+    
+    local grad = btnContainer:FindFirstChildOfClass("UIGradient")
+    if not grad then
+        grad = Instance.new("UIGradient")
+        grad.Rotation = 90
+        grad.Parent = btnContainer
+    end
+    grad.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, COLOR_FACE_TOP),
+        ColorSequenceKeypoint.new(1, COLOR_FACE_BOTTOM)
+    })
+    btnContainer.BackgroundColor3 = COLOR_FACE_BOTTOM
 
-                for Uid, eggdata in next, inv do
-                    if not AutoSellEnabled then break end
-                    if eggdata.Placement then continue end
+    if btnContainer.Parent and btnContainer.Parent:IsA("Frame") and btnContainer.Parent ~= btnContainer then
+        local p = btnContainer.Parent
+        if p.BackgroundColor3.R > 0.4 and p.BackgroundColor3.G < 0.35 then
+            p.BackgroundColor3 = COLOR_BEVEL_SHADOW
+        end
+    end
 
-                    local assetInfo = self.Assets.Directory[eggdata.AssetCategory]
-                    if not assetInfo then continue end
-                    local rarity = assetInfo.Rarity
-                    if not rarity then continue end
+    if labelObj and (labelObj:IsA("TextLabel") or labelObj:IsA("TextButton")) then
+        labelObj.TextColor3 = Color3.fromRGB(255, 255, 255)
+    end
+end
 
-                    local rarityName = rarity.DisplayName or rarity.Name or "Unknown"
-                    if table.find(AutoSellRarities, rarityName) then
-                        pcall(function()
-                            self.AskWearTool:InvokeServer(Uid)
-                        end)
-                        task.wait(0.05)
-                        pcall(function()
-                            self.SellPet:FireServer({Uid})
-                        end)
-                        task.wait(0.1)
+local function recolorHeaderBar(headerFrame, titleObj)
+    if not headerFrame then return end
+    local grad = headerFrame:FindFirstChildOfClass("UIGradient")
+    if not grad then
+        grad = Instance.new("UIGradient")
+        grad.Rotation = 90
+        grad.Parent = headerFrame
+    end
+    grad.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, COLOR_FACE_TOP),
+        ColorSequenceKeypoint.new(1, COLOR_FACE_BOTTOM)
+    })
+    headerFrame.BackgroundColor3 = COLOR_FACE_BOTTOM
+
+    if titleObj and (titleObj:IsA("TextLabel") or titleObj:IsA("TextButton")) then
+        titleObj.TextColor3 = Color3.fromRGB(255, 255, 255)
+        titleObj.Text = "DUCK Hub | by DUCZ "
+    end
+
+    attachSparklingNewBadge(headerFrame, titleObj)
+
+    for _, item in ipairs(headerFrame:GetDescendants()) do
+        if item:IsA("TextButton") or item:IsA("ImageButton") then
+            item.BackgroundColor3 = COLOR_FACE_BOTTOM
+            local xGrad = item:FindFirstChildOfClass("UIGradient")
+            if xGrad then
+                xGrad.Color = ColorSequence.new({
+                    ColorSequenceKeypoint.new(0, COLOR_FACE_TOP),
+                    ColorSequenceKeypoint.new(1, COLOR_FACE_BOTTOM)
+                })
+            end
+            if item:IsA("TextButton") then
+                item.TextColor3 = Color3.fromRGB(255, 255, 255)
+            end
+        end
+    end
+end
+
+local function inspectAndApplySoftBlue(inst)
+    if not (inst:IsA("TextLabel") or inst:IsA("TextButton")) then return end
+    if inst:FindFirstAncestor("Chilli_Dynamic_Island") or inst:FindFirstAncestor("Sparkling_New_Badge") then return end
+
+    local textRaw = inst.Text:lower():match("^%s*(.-)%s*$") or ""
+    if textRaw:find("chilli hub") then
+        local headerFrame = inst:FindFirstAncestorOfClass("Frame")
+        if headerFrame then recolorHeaderBar(headerFrame, inst) end
+        return
+    end
+
+    if TARGET_BUTTON_KEYWORDS[textRaw] then
+        local btnTarget = inst:IsA("TextButton") and inst or inst:FindFirstAncestorOfClass("TextButton") or inst:FindFirstAncestorOfClass("Frame")
+        if btnTarget then recolorSingleButton(btnTarget, inst) end
+        return
+    end
+end
+
+-- ==================== 5. CLICK AN TOÀN (STEALTH CLICK - NO VIM) ====================
+local function stealthClick(inst)
+    if not inst then return end
+    local targets = {inst}
+    if inst.Parent and inst.Parent:IsA("GuiObject") then table.insert(targets, inst.Parent) end
+    local btnAncestor = inst:FindFirstAncestorWhichIsA("GuiButton")
+    if btnAncestor then table.insert(targets, btnAncestor) end
+
+    for _, obj in ipairs(targets) do
+        pcall(function()
+            if firesignal then
+                firesignal(obj.MouseButton1Click)
+                firesignal(obj.Activated)
+            end
+        end)
+        pcall(function()
+            if getconnections then
+                for _, c in ipairs(getconnections(obj.MouseButton1Click)) do c:Fire() end
+                for _, c in ipairs(getconnections(obj.Activated)) do c:Fire() end
+            end
+        end)
+    end
+end
+
+-- ==================== 6. ĐỘNG CƠ NẠP CONFIG STEALTH ====================
+local isConfigInjecting = false
+
+local function executeAutoConfig(statusCallback)
+    if isConfigInjecting then return end
+    isConfigInjecting = true
+
+    task.spawn(function()
+        statusCallback("⏳ Đang nạp...", Color3.fromRGB(255, 210, 90))
+
+        if switchGlobalLanguage then
+            switchGlobalLanguage("EN")
+            task.wait(0.3)
+        end
+
+        local roots = {gethui and gethui(), CoreGui, LocalPlayer:FindFirstChild("PlayerGui")}
+        local chilliGui = nil
+
+        for _, root in ipairs(roots) do
+            if root then
+                for _, g in ipairs(root:GetChildren()) do
+                    if g:IsA("ScreenGui") and g.Name ~= "Chilli_Dynamic_Island" then
+                        for _, d in ipairs(g:GetDescendants()) do
+                            if (d:IsA("TextLabel") or d:IsA("TextButton")) and d.Text:lower():find("chilli hub") then
+                                chilliGui = g; break
+                            end
+                        end
+                    end
+                    if chilliGui then break end
+                end
+            end
+            if chilliGui then break end
+        end
+
+        if not chilliGui then
+            statusCallback("❌ Ko thấy Hub", Color3.fromRGB(255, 90, 90))
+            task.wait(2)
+            if updateIslandContentLanguage then updateIslandContentLanguage(currentLanguage) end
+            isConfigInjecting = false; return
+        end
+
+        -- 1. Mở Tab Config
+        local configTabElement = nil
+        for _, d in ipairs(chilliGui:GetDescendants()) do
+            if (d:IsA("TextLabel") or d:IsA("TextButton")) and d.Visible then
+                local t = d.Text:lower():match("^%s*(.-)%s*$") or ""
+                if t == "config" or t == "cấu hình" then
+                    configTabElement = d; break
+                end
+            end
+        end
+
+        if configTabElement then
+            stealthClick(configTabElement)
+            task.wait(0.35)
+        end
+
+        -- 2. Tìm ô TextBox Import
+        local importTextBox = nil
+        for _, d in ipairs(chilliGui:GetDescendants()) do
+            if d:IsA("TextBox") then
+                local ph = (d.PlaceholderText or ""):lower()
+                if ph:find("exported config") then
+                    importTextBox = d; break
+                end
+            end
+        end
+
+        if not importTextBox then
+            for _, lbl in ipairs(chilliGui:GetDescendants()) do
+                if lbl:IsA("TextLabel") and lbl.Text:find("Import Config Text") then
+                    local p = lbl.Parent
+                    if p then
+                        importTextBox = p:FindFirstChildWhichIsA("TextBox", true)
+                        if importTextBox then break end
                     end
                 end
-            end)
+            end
+        end
 
-            if not success then
-                warn("[Auto Sell] Error: " .. tostring(err))
+        if not importTextBox then
+            statusCallback("❌ Ko thấy ô Import", Color3.fromRGB(255, 90, 90))
+            task.wait(2)
+            if updateIslandContentLanguage then updateIslandContentLanguage(currentLanguage) end
+            isConfigInjecting = false; return
+        end
+
+        -- 3. Bơm dữ liệu JSON an toàn
+        importTextBox.Text = RAW_CONFIG_JSON
+        task.wait(0.1)
+
+        if getconnections then
+            pcall(function()
+                for _, conn in ipairs(getconnections(importTextBox.FocusLost)) do conn:Fire(true) end
+            end)
+        end
+        task.wait(0.25)
+
+        -- 4. Bấm nút đỏ "Import"
+        local importBtnElement = nil
+        for _, d in ipairs(chilliGui:GetDescendants()) do
+            if (d:IsA("TextLabel") or d:IsA("TextButton")) and d.Visible then
+                local t = d.Text:gsub("%s+", " "):match("^%s*(.-)%s*$") or ""
+                if t == "Import" or t == "Nhập" then
+                    importBtnElement = d; break
+                end
+            end
+        end
+
+        if not importBtnElement then
+            statusCallback("❌ Ko thấy nút Import", Color3.fromRGB(255, 90, 90))
+            task.wait(2)
+            if updateIslandContentLanguage then updateIslandContentLanguage(currentLanguage) end
+            isConfigInjecting = false; return
+        end
+
+        stealthClick(importBtnElement)
+        task.wait(0.9)
+
+        -- 5. Mở Dropdown "Load Config"
+        local loadDropdownElement = nil
+        for _, lbl in ipairs(chilliGui:GetDescendants()) do
+            if lbl:IsA("TextLabel") and (lbl.Text:find("Load Config") or lbl.Text:find("Tải Cấu Hình")) then
+                local row = lbl.Parent
+                if row then
+                    loadDropdownElement = row:FindFirstChildWhichIsA("GuiButton", true)
+                    if not loadDropdownElement then
+                        for _, c in ipairs(row:GetDescendants()) do
+                            if (c:IsA("TextLabel") or c:IsA("TextButton")) and c.Text:find("Default") then
+                                loadDropdownElement = c; break
+                            end
+                        end
+                    end
+                end
+                break
+            end
+        end
+
+        if loadDropdownElement then
+            stealthClick(loadDropdownElement)
+            task.wait(0.35)
+        end
+
+        -- 6. Chọn profile "main"
+        local mainProfileElement = nil
+        local t0 = tick()
+        while tick() - t0 < 4 do
+            for _, d in ipairs(chilliGui:GetDescendants()) do
+                if (d:IsA("TextLabel") or d:IsA("TextButton")) and d.Visible then
+                    local t = d.Text:gsub("%s+", " "):match("^%s*(.-)%s*$") or ""
+                    if t:lower() == "main" then
+                        mainProfileElement = d; break
+                    end
+                end
+            end
+            if mainProfileElement then break end
+            task.wait(0.12)
+        end
+
+        if not mainProfileElement then
+            statusCallback("❌ Ko có profile main", Color3.fromRGB(255, 90, 90))
+            task.wait(2)
+            if updateIslandContentLanguage then updateIslandContentLanguage(currentLanguage) end
+            isConfigInjecting = false; return
+        end
+
+        stealthClick(mainProfileElement)
+        task.wait(0.35)
+
+        -- 7. Bấm nút đỏ "Load"
+        local loadBtnElement = nil
+        for _, d in ipairs(chilliGui:GetDescendants()) do
+            if (d:IsA("TextLabel") or d:IsA("TextButton")) and d.Visible then
+                local t = d.Text:gsub("%s+", " "):match("^%s*(.-)%s*$") or ""
+                if t == "Load" or t == "Tải" then
+                    loadBtnElement = d; break
+                end
+            end
+        end
+
+        if not loadBtnElement then
+            statusCallback("❌ Ko thấy nút Load", Color3.fromRGB(255, 90, 90))
+            task.wait(2)
+            if updateIslandContentLanguage then updateIslandContentLanguage(currentLanguage) end
+            isConfigInjecting = false; return
+        end
+
+        stealthClick(loadBtnElement)
+        task.wait(0.4)
+
+        if switchGlobalLanguage then
+            switchGlobalLanguage("VI")
+        end
+
+        statusCallback("✔ ĐÃ NẠP XONG!", Color3.fromRGB(110, 245, 140))
+        task.wait(2.2)
+        if updateIslandContentLanguage then updateIslandContentLanguage(currentLanguage) end
+        isConfigInjecting = false
+    end)
+end
+
+-- ==================== 7. DYNAMIC ISLAND MORPHING WIDGET ====================
+local function createDynamicIslandUI()
+    local parentTarget = (gethui and gethui()) or CoreGui or LocalPlayer:WaitForChild("PlayerGui")
+    local oldIsland = parentTarget:FindFirstChild("Chilli_Dynamic_Island")
+    if oldIsland then oldIsland:Destroy() end
+
+    local ScreenGui = Instance.new("ScreenGui")
+    ScreenGui.Name = "Chilli_Dynamic_Island"
+    ScreenGui.ResetOnSpawn = false
+    ScreenGui.IgnoreGuiInset = true
+    ScreenGui.DisplayOrder = 2147483647
+    ScreenGui.Parent = parentTarget
+
+    local isExpanded = false
+
+    local Island = Instance.new("Frame")
+    Island.Name = "Island"
+    Island.Size = UDim2.new(0, 172, 0, 36)
+    Island.AnchorPoint = Vector2.new(0.5, 0)
+    Island.Position = UDim2.new(0.5, 0, 0, 10)
+    Island.BackgroundColor3 = Color3.fromRGB(8, 12, 18)
+    Island.BackgroundTransparency = 0.08
+    Island.BorderSizePixel = 0
+    Island.ClipsDescendants = true
+    Island.Parent = ScreenGui
+
+    local IslandCorner = Instance.new("UICorner")
+    IslandCorner.CornerRadius = UDim.new(1, 0)
+    IslandCorner.Parent = Island
+
+    local IslandStroke = Instance.new("UIStroke")
+    IslandStroke.Thickness = 1.4
+    IslandStroke.Color = COLOR_FACE_TOP
+    IslandStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    IslandStroke.Parent = Island
+
+    -- VIEW THU GỌN
+    local CollapsedView = Instance.new("TextButton")
+    CollapsedView.Name = "CollapsedView"
+    CollapsedView.Size = UDim2.new(1, 0, 0, 36)
+    CollapsedView.BackgroundTransparency = 1
+    CollapsedView.Text = ""
+    CollapsedView.Parent = Island
+
+    local DotStatus = Instance.new("Frame")
+    DotStatus.Size = UDim2.new(0, 7, 0, 7)
+    DotStatus.Position = UDim2.new(0, 14, 0.5, -3)
+    DotStatus.BackgroundColor3 = Color3.fromRGB(90, 240, 140)
+    DotStatus.BorderSizePixel = 0
+    DotStatus.Parent = CollapsedView
+
+    local DotCorner = Instance.new("UICorner")
+    DotCorner.CornerRadius = UDim.new(1, 0)
+    DotCorner.Parent = DotStatus
+
+    local IslandTitle = Instance.new("TextLabel")
+    IslandTitle.Size = UDim2.new(1, -55, 1, 0)
+    IslandTitle.Position = UDim2.new(0, 28, 0, 0)
+    IslandTitle.BackgroundTransparency = 1
+    IslandTitle.Text = "DUCK Hub | by DUCZ
+    IslandTitle.Font = Enum.Font.GothamBold
+    IslandTitle.TextSize = 11
+    IslandTitle.TextColor3 = Color3.fromRGB(245, 250, 255)
+    IslandTitle.TextXAlignment = Enum.TextXAlignment.Left
+    IslandTitle.Parent = CollapsedView
+
+    local ChevronIcon = Instance.new("TextLabel")
+    ChevronIcon.Size = UDim2.new(0, 20, 1, 0)
+    ChevronIcon.Position = UDim2.new(1, -26, 0, 0)
+    ChevronIcon.BackgroundTransparency = 1
+    ChevronIcon.Text = "▼"
+    ChevronIcon.Font = Enum.Font.GothamBold
+    ChevronIcon.TextSize = 10
+    ChevronIcon.TextColor3 = Color3.fromRGB(150, 195, 245)
+    ChevronIcon.Parent = CollapsedView
+
+    -- VIEW MỞ RỘNG
+    local ExpandedView = Instance.new("Frame")
+    ExpandedView.Name = "ExpandedView"
+    ExpandedView.Size = UDim2.new(1, 0, 1, 0)
+    ExpandedView.BackgroundTransparency = 1
+    ExpandedView.Visible = false
+    ExpandedView.Parent = Island
+
+    local ExpHeader = Instance.new("Frame")
+    ExpHeader.Size = UDim2.new(1, 0, 0, 32)
+    ExpHeader.BackgroundTransparency = 1
+    ExpHeader.Parent = ExpandedView
+
+    local ExpTitle = Instance.new("TextLabel")
+    ExpTitle.Size = UDim2.new(1, -50, 1, 0)
+    ExpTitle.Position = UDim2.new(0, 14, 0, 0)
+    ExpTitle.BackgroundTransparency = 1
+    ExpTitle.Text = "DUCK Hub"
+    ExpTitle.Font = Enum.Font.GothamBold
+    ExpTitle.TextSize = 11
+    ExpTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+    ExpTitle.TextXAlignment = Enum.TextXAlignment.Left
+    ExpTitle.Parent = ExpHeader
+
+    local CloseBtn = Instance.new("TextButton")
+    CloseBtn.Size = UDim2.new(0, 26, 0, 26)
+    CloseBtn.Position = UDim2.new(1, -34, 0, 3)
+    CloseBtn.BackgroundColor3 = Color3.fromRGB(25, 32, 48)
+    CloseBtn.Text = "▲"
+    CloseBtn.Font = Enum.Font.GothamBold
+    CloseBtn.TextSize = 11
+    CloseBtn.TextColor3 = Color3.fromRGB(150, 200, 255)
+    CloseBtn.Parent = ExpHeader
+
+    local CloseCorner = Instance.new("UICorner")
+    CloseCorner.CornerRadius = UDim.new(1, 0)
+    CloseCorner.Parent = CloseBtn
+
+    -- Hàng 1: Nút dịch Liquid Capsule bên trong Island
+    local LangCapsule = Instance.new("Frame")
+    LangCapsule.Size = UDim2.new(1, -24, 0, 32)
+    LangCapsule.Position = UDim2.new(0, 12, 0, 34)
+    LangCapsule.BackgroundColor3 = Color3.fromRGB(16, 22, 34)
+    LangCapsule.BorderSizePixel = 0
+    LangCapsule.Parent = ExpandedView
+
+    local LangCorner = Instance.new("UICorner")
+    LangCorner.CornerRadius = UDim.new(1, 0)
+    LangCorner.Parent = LangCapsule
+
+    local LangSlider = Instance.new("Frame")
+    LangSlider.Size = UDim2.new(0.5, -2, 1, -4)
+    LangSlider.Position = UDim2.new(0, 2, 0, 2)
+    LangSlider.BackgroundColor3 = COLOR_FACE_BOTTOM
+    LangSlider.BorderSizePixel = 0
+    LangSlider.Parent = LangCapsule
+
+    local SliderCorner = Instance.new("UICorner")
+    SliderCorner.CornerRadius = UDim.new(1, 0)
+    SliderCorner.Parent = LangSlider
+
+    local SliderGrad = Instance.new("UIGradient")
+    SliderGrad.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, COLOR_FACE_TOP),
+        ColorSequenceKeypoint.new(1, COLOR_FACE_BOTTOM)
+    })
+    SliderGrad.Rotation = 90
+    SliderGrad.Parent = LangSlider
+
+    local BtnVI = Instance.new("TextButton")
+    BtnVI.Size = UDim2.new(0.5, 0, 1, 0)
+    BtnVI.Position = UDim2.new(0, 0, 0, 0)
+    BtnVI.BackgroundTransparency = 1
+    BtnVI.Text = "🇻🇳 TIẾNG VIỆT"
+    BtnVI.Font = Enum.Font.GothamBold
+    BtnVI.TextSize = 10
+    BtnVI.TextColor3 = Color3.fromRGB(255, 255, 255)
+    BtnVI.ZIndex = 5
+    BtnVI.Parent = LangCapsule
+
+    local BtnEN = Instance.new("TextButton")
+    BtnEN.Size = UDim2.new(0.5, 0, 1, 0)
+    BtnEN.Position = UDim2.new(0.5, 0, 0, 0)
+    BtnEN.BackgroundTransparency = 1
+    BtnEN.Text = "🌐 ENGLISH"
+    BtnEN.Font = Enum.Font.GothamBold
+    BtnEN.TextSize = 10
+    BtnEN.TextColor3 = Color3.fromRGB(145, 160, 185)
+    BtnEN.ZIndex = 5
+    BtnEN.Parent = LangCapsule
+
+    -- Hàng 2: Thẻ Setting Auto Farm
+    local AutoFarmCard = Instance.new("Frame")
+    AutoFarmCard.Size = UDim2.new(1, -24, 0, 96)
+    AutoFarmCard.Position = UDim2.new(0, 12, 0, 72)
+    AutoFarmCard.BackgroundColor3 = Color3.fromRGB(14, 20, 30)
+    AutoFarmCard.BorderSizePixel = 0
+    AutoFarmCard.Parent = ExpandedView
+
+    local AutoFarmCorner = Instance.new("UICorner")
+    AutoFarmCorner.CornerRadius = UDim.new(0, 10)
+    AutoFarmCorner.Parent = AutoFarmCard
+
+    local AutoFarmStroke = Instance.new("UIStroke")
+    AutoFarmStroke.Thickness = 1
+    AutoFarmStroke.Color = Color3.fromRGB(45, 80, 140)
+    AutoFarmStroke.Parent = AutoFarmCard
+
+    local AutoFarmBtn = Instance.new("TextButton")
+    AutoFarmBtn.Size = UDim2.new(1, -12, 0, 28)
+    AutoFarmBtn.Position = UDim2.new(0, 6, 0, 6)
+    AutoFarmBtn.BackgroundColor3 = COLOR_FACE_BOTTOM
+    AutoFarmBtn.BorderSizePixel = 0
+    AutoFarmBtn.Text = "⚙️ SETTING AUTO FARM"
+    AutoFarmBtn.Font = Enum.Font.GothamBold
+    AutoFarmBtn.TextSize = 11
+    AutoFarmBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    AutoFarmBtn.Parent = AutoFarmCard
+
+    local BtnCorner = Instance.new("UICorner")
+    BtnCorner.CornerRadius = UDim.new(0, 8)
+    BtnCorner.Parent = AutoFarmBtn
+
+    local BtnGrad = Instance.new("UIGradient")
+    BtnGrad.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, COLOR_FACE_TOP),
+        ColorSequenceKeypoint.new(1, COLOR_FACE_BOTTOM)
+    })
+    BtnGrad.Rotation = 90
+    BtnGrad.Parent = AutoFarmBtn
+
+    local SubLabel = Instance.new("TextLabel")
+    SubLabel.Size = UDim2.new(1, -16, 0, 54)
+    SubLabel.Position = UDim2.new(0, 8, 0, 37)
+    SubLabel.BackgroundTransparency = 1
+    SubLabel.Font = Enum.Font.GothamMedium
+    SubLabel.TextSize = 8.8
+    SubLabel.TextColor3 = Color3.fromRGB(180, 210, 245)
+    SubLabel.TextXAlignment = Enum.TextXAlignment.Left
+    SubLabel.TextYAlignment = Enum.TextYAlignment.Top
+    SubLabel.TextWrapped = true
+    SubLabel.Text = "• Tự động làm từ A-Z\n• Nhặt trứng trên Secret 2B+\n• Tự động chạy máy tập khi rảnh rỗi\n• Tự động làm các nhiệm vụ còn thiếu và sự kiện..."
+    SubLabel.Parent = AutoFarmCard
+
+    updateIslandContentLanguage = function(lang)
+        if lang == "VI" then
+            AutoFarmBtn.Text = "⚙️ SETTING AUTO FARM"
+            SubLabel.Text = "• Tự động làm từ A-Z\n• Nhặt trứng trên Secret 2B+\n• Tự động chạy máy tập khi rảnh rỗi\n• Tự động làm các nhiệm vụ còn thiếu và sự kiện..."
+        else
+            AutoFarmBtn.Text = "⚙️ SETTING AUTO FARM"
+            SubLabel.Text = "• Automated from A to Z\n• Steal Secret eggs 2B+\n• Auto run treadmill when idle\n• Complete missing quests & live events..."
+        end
+    end
+
+    local function setExpanded(expand)
+        if isExpanded == expand then return end
+        isExpanded = expand
+
+        if expand then
+            CollapsedView.Visible = false
+            ExpandedView.Visible = true
+            TweenService:Create(Island, TweenInfo.new(0.38, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+                Size = UDim2.new(0, 320, 0, 178)
+            }):Play()
+            TweenService:Create(IslandCorner, TweenInfo.new(0.35), {CornerRadius = UDim.new(0, 16)}):Play()
+        else
+            ExpandedView.Visible = false
+            CollapsedView.Visible = true
+            TweenService:Create(Island, TweenInfo.new(0.32, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+                Size = UDim2.new(0, 172, 0, 36)
+            }):Play()
+            TweenService:Create(IslandCorner, TweenInfo.new(0.3), {CornerRadius = UDim.new(1, 0)}):Play()
+        end
+    end
+
+    CollapsedView.MouseButton1Click:Connect(function() setExpanded(true) end)
+    CloseBtn.MouseButton1Click:Connect(function() setExpanded(false) end)
+
+    local function switchMode(target)
+        if currentLanguage == target then return end
+        currentLanguage = target
+
+        if target == "VI" then
+            TweenService:Create(LangSlider, TweenInfo.new(0.32, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+                Position = UDim2.new(0, 2, 0, 2)
+            }):Play()
+            TweenService:Create(BtnVI, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+            TweenService:Create(BtnEN, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(145, 160, 185)}):Play()
+        else
+            TweenService:Create(LangSlider, TweenInfo.new(0.32, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+                Position = UDim2.new(0.5, 0, 0, 2)
+            }):Play()
+            TweenService:Create(BtnEN, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+            TweenService:Create(BtnVI, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(145, 160, 185)}):Play()
+        end
+
+        updateAllActive()
+
+        if updateIslandContentLanguage then
+            updateIslandContentLanguage(target)
+        end
+    end
+
+    switchGlobalLanguage = switchMode
+    BtnVI.MouseButton1Click:Connect(function() switchMode("VI") end)
+    BtnEN.MouseButton1Click:Connect(function() switchMode("EN") end)
+
+    local function updateStatus(txt, col)
+        AutoFarmBtn.Text = txt
+        TweenService:Create(AutoFarmBtn, TweenInfo.new(0.18), {TextColor3 = col}):Play()
+    end
+
+    AutoFarmBtn.MouseButton1Click:Connect(function()
+        if isConfigInjecting then return end
+        TweenService:Create(AutoFarmCard, TweenInfo.new(0.08), {Size = UDim2.new(1, -28, 0, 92)}):Play()
+        task.delay(0.08, function()
+            TweenService:Create(AutoFarmCard, TweenInfo.new(0.15, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Size = UDim2.new(1, -24, 0, 96)}):Play()
+        end)
+        executeAutoConfig(updateStatus)
+    end)
+
+    -- Kéo thả tự do kèm hãm biên màn hình
+    local dragging, dragStart, startPos = false, nil, nil
+    Island.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            dragStart = input.Position
+            startPos = Island.Position
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then dragging = false end
+            end)
+        end
+    end)
+
+    Island.InputChanged:Connect(function(input)
+        if (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) and dragging then
+            local delta = input.Position - dragStart
+            local cam = workspace.CurrentCamera
+            local maxX = cam and cam.ViewportSize.X - 180 or 800
+            local maxY = cam and cam.ViewportSize.Y - 50 or 600
+
+            local newX = math.clamp(startPos.X.Offset + delta.X, -maxX / 2, maxX / 2)
+            local newY = math.clamp(startPos.Y.Offset + delta.Y, 0, maxY)
+
+            Island.Position = UDim2.new(startPos.X.Scale, newX, startPos.Y.Scale, newY)
+        end
+    end)
+end
+
+-- ==================== 8. OBSERVER ENGINE THỜI GIAN THỰC (QUÉT MỖI 0.25S) ====================
+task.delay(1.2, function()
+    createDynamicIslandUI()
+
+    local searchRoots = {
+        gethui and gethui(),
+        CoreGui,
+        LocalPlayer:FindFirstChild("PlayerGui")
+    }
+
+    local activeHubGui = nil
+
+    local function findHub()
+        for _, root in ipairs(searchRoots) do
+            if root then
+                for _, g in ipairs(root:GetChildren()) do
+                    if g:IsA("ScreenGui") and g.Name ~= "Chilli_Dynamic_Island" then
+                        for _, d in ipairs(g:GetDescendants()) do
+                            if (d:IsA("TextLabel") or d:IsA("TextButton")) and d.Text:lower():find("chilli hub") then
+                                return g
+                            end
+                        end
+                    end
+                end
+            end
+        end
+        return nil
+    end
+
+    -- Luồng Observer quét trực tiếp bên trong Hub mỗi 0.25 giây
+    task.spawn(function()
+        while true do
+            task.wait(0.25)
+            if not activeHubGui or not activeHubGui.Parent then
+                activeHubGui = findHub()
+            end
+
+            if activeHubGui then
+                for _, desc in ipairs(activeHubGui:GetDescendants()) do
+                    if (desc:IsA("TextLabel") or desc:IsA("TextButton") or desc:IsA("TextBox")) and desc.Visible then
+                        hookElement(desc)
+                        inspectAndApplySoftBlue(desc)
+                    end
+                end
             end
         end
     end)
 
-    warn("[Auto Sell] Initialized successfully")
-end
-
-AutoSellUtility:init()
-
-wait(5)
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
-
-
-local joints = {}
-for _, joint in pairs(character:GetDescendants()) do
-	if joint:IsA("Motor6D") then
-		joints[joint.Name] = {Part0 = joint.Part0, Part1 = joint.Part1, C0 = joint.C0, C1 = joint.C1}
-	end
-end
-
-
-local function restoreJoints()
-	for name, data in pairs(joints) do
-		if data.Part0:FindFirstChild(name) == nil then
-			local joint = Instance.new("Motor6D")
-			joint.Name = name
-			joint.Part0 = data.Part0
-			joint.Part1 = data.Part1
-			joint.C0 = data.C0
-			joint.C1 = data.C1
-			joint.Parent = data.Part0
-		end
-	end
-end
-
-
-game:GetService("RunService").RenderStepped:Connect(function()
-	if humanoid:GetState() == Enum.HumanoidStateType.Physics or
-	   humanoid:GetState() == Enum.HumanoidStateType.Freefall or
-	   humanoid:GetState() == Enum.HumanoidStateType.Seated then
-		humanoid:ChangeState(Enum.HumanoidStateType.Running)
-		restoreJoints()
-	end
-end)
+    for _, root in ipairs(searchRoots) do
+        if root then
+            root.DescendantAdded:Connect(function(desc)
+                task.defer(function()
+                    if desc:IsA("TextLabel") or desc:IsA("TextButton") or desc:IsA("TextBox") then
+                        hookElement(desc)
+                        inspectAndApplySoftBlue(desc)
+                    end
+                end)
+            end)
+        end
+    end
+end)F
