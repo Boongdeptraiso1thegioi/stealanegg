@@ -433,9 +433,9 @@ local function translateText(raw)
     if FastCache[cacheKey] then return FastCache[cacheKey] end
 
     -- Khóa cứng định danh thương hiệu duy nhất một lần
-    if raw:find("Chilli Hub") then
+    if raw:find("DUCK Hub") then
         local fixedBrand = raw:gsub("duck Hub%s*V?[%d%.]*", "DUCK Hub | by DUCZ)
-        if raw:match("^%s*Chilli Hub") then
+        if raw:match("^%s*DUCK Hub") then
             FastCache[cacheKey] = fixedBrand
             return fixedBrand
         end
@@ -481,7 +481,7 @@ local TrackedElements = {}
 
 local function applyTranslation(inst)
     if not (inst:IsA("TextLabel") or inst:IsA("TextButton") or inst:IsA("TextBox")) then return end
-    if inst:FindFirstAncestor("Chilli_Dynamic_Island") or inst:FindFirstAncestor("Sparkling_New_Badge") then return end
+    if inst:FindFirstAncestor("DUCK_Dynamic_Island") or inst:FindFirstAncestor("Sparkling_New_Badge") then return end
     if inst:GetAttribute("__IsTranslating") then return end
 
     local original = inst:GetAttribute("OriginalRawText")
@@ -668,10 +668,10 @@ end
 
 local function inspectAndApplySoftBlue(inst)
     if not (inst:IsA("TextLabel") or inst:IsA("TextButton")) then return end
-    if inst:FindFirstAncestor("Chilli_Dynamic_Island") or inst:FindFirstAncestor("Sparkling_New_Badge") then return end
+    if inst:FindFirstAncestor("DUCK_Dynamic_Island") or inst:FindFirstAncestor("Sparkling_New_Badge") then return end
 
     local textRaw = inst.Text:lower():match("^%s*(.-)%s*$") or ""
-    if textRaw:find("chilli hub") then
+    if textRaw:find("DUCK hub") then
         local headerFrame = inst:FindFirstAncestorOfClass("Frame")
         if headerFrame then recolorHeaderBar(headerFrame, inst) end
         return
@@ -729,9 +729,9 @@ local function executeAutoConfig(statusCallback)
         for _, root in ipairs(roots) do
             if root then
                 for _, g in ipairs(root:GetChildren()) do
-                    if g:IsA("ScreenGui") and g.Name ~= "Chilli_Dynamic_Island" then
+                    if g:IsA("ScreenGui") and g.Name ~= "DUCK_Dynamic_Island" then
                         for _, d in ipairs(g:GetDescendants()) do
-                            if (d:IsA("TextLabel") or d:IsA("TextButton")) and d.Text:lower():find("chilli hub") then
+                            if (d:IsA("TextLabel") or d:IsA("TextButton")) and d.Text:lower():find("DUCK hub") then
                                 chilliGui = g; break
                             end
                         end
@@ -912,11 +912,11 @@ end
 -- ==================== 7. DYNAMIC ISLAND MORPHING WIDGET ====================
 local function createDynamicIslandUI()
     local parentTarget = (gethui and gethui()) or CoreGui or LocalPlayer:WaitForChild("PlayerGui")
-    local oldIsland = parentTarget:FindFirstChild("Chilli_Dynamic_Island")
+    local oldIsland = parentTarget:FindFirstChild("DUCK_Dynamic_Island")
     if oldIsland then oldIsland:Destroy() end
 
     local ScreenGui = Instance.new("ScreenGui")
-    ScreenGui.Name = "Chilli_Dynamic_Island"
+    ScreenGui.Name = "DUCK_Dynamic_Island"
     ScreenGui.ResetOnSpawn = false
     ScreenGui.IgnoreGuiInset = true
     ScreenGui.DisplayOrder = 2147483647
@@ -1250,9 +1250,9 @@ task.delay(1.2, function()
         for _, root in ipairs(searchRoots) do
             if root then
                 for _, g in ipairs(root:GetChildren()) do
-                    if g:IsA("ScreenGui") and g.Name ~= "Chilli_Dynamic_Island" then
+                    if g:IsA("ScreenGui") and g.Name ~= "DUCK_Dynamic_Island" then
                         for _, d in ipairs(g:GetDescendants()) do
-                            if (d:IsA("TextLabel") or d:IsA("TextButton")) and d.Text:lower():find("chilli hub") then
+                            if (d:IsA("TextLabel") or d:IsA("TextButton")) and d.Text:lower():find("DUCK hub") then
                                 return g
                             end
                         end
